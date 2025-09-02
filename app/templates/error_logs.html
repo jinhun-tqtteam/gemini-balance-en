@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block title %}错误日志管理 - Gemini Balance{%
+{% extends "base.html" %} {% block title %}Error Log Management - Gemini Balance{%
 endblock %} {% block head_extra_styles %}
 <style>
   /* error_logs.html specific styles */
@@ -590,7 +590,7 @@ endblock %} {% block head_extra_styles %}
         alt="Gemini Balance Logo"
         class="h-9 inline-block align-middle mr-2"
       />
-      Gemini Balance - 错误日志
+      Gemini Balance - Error Logs
     </h1>
 
     <!-- Navigation Tabs -->
@@ -600,21 +600,21 @@ endblock %} {% block head_extra_styles %}
         class="nav-link whitespace-nowrap flex items-center justify-center gap-2 px-6 py-3 font-medium rounded-lg text-gray-700 hover:text-gray-900 transition-all duration-200"
         style="background-color: rgba(229, 231, 235, 0.8)"
       >
-        <i class="fas fa-cog"></i> 配置编辑
+        <i class="fas fa-cog"></i> Configuration
       </a>
       <a
         href="/keys"
         class="nav-link whitespace-nowrap flex items-center justify-center gap-2 px-6 py-3 font-medium rounded-lg text-gray-700 hover:text-gray-900 transition-all duration-200"
         style="background-color: rgba(229, 231, 235, 0.8)"
       >
-        <i class="fas fa-tachometer-alt"></i> 监控面板
+        <i class="fas fa-tachometer-alt"></i> Dashboard
       </a>
       <a
         href="/logs"
         class="main-nav-btn whitespace-nowrap flex items-center justify-center gap-2 px-6 py-3 font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
         style="background-color: #3b82f6 !important; color: #ffffff !important;"
       >
-        <i class="fas fa-exclamation-triangle"></i> 错误日志
+        <i class="fas fa-exclamation-triangle"></i> Error Logs
       </a>
     </div>
 
@@ -631,10 +631,10 @@ endblock %} {% block head_extra_styles %}
       <h2
         class="text-xl font-bold mb-6 pb-3 border-b flex items-center gap-2 text-gray-100 border-violet-300 border-opacity-30"
       >
-        <i class="fas fa-bug text-violet-400"></i> 错误日志列表
+        <i class="fas fa-bug text-violet-400"></i> Error Log List
       </h2>
 
-      <!-- 搜索与操作控件 -->
+      <!-- Search and Operation Controls -->
       <div
         class="grid grid-cols-1 lg:grid-cols-[1fr_auto] items-center gap-4 mb-6"
       >
@@ -644,19 +644,19 @@ endblock %} {% block head_extra_styles %}
           <input
             type="text"
             id="keySearch"
-            placeholder="搜索密钥 (部分)"
+            placeholder="Search key (partial)"
             class="px-3 py-1 rounded-lg form-input-themed"
           />
           <input
             type="text"
             id="errorSearch"
-            placeholder="搜索错误类型/日志"
+            placeholder="Search error type/log"
             class="px-3 py-1 rounded-lg form-input-themed"
           />
           <input
             type="text"
             id="errorCodeSearch"
-            placeholder="搜索错误码"
+            placeholder="Search error code"
             class="px-3 py-1 rounded-lg form-input-themed"
           />
           <div
@@ -664,7 +664,7 @@ endblock %} {% block head_extra_styles %}
           >
             <div class="flex items-center gap-2">
               <label class="text-sm text-gray-300 whitespace-nowrap"
-                >开始时间:</label
+                >Start Time:</label
               >
               <input
                 type="datetime-local"
@@ -674,7 +674,7 @@ endblock %} {% block head_extra_styles %}
             </div>
             <div class="flex items-center gap-2">
               <label class="text-sm text-gray-300 whitespace-nowrap"
-                >结束时间:</label
+                >End Time:</label
               >
               <input
                 type="datetime-local"
@@ -689,28 +689,28 @@ endblock %} {% block head_extra_styles %}
             id="searchBtn"
             class="flex items-center justify-center px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md whitespace-nowrap"
           >
-            <i class="fas fa-search mr-1.5"></i>搜索
+            <i class="fas fa-search mr-1.5"></i>Search
           </button>
           <button
             id="copySelectedKeysBtn"
             class="flex items-center justify-center px-4 py-1.5 bg-sky-600 hover:bg-sky-700 text-white rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md whitespace-nowrap"
             disabled
           >
-            <i class="far fa-copy mr-1.5"></i>复制
+            <i class="far fa-copy mr-1.5"></i>Copy
           </button>
           <button
             id="deleteSelectedBtn"
             class="flex items-center justify-center px-4 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md whitespace-nowrap"
             disabled
           >
-            <i class="fas fa-trash-alt mr-1.5"></i>删除
+            <i class="fas fa-trash-alt mr-1.5"></i>Delete
           </button>
           <button
             id="deleteAllLogsBtn"
             class="flex items-center justify-center px-4 py-1.5 bg-red-700 hover:bg-red-800 text-white rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md whitespace-nowrap"
-            title="清空所有错误日志"
+            title="Clear all error logs"
           >
-            <i class="fas fa-dumpster-fire mr-1.5"></i>清空全部
+            <i class="fas fa-dumpster-fire mr-1.5"></i>Clear All
           </button>
         </div>
       </div>
@@ -738,15 +738,15 @@ endblock %} {% block head_extra_styles %}
               >
                 ID <i class="fas fa-sort ml-1"></i>
               </th>
-              <th class="px-5 py-3 font-semibold text-gray-700">Gemini密钥</th>
-              <th class="px-5 py-3 font-semibold text-gray-700">错误类型</th>
-              <th class="px-5 py-3 font-semibold text-gray-700">错误码</th>
-              <th class="px-5 py-3 font-semibold text-gray-700">模型名称</th>
-              <th class="px-5 py-3 font-semibold text-gray-700">请求时间</th>
+              <th class="px-5 py-3 font-semibold text-gray-700">Gemini Key</th>
+              <th class="px-5 py-3 font-semibold text-gray-700">Error Type</th>
+              <th class="px-5 py-3 font-semibold text-gray-700">Error Code</th>
+              <th class="px-5 py-3 font-semibold text-gray-700">Model Name</th>
+              <th class="px-5 py-3 font-semibold text-gray-700">Request Time</th>
               <th
                 class="px-5 py-3 font-semibold text-gray-700 rounded-tr-lg text-center"
               >
-                操作
+                Actions
               </th>
             </tr>
           </thead>
@@ -755,7 +755,7 @@ endblock %} {% block head_extra_styles %}
             class="divide-y"
             style="border-color: rgba(0, 0, 0, 0.08)"
           >
-            <!-- 错误日志数据将通过JavaScript动态加载 -->
+            <!-- Error log data will be dynamically loaded via JavaScript -->
           </tbody>
         </table>
       </div>
@@ -768,12 +768,12 @@ endblock %} {% block head_extra_styles %}
         <div
           class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"
         ></div>
-        <p class="ml-4 text-lg text-gray-600 font-medium">加载中，请稍候...</p>
+        <p class="ml-4 text-lg text-gray-600 font-medium">Loading, please wait...</p>
       </div>
 
       <div id="noDataMessage" class="text-center py-12 text-gray-600 hidden">
         <i class="fas fa-inbox text-5xl mb-3"></i>
-        <p class="text-lg">暂无错误日志数据</p>
+        <p class="text-lg">No error log data available</p>
       </div>
 
       <div
@@ -782,10 +782,10 @@ endblock %} {% block head_extra_styles %}
         style="background-color: rgba(220, 38, 38, 0.2); color: #fca5a5"
       >
         <i class="fas fa-exclamation-circle mr-2"></i>
-        加载错误日志失败，请稍后重试。
+        Failed to load error logs, please try again later.
       </div>
 
-      <!-- 分页与每页显示控件 -->
+      <!-- Pagination and Per-page Display Controls -->
       <div
         class="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4"
       >
@@ -806,7 +806,7 @@ endblock %} {% block head_extra_styles %}
         </div>
         <div class="flex items-center gap-4">
           <ul class="pagination flex items-center gap-1" id="pagination">
-            <!-- 分页控件将通过JavaScript动态加载 -->
+            <!-- Pagination controls will be dynamically loaded via JavaScript -->
           </ul>
           <div class="flex items-center gap-1">
             <input
@@ -858,7 +858,7 @@ endblock %} {% block head_extra_styles %}
         class="flex justify-between items-center pb-4 mb-4"
         style="border-bottom: 1px solid #e5e7eb"
       >
-        <h2 class="text-xl font-bold text-gray-800">错误日志详情</h2>
+        <h2 class="text-xl font-bold text-gray-800">Error Log Details</h2>
         <button
           id="closeLogDetailModalBtn"
           class="text-gray-600 hover:text-gray-800 text-xl"
@@ -910,7 +910,7 @@ endblock %} {% block head_extra_styles %}
           class="p-4 rounded-lg relative group"
           style="background-color: #f8fafc"
         >
-          <h6 class="text-sm font-semibold text-blue-600 mb-1">错误日志:</h6>
+          <h6 class="text-sm font-semibold text-blue-600 mb-1">Error Log:</h6>
           <pre
             id="modalErrorLog"
             class="font-mono text-sm p-3 rounded overflow-x-auto whitespace-pre-wrap"

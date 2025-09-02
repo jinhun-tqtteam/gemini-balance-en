@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block title %}配置编辑器 - Gemini Balance{%
+{% extends "base.html" %} {% block title %}Configuration Editor - Gemini Balance{%
 endblock %} {% block head_extra_styles %}
 <style>
   /* config_editor.html specific styles */
@@ -180,7 +180,7 @@ endblock %} {% block head_extra_styles %}
     color: #374151 !important; /* gray-700 深灰色文字 */
   }
 
-  /* 思考模型预算映射样式 */
+  /* Thinking model budget mapping styles */
   .map-item {
     background-color: rgba(60, 40, 130, 0.2) !important;
     border-radius: 0.5rem !important;
@@ -306,7 +306,7 @@ endblock %} {% block head_extra_styles %}
     box-shadow: 0 8px 20px rgba(107, 114, 128, 0.4) !important; /* 灰色阴影 */
   }
 
-  /* 刷新按钮样式 - 与监控面板页面保持一致 */
+  /* Refresh button styles - consistent with monitoring dashboard page */
   .bg-white.bg-opacity-20 {
     background-color: rgba(255, 255, 255, 0.9) !important;
     color: #3b82f6 !important; /* blue-500 - 与监控面板一致 */
@@ -795,7 +795,7 @@ endblock %} {% block head_extra_styles %}
     <button
       class="absolute top-6 right-6 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full w-8 h-8 flex items-center justify-center text-primary-600 transition-all duration-300"
       onclick="refreshPage(this)"
-      title="手动刷新"
+      title="Manual Refresh"
     >
       <i class="fas fa-sync-alt"></i>
     </button>
@@ -806,7 +806,7 @@ endblock %} {% block head_extra_styles %}
         alt="Gemini Balance Logo"
         class="h-9 inline-block align-middle mr-2"
       />
-      Gemini Balance - 配置编辑
+      Gemini Balance - Configuration Editor
     </h1>
 
     <!-- Navigation Tabs -->
@@ -818,21 +818,21 @@ endblock %} {% block head_extra_styles %}
         class="main-nav-btn whitespace-nowrap flex items-center justify-center gap-2 px-6 py-3 font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
         style="background-color: #3b82f6 !important; color: #ffffff !important"
       >
-        <i class="fas fa-cog"></i> 配置编辑
+        <i class="fas fa-cog"></i> Configuration
       </a>
       <a
         href="/keys"
         class="nav-link whitespace-nowrap flex items-center justify-center gap-2 px-6 py-3 font-medium rounded-lg text-gray-700 hover:text-gray-900 transition-all duration-200"
         style="background-color: rgba(229, 231, 235, 0.8)"
       >
-        <i class="fas fa-tachometer-alt"></i> 监控面板
+        <i class="fas fa-tachometer-alt"></i> Dashboard
       </a>
       <a
         href="/logs"
         class="nav-link whitespace-nowrap flex items-center justify-center gap-2 px-6 py-3 font-medium rounded-lg text-gray-700 hover:text-gray-900 transition-all duration-200"
         style="background-color: rgba(229, 231, 235, 0.8)"
       >
-        <i class="fas fa-exclamation-triangle"></i> 错误日志
+        <i class="fas fa-exclamation-triangle"></i> Error Logs
       </a>
     </div>
 
@@ -851,7 +851,7 @@ endblock %} {% block head_extra_styles %}
           font-weight: 600 !important;
         "
       >
-        API配置
+        API Configuration
       </button>
       <button
         class="tab-btn px-5 py-2 rounded-full font-medium text-sm transition-all duration-200"
@@ -864,7 +864,7 @@ endblock %} {% block head_extra_styles %}
           font-weight: 500 !important;
         "
       >
-        模型配置
+        Model Configuration
       </button>
       <button
         class="tab-btn px-5 py-2 rounded-full font-medium text-sm transition-all duration-200"
@@ -877,7 +877,7 @@ endblock %} {% block head_extra_styles %}
           font-weight: 500 !important;
         "
       >
-        TTS 配置
+        TTS Configuration
       </button>
       <button
         class="tab-btn px-5 py-2 rounded-full font-medium text-sm transition-all duration-200"
@@ -890,7 +890,7 @@ endblock %} {% block head_extra_styles %}
           font-weight: 500 !important;
         "
       >
-        图像生成
+        Image Generation
       </button>
       <button
         class="tab-btn px-5 py-2 rounded-full font-medium text-sm transition-all duration-200"
@@ -903,7 +903,7 @@ endblock %} {% block head_extra_styles %}
           font-weight: 500 !important;
         "
       >
-        流式输出
+        Stream Output
       </button>
       <button
         class="tab-btn px-5 py-2 rounded-full font-medium text-sm transition-all duration-200"
@@ -916,7 +916,7 @@ endblock %} {% block head_extra_styles %}
           font-weight: 500 !important;
         "
       >
-        定时任务
+        Scheduled Tasks
       </button>
       <button
         class="tab-btn px-5 py-2 rounded-full font-medium text-sm transition-all duration-200"
@@ -929,7 +929,7 @@ endblock %} {% block head_extra_styles %}
           font-weight: 500 !important;
         "
       >
-        日志配置
+        Log Configuration
       </button>
     </div>
 
@@ -937,31 +937,31 @@ endblock %} {% block head_extra_styles %}
 
     <!-- Configuration Form -->
     <form id="configForm" class="mt-6">
-      <!-- API 相关配置 -->
+      <!-- API Related Configuration -->
       <div class="config-section active" id="api-section">
         <h2
           class="text-xl font-bold mb-6 pb-3 border-b flex items-center gap-2 text-gray-800 border-gray-300"
         >
-          <i class="fas fa-key text-blue-500"></i> API相关配置
+          <i class="fas fa-key text-blue-500"></i> API Related Configuration
         </h2>
 
-        <!-- API密钥列表 -->
+        <!-- API Key List -->
         <div class="mb-6">
           <label for="API_KEYS" class="block font-semibold mb-2 text-gray-800"
-            >API密钥列表</label
+            >API Key List</label
           >
           <div class="mb-2">
             <input
               type="search"
               id="apiKeySearchInput"
-              placeholder="搜索密钥..."
+              placeholder="Search keys..."
               class="w-full px-4 py-2 rounded-lg form-input-themed"
             />
           </div>
           <div class="array-container" id="API_KEYS_container">
-            <!-- 数组项将在这里动态添加 -->
+            <!-- Array items will be dynamically added here -->
           </div>
-          <!-- API密钥分页控件 -->
+          <!-- API Key Pagination Controls -->
           <div id="apiKeyPagination" class="flex items-center justify-between mt-2 mb-2" style="display: none;">
             <div class="flex items-center gap-2">
               <button
@@ -969,19 +969,19 @@ endblock %} {% block head_extra_styles %}
                 id="apiKeyPrevBtn"
                 class="px-3 py-1 rounded bg-blue-500 text-white hover:bg-blue-600 cursor-pointer"
               >
-                <i class="fas fa-chevron-left"></i> 上一页
+                <i class="fas fa-chevron-left"></i> Previous
               </button>
-              <span id="apiKeyPageInfo" class="text-sm text-gray-600">第 1 页，共 1 页</span>
+              <span id="apiKeyPageInfo" class="text-sm text-gray-600">Page 1 of 1</span>
               <button
                 type="button"
                 id="apiKeyNextBtn"
                 class="px-3 py-1 rounded bg-blue-500 text-white hover:bg-blue-600 cursor-pointer"
               >
-                下一页 <i class="fas fa-chevron-right"></i>
+                Next <i class="fas fa-chevron-right"></i>
               </button>
             </div>
             <div class="text-xs text-gray-500">
-              每页显示 20 个密钥
+              Show 20 keys per page
             </div>
           </div>
           <div class="flex justify-end gap-2">
@@ -990,30 +990,30 @@ endblock %} {% block head_extra_styles %}
               class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2"
               id="bulkDeleteApiKeyBtn"
             >
-              <i class="fas fa-trash-alt"></i> 删除密钥
+              <i class="fas fa-trash-alt"></i> Delete Keys
             </button>
             <button
               type="button"
               class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2"
               id="addApiKeyBtn"
             >
-              <i class="fas fa-plus"></i> 添加密钥
+              <i class="fas fa-plus"></i> Add Keys
             </button>
           </div>
           <small class="text-gray-500 mt-1 block"
-            >Gemini API密钥列表，每行一个</small
+            >Gemini API key list, one per line</small
           >
         </div>
 
-        <!-- 允许的令牌列表 -->
+        <!-- Allowed Token List -->
         <div class="mb-6">
           <label
             for="ALLOWED_TOKENS"
             class="block font-semibold mb-2 text-gray-800"
-            >允许的令牌列表</label
+            >Allowed Token List</label
           >
           <div class="array-container" id="ALLOWED_TOKENS_container">
-            <!-- 数组项将在这里动态添加 -->
+            <!-- Array items will be dynamically added here -->
           </div>
           <div class="flex justify-end">
             <button
@@ -1021,16 +1021,16 @@ endblock %} {% block head_extra_styles %}
               class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2"
               onclick="addArrayItem('ALLOWED_TOKENS')"
             >
-              <i class="fas fa-plus"></i> 添加令牌
+              <i class="fas fa-plus"></i> Add Token
             </button>
           </div>
-          <small class="text-gray-500 mt-1 block">允许访问API的令牌列表</small>
+          <small class="text-gray-500 mt-1 block">Token list allowed to access API</small>
         </div>
 
-        <!-- 认证令牌 -->
+        <!-- Authentication Token -->
         <div class="mb-6">
           <label for="AUTH_TOKEN" class="block font-semibold mb-2 text-gray-800"
-            >认证令牌</label
+            >Authentication Token</label
           >
           <div class="flex items-center">
             <div
@@ -1041,27 +1041,27 @@ endblock %} {% block head_extra_styles %}
                 type="text"
                 id="AUTH_TOKEN"
                 name="AUTH_TOKEN"
-                placeholder="默认使用ALLOWED_TOKENS中的第一个"
+                placeholder="Uses first token from ALLOWED_TOKENS by default"
                 class="array-input flex-grow px-3 py-2 rounded-l-md sensitive-input form-input-themed"
               />
               <button
                 type="button"
                 id="generateAuthTokenBtn"
                 class="generate-btn px-2 py-2 text-gray-400 hover:text-blue-500 focus:outline-none rounded-r-md hover:bg-gray-600 transition-colors"
-                title="生成随机令牌"
+                title="Generate random token"
                 style="background-color: rgba(59, 130, 246, 0.1)"
               >
                 <i class="fas fa-dice"></i>
               </button>
             </div>
           </div>
-          <small class="text-gray-500 mt-1 block">用于API认证的令牌</small>
+          <small class="text-gray-500 mt-1 block">Token for API authentication</small>
         </div>
 
-        <!-- API基础URL -->
+        <!-- API Base URL -->
         <div class="mb-6">
           <label for="BASE_URL" class="block font-semibold mb-2 text-gray-700"
-            >API基础URL</label
+            >API Base URL</label
           >
           <input
             type="text"
@@ -1070,15 +1070,15 @@ endblock %} {% block head_extra_styles %}
             placeholder="https://generativelanguage.googleapis.com/v1beta"
             class="w-full px-4 py-3 rounded-lg form-input-themed"
           />
-          <small class="text-gray-500 mt-1 block">Gemini API的基础URL</small>
+          <small class="text-gray-500 mt-1 block">Base URL for Gemini API</small>
         </div>
 
-        <!-- 自定义Headers -->
+        <!-- Custom Headers -->
         <div class="mb-6">
           <label
             for="CUSTOM_HEADERS"
             class="block font-semibold mb-2 text-gray-700"
-            >自定义Headers</label
+            >Custom Headers</label
           >
           <div
             class="bg-white rounded-lg border border-gray-200 p-4 mb-2 space-y-3"
@@ -1089,9 +1089,9 @@ endblock %} {% block head_extra_styles %}
               color: #374151;
             "
           >
-            <!-- 键值对将在这里动态添加 -->
+            <!-- Key-value pairs will be dynamically added here -->
             <div class="text-gray-500 text-sm italic">
-              添加自定义请求头，例如 X-Api-Key: your-key
+              Add custom request headers, e.g., X-Api-Key: your-key
             </div>
           </div>
           <div class="flex justify-end">
@@ -1100,23 +1100,23 @@ endblock %} {% block head_extra_styles %}
               class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2"
               id="addCustomHeaderBtn"
             >
-              <i class="fas fa-plus"></i> 添加Header
+              <i class="fas fa-plus"></i> Add Header
             </button>
           </div>
           <small class="text-gray-500 mt-1 block"
-            >在这里添加的键值对将被添加到所有出站API请求的Header中。</small
+            >Key-value pairs added here will be included in all outbound API request headers.</small
           >
         </div>
 
-        <!-- Vertex Express API密钥列表 -->
+        <!-- Vertex Express API Key List -->
         <div class="mb-6">
           <label
             for="VERTEX_API_KEYS"
             class="block font-semibold mb-2 text-gray-700"
-            >Vertex Express API密钥列表</label
+            >Vertex Express API Key List</label
           >
           <div class="array-container" id="VERTEX_API_KEYS_container">
-            <!-- 数组项将在这里动态添加 -->
+            <!-- Array items will be dynamically added here -->
           </div>
           <div class="flex justify-end gap-2">
             <button
@@ -1124,27 +1124,27 @@ endblock %} {% block head_extra_styles %}
               class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2"
               id="bulkDeleteVertexApiKeyBtn"
             >
-              <i class="fas fa-trash-alt"></i> 删除Vertex密钥
+              <i class="fas fa-trash-alt"></i> Delete Vertex Keys
             </button>
             <button
               type="button"
               class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2"
               id="addVertexApiKeyBtn"
             >
-              <i class="fas fa-plus"></i> 添加Vertex密钥
+              <i class="fas fa-plus"></i> Add Vertex Keys
             </button>
           </div>
           <small class="text-gray-500 mt-1 block"
-            >Vertex AI Platform API密钥列表。点击按钮可批量添加或删除。</small
+            >Vertex AI Platform API key list. Click buttons for bulk add or delete.</small
           >
         </div>
 
-        <!-- Vertex Express API基础URL -->
+        <!-- Vertex Express API Base URL -->
         <div class="mb-6">
           <label
             for="VERTEX_EXPRESS_BASE_URL"
             class="block font-semibold mb-2 text-gray-700"
-            >Vertex Express API基础URL</label
+            >Vertex Express API Base URL</label
           >
           <input
             type="text"
@@ -1154,16 +1154,16 @@ endblock %} {% block head_extra_styles %}
             class="w-full px-4 py-3 rounded-lg form-input-themed"
           />
           <small class="text-gray-500 mt-1 block"
-            >Vertex Express API的基础URL</small
+            >Base URL for Vertex Express API</small
           >
         </div>
-        <!-- 智能路由配置 -->
+        <!-- Smart Routing Configuration -->
         <div class="mb-6">
           <div class="flex items-center justify-between">
             <label
               for="URL_NORMALIZATION_ENABLED"
               class="font-semibold text-gray-700"
-              >启用智能路由映射</label
+              >Enable Smart Route Mapping</label
             >
             <div
               class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in"
@@ -1181,15 +1181,15 @@ endblock %} {% block head_extra_styles %}
             </div>
           </div>
           <small class="text-gray-500 mt-1 block">
-            自动客户端请求的url拼接为正确格式（仅保证正常聊天，出现问题请关闭）
+            Auto-normalize client request URLs to correct format (only ensures normal chat, disable if issues occur)
           </small>
         </div>
-        <!-- 最大失败次数 -->
+        <!-- Maximum Failure Count -->
         <div class="mb-6">
           <label
             for="MAX_FAILURES"
             class="block font-semibold mb-2 text-gray-700"
-            >最大失败次数</label
+            >Maximum Failure Count</label
           >
           <input
             type="number"
@@ -1282,7 +1282,7 @@ endblock %} {% block head_extra_styles %}
             <label
               for="PROXIES_USE_CONSISTENCY_HASH_BY_API_KEY"
               class="font-semibold text-gray-700"
-              >是否开启固定代理策略</label
+              >Whether to enable fixed proxy strategy</label
             >
             <div
               class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in"
@@ -1305,18 +1305,18 @@ endblock %} {% block head_extra_styles %}
         </div>
       </div>
 
-      <!-- 模型相关配置 -->
+      <!-- Model Related Configuration -->
       <div class="config-section" id="model-section">
         <h2
           class="text-xl font-bold mb-6 pb-3 border-b flex items-center gap-2 text-gray-800 border-violet-300 border-opacity-30"
         >
-          <i class="fas fa-robot text-violet-400"></i> 模型相关配置
+          <i class="fas fa-robot text-violet-400"></i> Model Related Configuration
         </h2>
 
-        <!-- 测试模型 -->
+        <!-- Test Model -->
         <div class="mb-6">
           <label for="TEST_MODEL" class="block font-semibold mb-2 text-gray-700"
-            >测试模型</label
+            >Test Model</label
           >
           <div class="flex items-center gap-2">
             <input
@@ -1335,23 +1335,23 @@ endblock %} {% block head_extra_styles %}
               <i class="fas fa-list-ul"></i>
             </button>
           </div>
-          <small class="text-gray-500 mt-1 block">用于测试API密钥的模型</small>
+          <small class="text-gray-500 mt-1 block">Model used for testing API keys</small>
         </div>
 
-        <!-- 图像模型列表 -->
+        <!-- Image Model List -->
         <div class="mb-6">
           <label
             for="IMAGE_MODELS"
             class="block font-semibold mb-2 text-gray-700"
-            >图像模型列表</label
+            >Image Model List</label
           >
           <div class="array-container" id="IMAGE_MODELS_container">
-            <!-- 数组项将在这里动态添加 -->
+            <!-- Array items will be dynamically added here -->
           </div>
           <div class="flex justify-end gap-2 mt-2">
             <button
               type="button"
-              title="从列表选择模型添加到下方"
+              title="Select model from list to add below"
               class="model-helper-trigger-btn p-2 rounded-md text-violet-300 hover:bg-violet-700 transition-colors"
               data-target-array-key="IMAGE_MODELS"
             >
@@ -1362,26 +1362,26 @@ endblock %} {% block head_extra_styles %}
               class="bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2"
               onclick="addArrayItem('IMAGE_MODELS')"
             >
-              <i class="fas fa-plus"></i> 添加模型
+              <i class="fas fa-plus"></i> Add Model
             </button>
           </div>
-          <small class="text-gray-500 mt-1 block">支持图像处理的模型列表</small>
+          <small class="text-gray-500 mt-1 block">List of models that support image processing</small>
         </div>
 
-        <!-- 搜索模型列表 -->
+        <!-- Search Model List -->
         <div class="mb-6">
           <label
             for="SEARCH_MODELS"
             class="block font-semibold mb-2 text-gray-700"
-            >搜索模型列表</label
+            >Search Model List</label
           >
           <div class="array-container" id="SEARCH_MODELS_container">
-            <!-- 数组项将在这里动态添加 -->
+            <!-- Array items will be dynamically added here -->
           </div>
           <div class="flex justify-end gap-2 mt-2">
             <button
               type="button"
-              title="从列表选择模型添加到下方"
+              title="Select model from list to add below"
               class="model-helper-trigger-btn p-2 rounded-md text-violet-300 hover:bg-violet-700 transition-colors"
               data-target-array-key="SEARCH_MODELS"
             >
@@ -1392,26 +1392,26 @@ endblock %} {% block head_extra_styles %}
               class="bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2"
               onclick="addArrayItem('SEARCH_MODELS')"
             >
-              <i class="fas fa-plus"></i> 添加模型
+              <i class="fas fa-plus"></i> Add Model
             </button>
           </div>
-          <small class="text-gray-500 mt-1 block">支持搜索功能的模型列表</small>
+          <small class="text-gray-500 mt-1 block">List of models that support search functionality</small>
         </div>
 
-        <!-- 过滤模型列表 -->
+        <!-- Filter Model List -->
         <div class="mb-6">
           <label
             for="FILTERED_MODELS"
             class="block font-semibold mb-2 text-gray-700"
-            >过滤模型列表</label
+            >Filter Model List</label
           >
           <div class="array-container" id="FILTERED_MODELS_container">
-            <!-- 数组项将在这里动态添加 -->
+            <!-- Array items will be dynamically added here -->
           </div>
           <div class="flex justify-end gap-2 mt-2">
             <button
               type="button"
-              title="从列表选择模型添加到下方"
+              title="Select model from list to add below"
               class="model-helper-trigger-btn p-2 rounded-md text-violet-300 hover:bg-violet-700 transition-colors"
               data-target-array-key="FILTERED_MODELS"
             >
@@ -1422,18 +1422,18 @@ endblock %} {% block head_extra_styles %}
               class="bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2"
               onclick="addArrayItem('FILTERED_MODELS')"
             >
-              <i class="fas fa-plus"></i> 添加模型
+              <i class="fas fa-plus"></i> Add Model
             </button>
           </div>
-          <small class="text-gray-500 mt-1 block">需要过滤的模型列表</small>
+          <small class="text-gray-500 mt-1 block">List of models that need to be filtered</small>
         </div>
 
-        <!-- 启用代码执行工具 -->
+        <!-- Enable Code Execution Tools -->
         <div class="mb-6 flex items-center justify-between">
           <label
             for="TOOLS_CODE_EXECUTION_ENABLED"
             class="font-semibold text-gray-700"
-            >启用代码执行工具</label
+            >Enable Code Execution Tools</label
           >
           <div
             class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in"
@@ -1451,10 +1451,10 @@ endblock %} {% block head_extra_styles %}
           </div>
         </div>
 
-        <!-- 启用网址上下文 -->
+        <!-- Enable URL Context -->
         <div class="mb-6 flex items-center justify-between">
           <label for="URL_CONTEXT_ENABLED" class="font-semibold text-gray-700"
-            >启用网址上下文</label
+            >Enable URL Context</label
           >
           <div
             class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in"
@@ -1480,12 +1480,12 @@ endblock %} {% block head_extra_styles %}
             >网址上下文模型列表</label
           >
           <div class="array-container" id="URL_CONTEXT_MODELS_container">
-            <!-- 数组项将在这里动态添加 -->
+            <!-- Array items will be dynamically added here -->
           </div>
           <div class="flex justify-end gap-2 mt-2">
             <button
               type="button"
-              title="从列表选择模型添加到下方"
+              title="Select model from list to add below"
               class="model-helper-trigger-btn p-2 rounded-md text-violet-300 hover:bg-violet-700 transition-colors"
               data-target-array-key="URL_CONTEXT_MODELS"
             >
@@ -1496,7 +1496,7 @@ endblock %} {% block head_extra_styles %}
               class="bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2"
               onclick="addArrayItem('URL_CONTEXT_MODELS')"
             >
-              <i class="fas fa-plus"></i> 添加模型
+              <i class="fas fa-plus"></i> Add Model
             </button>
           </div>
           <small class="text-gray-500 mt-1 block"
@@ -1525,10 +1525,10 @@ endblock %} {% block head_extra_styles %}
           </div>
         </div>
 
-        <!-- 显示思考过程 -->
+        <!-- Show Thinking Process -->
         <div class="mb-6 flex items-center justify-between">
           <label for="SHOW_THINKING_PROCESS" class="font-semibold text-gray-700"
-            >显示思考过程</label
+            >Show Thinking Process</label
           >
           <div
             class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in"
@@ -1546,20 +1546,20 @@ endblock %} {% block head_extra_styles %}
           </div>
         </div>
 
-        <!-- 思考模型列表 -->
+        <!-- Thinking Model List -->
         <div class="mb-6">
           <label
             for="THINKING_MODELS"
             class="block font-semibold mb-2 text-gray-700"
-            >思考模型列表</label
+            >Thinking Model List</label
           >
           <div class="array-container" id="THINKING_MODELS_container">
-            <!-- 数组项将在这里动态添加 -->
+            <!-- Array items will be dynamically added here -->
           </div>
           <div class="flex justify-end gap-2 mt-2">
             <button
               type="button"
-              title="从列表选择模型添加到下方"
+              title="Select model from list to add below"
               class="model-helper-trigger-btn p-2 rounded-md text-violet-300 hover:bg-violet-700 transition-colors"
               data-target-array-key="THINKING_MODELS"
             >
@@ -1570,7 +1570,7 @@ endblock %} {% block head_extra_styles %}
               class="bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2"
               onclick="addArrayItem('THINKING_MODELS')"
             >
-              <i class="fas fa-plus"></i> 添加模型
+              <i class="fas fa-plus"></i> Add Model
             </button>
           </div>
           <small class="text-gray-500 mt-1 block"
@@ -1578,12 +1578,12 @@ endblock %} {% block head_extra_styles %}
           >
         </div>
 
-        <!-- 思考模型预算映射 -->
+        <!-- Thinking Model Budget Mapping -->
         <div class="mb-6">
           <label
             for="THINKING_BUDGET_MAP"
             class="block font-semibold mb-2 text-gray-700"
-            >思考模型预算映射</label
+            >Thinking Model Budget Mapping</label
           >
           <div
             class="bg-white rounded-lg border border-gray-200 p-4 mb-2 space-y-3"
@@ -1594,19 +1594,19 @@ endblock %} {% block head_extra_styles %}
               color: #374151;
             "
           >
-            <!-- 键值对将在这里动态添加 -->
+            <!-- Key-value pairs will be dynamically added here -->
             <div class="text-gray-500 text-sm italic">
-              请先在上方添加思考模型，然后在此处配置预算。
+              Please add thinking models above first, then configure budgets here.
             </div>
           </div>
-          <!-- 移除添加预算映射按钮 -->
+          <!-- Remove add budget mapping button -->
           <!-- <div class="flex justify-end">
                             <button type="button" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2" id="addBudgetMapItemBtn">
-                                <i class="fas fa-plus"></i> 添加预算映射
+                                <i class="fas fa-plus"></i> Add Budget Mapping
                             </button>
                         </div> -->
           <small class="text-gray-500 mt-1 block"
-            >为每个思考模型设置预算（-1为auto，最大值
+            >Set budget for each thinking model (-1 for auto, maximum value
             32767），此项与上方模型列表自动关联。</small
           >
         </div>
@@ -1637,7 +1637,7 @@ endblock %} {% block head_extra_styles %}
               class="bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2"
               id="addSafetySettingBtn"
             >
-              <i class="fas fa-plus"></i> 添加安全设置
+              <i class="fas fa-plus"></i> 添加Security Settings
             </button>
           </div>
           <small class="text-gray-500 mt-1 block"
@@ -1658,7 +1658,7 @@ endblock %} {% block head_extra_styles %}
         <h2
           class="text-xl font-bold mb-6 pb-3 border-b flex items-center gap-2 text-gray-800 border-violet-300 border-opacity-30"
         >
-          <i class="fas fa-volume-up text-violet-400"></i> TTS 相关配置
+          <i class="fas fa-volume-up text-violet-400"></i> TTS Related Configuration
         </h2>
 
         <!-- TTS 模型 -->
@@ -1752,7 +1752,7 @@ endblock %} {% block head_extra_styles %}
         <h2
           class="text-xl font-bold mb-6 pb-3 border-b flex items-center gap-2 text-gray-800 border-violet-300 border-opacity-30"
         >
-          <i class="fas fa-image text-violet-400"></i> 图像生成配置
+          <i class="fas fa-image text-violet-400"></i> Image Generation Configuration
         </h2>
 
         <!-- 付费API密钥 -->
@@ -1928,15 +1928,15 @@ endblock %} {% block head_extra_styles %}
         <h2
           class="text-xl font-bold mb-6 pb-3 border-b flex items-center gap-2 text-gray-800 border-violet-300 border-opacity-30"
         >
-          <i class="fas fa-stream text-violet-400"></i> 流式输出相关配置
+          <i class="fas fa-stream text-violet-400"></i> Stream Output Related Configuration
         </h2>
 
-        <!-- 启用流式输出优化 -->
+        <!-- Enable Stream Output Optimization -->
         <div class="mb-6 flex items-center justify-between">
           <label
             for="STREAM_OPTIMIZER_ENABLED"
             class="font-semibold text-gray-700"
-            >启用流式输出优化</label
+            >Enable Stream Output Optimization</label
           >
           <div
             class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in"
@@ -2054,10 +2054,10 @@ endblock %} {% block head_extra_styles %}
           Streaming)
         </h3>
 
-        <!-- 启用假流式输出 -->
+        <!-- Enable Fake Stream Output -->
         <div class="mb-6 flex items-center justify-between">
           <label for="FAKE_STREAM_ENABLED" class="font-semibold text-gray-700"
-            >启用假流式输出</label
+            >Enable Fake Stream Output</label
           >
           <div
             class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in"
@@ -2095,7 +2095,7 @@ endblock %} {% block head_extra_styles %}
             class="w-full px-4 py-3 rounded-lg form-input-themed"
           />
           <small class="text-gray-500 mt-1 block"
-            >在启用假流式输出时，向客户端发送空数据以维持连接状态的时间间隔（建议
+            >在Enable Fake Stream Output时，向客户端发送空数据以维持连接状态的时间间隔（建议
             3-10 秒）。</small
           >
         </div>
@@ -2287,7 +2287,7 @@ endblock %} {% block head_extra_styles %}
             color: #ffffff !important;
           "
         >
-          <i class="fas fa-save"></i> 保存配置
+          <i class="fas fa-save"></i> Save Configuration
         </button>
         <button
           type="button"
@@ -2298,7 +2298,7 @@ endblock %} {% block head_extra_styles %}
             color: #ffffff !important;
           "
         >
-          <i class="fas fa-undo"></i> 重置配置
+          <i class="fas fa-undo"></i> Reset Configuration
         </button>
       </div>
     </form>
@@ -2527,7 +2527,7 @@ endblock %} {% block head_extra_styles %}
   >
     <div class="p-6">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold text-gray-800">确认重置配置</h2>
+        <h2 class="text-xl font-bold text-gray-800">Confirm Reset Configuration</h2>
         <button
           id="closeResetModalBtn"
           class="text-gray-300 hover:text-gray-800 text-xl"
@@ -2752,7 +2752,7 @@ endblock %} {% block head_extra_styles %}
     <div class="p-6">
       <div class="flex justify-between items-center mb-4">
         <h2 id="modelHelperTitle" class="text-xl font-bold text-gray-800">
-          选择模型
+          Select Model
         </h2>
         <button
           id="closeModelHelperModalBtn"
@@ -2859,7 +2859,7 @@ endblock %} {% block head_extra_styles %}
       logLevelSelect.addEventListener("change", updateLogLevelStyle);
     }
 
-    // 增强预算映射项交互
+    // Enhanced budget mapping item interaction
     const budgetInputs = document.querySelectorAll(".map-value-input");
     budgetInputs.forEach((input) => {
       // 添加焦点和悬停效果

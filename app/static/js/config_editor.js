@@ -672,7 +672,7 @@ function generateUUID() {
  */
 async function initConfig() {
   try {
-    showNotification("正在加载配置...", "info");
+    showNotification("Loading configuration...", "info");
     const response = await fetch("/api/config");
 
     if (!response.ok) {
@@ -764,23 +764,23 @@ async function initConfig() {
       config.URL_CONTEXT_MODELS = [];
     }
  
-    // --- 新增：处理自动删除错误日志配置的默认值 ---
+    // --- 新增：处理自动Delete错误日志配置的默认值 ---
     if (typeof config.AUTO_DELETE_ERROR_LOGS_ENABLED === "undefined") {
       config.AUTO_DELETE_ERROR_LOGS_ENABLED = false;
     }
     if (typeof config.AUTO_DELETE_ERROR_LOGS_DAYS === "undefined") {
       config.AUTO_DELETE_ERROR_LOGS_DAYS = 7;
     }
-    // --- 结束：处理自动删除错误日志配置的默认值 ---
+    // --- 结束：处理自动Delete错误日志配置的默认值 ---
 
-    // --- 新增：处理自动删除请求日志配置的默认值 ---
+    // --- 新增：处理自动Delete请求日志配置的默认值 ---
     if (typeof config.AUTO_DELETE_REQUEST_LOGS_ENABLED === "undefined") {
       config.AUTO_DELETE_REQUEST_LOGS_ENABLED = false;
     }
     if (typeof config.AUTO_DELETE_REQUEST_LOGS_DAYS === "undefined") {
       config.AUTO_DELETE_REQUEST_LOGS_DAYS = 30;
     }
-    // --- 结束：处理自动删除请求日志配置的默认值 ---
+    // --- 结束：处理自动Delete请求日志配置的默认值 ---
 
     // --- 新增：处理假流式配置的默认值 ---
     if (typeof config.FAKE_STREAM_ENABLED === "undefined") {
@@ -805,12 +805,12 @@ async function initConfig() {
       toggleProviderConfig("smms");
     }
 
-    showNotification("配置加载成功", "success");
+    showNotification("Configuration loaded successfully", "success");
   } catch (error) {
-    console.error("加载配置失败:", error);
-    showNotification("加载配置失败: " + error.message, "error");
+    console.error("Failed to load configuration:", error);
+    showNotification("Failed to load configuration: " + error.message, "error");
 
-    // 加载失败时，使用默认配置
+// When loading fails, use default configuration
     const defaultConfig = {
       API_KEYS: [""],
       ALLOWED_TOKENS: [""],
@@ -1022,7 +1022,7 @@ function populateForm(config) {
       '<div class="text-gray-500 text-sm italic">定义模型的安全过滤阈值。</div>';
   }
 
-  // --- 新增：处理自动删除错误日志的字段 ---
+  // --- 新增：处理自动Delete错误日志的字段 ---
   const autoDeleteEnabledCheckbox = document.getElementById(
     "AUTO_DELETE_ERROR_LOGS_ENABLED"
   );
@@ -1042,9 +1042,9 @@ function populateForm(config) {
       autoDeleteDaysSelect.disabled = !this.checked;
     });
   }
-  // --- 结束：处理自动删除错误日志的字段 ---
+  // --- 结束：处理自动Delete错误日志的字段 ---
 
-  // --- 新增：处理自动删除请求日志的字段 ---
+  // --- 新增：处理自动Delete请求日志的字段 ---
   const autoDeleteRequestEnabledCheckbox = document.getElementById(
     "AUTO_DELETE_REQUEST_LOGS_ENABLED"
   );
@@ -1064,7 +1064,7 @@ function populateForm(config) {
       autoDeleteRequestDaysSelect.disabled = !this.checked;
     });
   }
-  // --- 结束：处理自动删除请求日志的字段 ---
+  // --- 结束：处理自动Delete请求日志的字段 ---
 
   // --- 新增：处理假流式配置的字段 ---
   const fakeStreamEnabledCheckbox = document.getElementById(
@@ -1261,7 +1261,7 @@ function handleBulkDeleteApiKeys() {
 
   const bulkText = bulkDeleteApiKeyInput.value;
   if (!bulkText.trim()) {
-    showNotification("请粘贴需要删除的 API 密钥", "warning");
+    showNotification("Please paste the API keys to delete", "warning");
     return;
   }
 
@@ -1272,7 +1272,7 @@ function handleBulkDeleteApiKeys() {
     return;
   }
 
-  // 从allApiKeys数组中删除匹配的密钥
+  // 从allApiKeys数组中Delete匹配的密钥
   let deleteCount = 0;
   allApiKeys = allApiKeys.filter(key => {
     if (keysToDelete.has(key)) {
@@ -1299,9 +1299,9 @@ function handleBulkDeleteApiKeys() {
   closeModal(bulkDeleteApiKeyModal);
 
   if (deleteCount > 0) {
-    showNotification(`成功删除了 ${deleteCount} 个匹配的密钥`, "success");
+    showNotification(`Successfully deleted ${deleteCount} matching keys`, "success");
   } else {
-    showNotification("列表中未找到您输入的任何密钥进行删除", "info");
+    showNotification("No matching keys found in the list to delete", "info");
   }
   bulkDeleteApiKeyInput.value = "";
 }
@@ -1345,7 +1345,7 @@ function handleBulkDeleteProxies() {
 
   const bulkText = bulkDeleteProxyInput.value;
   if (!bulkText.trim()) {
-    showNotification("请粘贴需要删除的代理地址", "warning");
+    showNotification("Please paste the proxy addresses to delete", "warning");
     return;
   }
 
@@ -1370,9 +1370,9 @@ function handleBulkDeleteProxies() {
   closeModal(bulkDeleteProxyModal);
 
   if (deleteCount > 0) {
-    showNotification(`成功删除了 ${deleteCount} 个匹配的代理`, "success");
+    showNotification(`Successfully deleted ${deleteCount} matching proxies`, "success");
   } else {
-    showNotification("列表中未找到您输入的任何代理进行删除", "info");
+    showNotification("No matching proxies found in the list to delete", "info");
   }
   bulkDeleteProxyInput.value = "";
 }
@@ -1450,7 +1450,7 @@ function handleBulkDeleteVertexApiKeys() {
 
   const bulkText = bulkDeleteVertexApiKeyInput.value;
   if (!bulkText.trim()) {
-    showNotification("请粘贴需要删除的 Vertex Express API 密钥", "warning");
+    showNotification("Please paste the Vertex Express API keys to delete", "warning");
     return;
   }
 
@@ -1488,11 +1488,11 @@ function handleBulkDeleteVertexApiKeys() {
 
   if (deleteCount > 0) {
     showNotification(
-      `成功删除了 ${deleteCount} 个匹配的 Vertex 密钥`,
+      `Successfully deleted ${deleteCount} matching Vertex keys`,
       "success"
     );
   } else {
-    showNotification("列表中未找到您输入的任何 Vertex 密钥进行删除", "info");
+    showNotification("No matching Vertex keys found in the list to delete", "info");
   }
   bulkDeleteVertexApiKeyInput.value = "";
 }
@@ -1605,7 +1605,7 @@ function createRemoveButton() {
   removeBtn.className =
     "remove-btn text-gray-400 hover:text-red-500 focus:outline-none transition-colors duration-150";
   removeBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
-  removeBtn.title = "删除";
+  removeBtn.title = "Delete";
   // Event listener will be added via delegation in DOMContentLoaded
   return removeBtn;
 }
@@ -1800,7 +1800,7 @@ function createAndAppendBudgetMapItem(mapKey, mapValue, modelId) {
   // removeBtn.type = 'button';
   // removeBtn.className = 'remove-btn text-gray-300 cursor-not-allowed focus:outline-none'; // Kept original class for reference
   // removeBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
-  // removeBtn.title = '请从上方模型列表删除';
+  // removeBtn.title = '请从上方模型列表Delete';
   // removeBtn.disabled = true;
 
   mapItem.appendChild(keyInput);
@@ -1998,7 +1998,7 @@ function collectFormData() {
     });
   }
 
-  // --- 新增：收集自动删除错误日志的配置 ---
+  // --- 新增：收集自动Delete错误日志的配置 ---
   const autoDeleteEnabledCheckbox = document.getElementById(
     "AUTO_DELETE_ERROR_LOGS_ENABLED"
   );
@@ -2019,9 +2019,9 @@ function collectFormData() {
       10
     );
   }
-  // --- 结束：收集自动删除错误日志的配置 ---
+  // --- 结束：收集自动Delete错误日志的配置 ---
 
-  // --- 新增：收集自动删除请求日志的配置 ---
+  // --- 新增：收集自动Delete请求日志的配置 ---
   const autoDeleteRequestEnabledCheckbox = document.getElementById(
     "AUTO_DELETE_REQUEST_LOGS_ENABLED"
   );
@@ -2039,7 +2039,7 @@ function collectFormData() {
       10
     );
   }
-  // --- 结束：收集自动删除请求日志的配置 ---
+  // --- 结束：收集自动Delete请求日志的配置 ---
 
   // --- 新增：收集假流式配置 ---
   const fakeStreamEnabledCheckbox = document.getElementById(
@@ -2364,7 +2364,7 @@ function addSafetySettingItem(category = "", threshold = "") {
   removeBtn.className =
     "remove-btn text-gray-400 hover:text-red-500 focus:outline-none transition-colors duration-150";
   removeBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
-  removeBtn.title = "删除此设置";
+  removeBtn.title = "Delete此设置";
   // Event listener for removeBtn is now handled by event delegation in DOMContentLoaded
 
   settingItem.appendChild(categorySelect);

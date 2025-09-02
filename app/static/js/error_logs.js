@@ -1,4 +1,4 @@
-// 错误日志页面JavaScript (Updated for new structure, no Bootstrap)
+// Error log page JavaScript (Updated for new structure, no Bootstrap)
 
 // 页面滚动功能
 function scrollToTop() {
@@ -100,18 +100,18 @@ let searchBtn;
 let pageInput;
 let goToPageBtn;
 let selectAllCheckbox; // 新增：全选复选框
-let copySelectedKeysBtn; // 新增：复制选中按钮
-let deleteSelectedBtn; // 新增：批量删除按钮
+let copySelectedKeysBtn; // Added: Copy selected button
+let deleteSelectedBtn; // Added: Batch delete button
 let sortByIdHeader; // 新增：ID 排序表头
 let sortIcon; // 新增：排序图标
 let selectedCountSpan; // 新增：选中计数显示
-let deleteConfirmModal; // 新增：删除确认模态框
-let closeDeleteConfirmModalBtn; // 新增：关闭删除模态框按钮
-let cancelDeleteBtn; // 新增：取消删除按钮
-let confirmDeleteBtn; // 新增：确认删除按钮
-let deleteConfirmMessage; // 新增：删除确认消息元素
-let idsToDeleteGlobally = []; // 新增：存储待删除的ID
-let currentConfirmCallback = null; // 新增：存储当前的确认回调
+let deleteConfirmModal; // Added: Delete confirmation modal
+let closeDeleteConfirmModalBtn; // Added: Close delete modal button
+let cancelDeleteBtn; // Added: Cancel delete button
+let confirmDeleteBtn; // Added: Confirm delete button
+let deleteConfirmMessage; // Added: Delete confirmation message element
+let idsToDeleteGlobally = []; // Added: Store IDs to be deleted
+let currentConfirmCallback = null; // Added: Store current confirmation callback
 let deleteAllLogsBtn; // 新增：清空全部按钮
 
 // Helper functions for initialization
@@ -254,7 +254,7 @@ function initializeActionControls() {
    // 为 "清空全部" 按钮添加事件监听器
    if (deleteAllLogsBtn) {
      deleteAllLogsBtn.addEventListener("click", function() {
-       const message = "您确定要清空所有错误日志吗？此操作不可恢复！";
+       const message = "Are you sure you want to clear all error logs? This operation cannot be undone!";
        showDeleteConfirmModal(message, handleDeleteAllLogs); // 传入回调
      });
    }
@@ -269,16 +269,16 @@ function initializeActionControls() {
  
    try {
      await fetchAPI(url, options);
-     showNotification("所有错误日志已成功清空", "success");
+     showNotification("All error logs have been successfully cleared", "success");
      if (selectAllCheckbox) selectAllCheckbox.checked = false; // 取消全选
-     loadErrorLogs(); // 重新加载日志
+     loadErrorLogs(); // Reload logs
    } catch (error) {
-     console.error("清空所有错误日志失败:", error);
-     showNotification(`清空失败: ${error.message}`, "error", 5000);
+     console.error("Failed to clear all error logs:", error);
+     showNotification(`Clear failed: ${error.message}`, "error", 5000);
    }
  }
   
- // 页面加载完成后执行
+ // Execute after page load is complete
 document.addEventListener("DOMContentLoaded", function () {
   cacheDOMElements();
   initializePageSizeControls();
@@ -295,7 +295,7 @@ document.addEventListener("DOMContentLoaded", function () {
   setupCopyButtons();
 });
 
-// 新增：显示删除确认模态框
+// Added: Show delete confirmation modal
 function showDeleteConfirmModal(message, confirmCallback) {
   if (deleteConfirmModal && deleteConfirmMessage) {
     deleteConfirmMessage.textContent = message;
@@ -305,17 +305,17 @@ function showDeleteConfirmModal(message, confirmCallback) {
   }
 }
  
-// 新增：隐藏删除确认模态框
+// Added: Hide delete confirmation modal
 function hideDeleteConfirmModal() {
   if (deleteConfirmModal) {
     deleteConfirmModal.classList.remove("show");
     document.body.style.overflow = ""; // Restore body scrolling
-    idsToDeleteGlobally = []; // 清空待删除ID
+    idsToDeleteGlobally = []; // Clear IDs to be deleted
     currentConfirmCallback = null; // 清除回调
   }
 }
  
-// 新增：处理确认删除按钮点击
+// Added: Handle confirm delete button click
 function handleConfirmDelete() {
   if (typeof currentConfirmCallback === 'function') {
     currentConfirmCallback(); // 调用存储的回调
@@ -355,10 +355,10 @@ function handleCopyResult(buttonElement, success) {
   const iconElement = buttonElement.querySelector("i");
   if (success) {
     iconElement.className = "fas fa-check text-success-500"; // Use checkmark icon class
-    showNotification("已复制到剪贴板", "success", 2000);
+    showNotification("Copied to clipboard", "success", 2000);
   } else {
     iconElement.className = "fas fa-times text-danger-500"; // Use error icon class
-    showNotification("复制失败", "error", 3000);
+    showNotification("Copy failed", "error", 3000);
   }
   setTimeout(
     () => {
@@ -368,7 +368,7 @@ function handleCopyResult(buttonElement, success) {
   ); // Restore original icon class
 }
 
-// 新的内部辅助函数，封装实际的复制操作和反馈
+// New internal helper function that encapsulates actual copy operation and feedback
 function _performCopy(text, buttonElement) {
   let copySuccess = false;
   if (navigator.clipboard && window.isSecureContext) {
@@ -378,7 +378,7 @@ function _performCopy(text, buttonElement) {
         if (buttonElement) {
           handleCopyResult(buttonElement, true);
         } else {
-          showNotification("已复制到剪贴板", "success");
+          showNotification("Copied to clipboard", "success");
         }
       })
       .catch((err) => {
@@ -388,7 +388,7 @@ function _performCopy(text, buttonElement) {
           handleCopyResult(buttonElement, copySuccess);
         } else {
           showNotification(
-            copySuccess ? "已复制到剪贴板" : "复制失败",
+            copySuccess ? "Copied to clipboard" : "Copy failed",
             copySuccess ? "success" : "error"
           );
         }

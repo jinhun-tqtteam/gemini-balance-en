@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -528,7 +528,7 @@
 
     <!-- 通用JS -->
     <script>
-      // 设置版权年份
+      // Set copyright year
       document.getElementById("copyright-year").textContent =
         new Date().getFullYear();
 
@@ -580,7 +580,7 @@
         return notification;
       }
 
-      // 页面刷新带加载状态
+      // Page refresh with loading state
       function refreshPage(button) {
         if (button) {
           const icon = button.querySelector("i");
@@ -601,7 +601,7 @@
       async function fetchVersionInfo() {
         if (!versionInfoContainer) return;
         versionInfoContainer.innerHTML =
-          '<span class="mx-1">|</span><span class="text-xs text-gray-700">检查更新中...</span>'; // Initial loading state
+          '<span class="mx-1">|</span><span class="text-xs text-gray-700">Checking for updates...</span>'; // Initial loading state
 
         try {
           const response = await fetch("/api/version/check");
@@ -615,19 +615,19 @@
             versionHtml += `
                         <span class="mx-1">|</span>
                         <a href="https://github.com/snailyp/gemini-balance/releases/latest" target="_blank" class="text-yellow-600 hover:text-yellow-800 transition duration-300 animate-pulse">
-                            <i class="fas fa-arrow-up"></i> 新版本: v${data.latest_version}
+                            <i class="fas fa-arrow-up"></i> New Version: v${data.latest_version}
                         </a>`;
           } else if (data.error_message) {
             versionHtml += `
                         <span class="mx-1">|</span>
-                        <span class="text-xs text-red-500" title="${data.error_message}">更新检查失败</span>`;
+                        <span class="text-xs text-red-500" title="${data.error_message}">Update check failed</span>`;
           } else {
-            versionHtml += `<span class="mx-1">|</span><span class="text-xs text-green-500">已是最新</span>`; // Indicate up-to-date
+            versionHtml += `<span class="mx-1">|</span><span class="text-xs text-green-500">Up to date</span>`; // Indicate up-to-date
           }
           versionInfoContainer.innerHTML = versionHtml;
         } catch (error) {
           console.error("Error fetching version info:", error);
-          versionInfoContainer.innerHTML = `<span class="mx-1">|</span><span class="text-xs text-red-500" title="无法连接到服务器或解析响应">更新检查失败</span>`;
+          versionInfoContainer.innerHTML = `<span class="mx-1">|</span><span class="text-xs text-red-500" title="Unable to connect to server or parse response">Update check failed</span>`;
         }
       }
 

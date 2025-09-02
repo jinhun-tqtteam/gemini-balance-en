@@ -17,7 +17,7 @@ function copyToClipboard(text) {
         if (successful) {
           resolve();
         } else {
-          reject(new Error("复制失败"));
+          reject(new Error("Copy failed"));
         }
       } catch (err) {
         document.body.removeChild(textArea);
@@ -78,7 +78,7 @@ async function fetchAPI(url, options = {}) {
     );
     // Re-throw the error so the calling function knows the operation failed
     // Add more context if possible
-    throw new Error(`API请求失败: ${error.message}`);
+    throw new Error(`API request failed: ${error.message}`);
   }
 }
 
@@ -106,7 +106,7 @@ function initStatItemAnimations() {
   });
 }
 
-// 获取指定类型区域内选中的密钥
+// Get selected keys in the specified type area
 function getSelectedKeys(type) {
   let selectorRoot;
   if (type === 'attention') {
@@ -157,7 +157,7 @@ function updateBatchActions(type) {
   }
 }
 
-// 全选/取消全选指定类型的密钥
+// Select all/deselect all keys of specified type
 function toggleSelectAll(type, isChecked) {
   const rootId = type === 'attention' ? 'attentionKeysList' : `${type}Keys`;
   const listElement = document.getElementById(rootId);
@@ -189,12 +189,12 @@ function toggleSelectAll(type, isChecked) {
   updateBatchActions(type);
 }
 
-// 复制选中的密钥
+// Copy selected keys
 function copySelectedKeys(type) {
   const selectedKeys = getSelectedKeys(type);
 
   if (selectedKeys.length === 0) {
-    showNotification("没有选中的密钥可复制", "warning");
+    showNotification("No selected keys to copy", "warning");
     return;
   }
 
@@ -203,26 +203,26 @@ function copySelectedKeys(type) {
   copyToClipboard(keysText)
     .then(() => {
       showNotification(
-        `已成功复制 ${selectedKeys.length} 个选中的${
+        `Successfully copied ${selectedKeys.length} selected ${
           type === "valid" ? "有效" : "无效"
-        }密钥`
+        } keys`
       );
     })
     .catch((err) => {
       console.error("无法复制文本: ", err);
-      showNotification("复制失败，请重试", "error");
+      showNotification("Copy failed，请重试", "error");
     });
 }
 
-// 单个复制保持不变
+// Single copy remains unchanged
 function copyKey(key) {
   copyToClipboard(key)
     .then(() => {
-      showNotification(`已成功复制密钥`);
+      showNotification(`Successfully copied key`);
     })
     .catch((err) => {
       console.error("无法复制文本: ", err);
-      showNotification("复制失败，请重试", "error");
+      showNotification("Copy failed，请重试", "error");
     });
 }
 
@@ -242,24 +242,24 @@ async function verifyKey(key, button) {
 
       // 根据验证结果更新UI并显示模态提示框
       if (data && (data.success || data.status === "valid")) {
-        // 验证成功，显示成功结果
+        // Verification successful, show success result
         button.style.backgroundColor = "#27ae60";
-        // 使用结果模态框显示成功消息
-        showResultModal(true, "密钥验证成功");
+        // Use result modal to show success message
+        showResultModal(true, "Key verification successful");
         // 模态框关闭时会自动刷新页面
       } else {
-        // 验证失败，显示失败结果
-        const errorMsg = data.error || "密钥无效";
+        // Verification failed, show failure result
+        const errorMsg = data.error || "Invalid key";
         button.style.backgroundColor = "#e74c3c";
-        // 使用结果模态框显示失败消息，改为true以在关闭时刷新
-        showResultModal(false, "密钥验证失败: " + errorMsg, true);
+        // Use result modal to show failure message, set to true to refresh on close
+        showResultModal(false, "Key verification failed: " + errorMsg, true);
       }
     } catch (apiError) {
-      console.error("密钥验证 API 请求失败:", apiError);
-      showResultModal(false, `验证请求失败: ${apiError.message}`, true);
+      console.error("Key verification API request failed:", apiError);
+      showResultModal(false, `Verification request failed: ${apiError.message}`, true);
     } finally {
       // 1秒后恢复按钮原始状态 (如果页面不刷新)
-      // 由于现在成功和失败都会刷新，这部分逻辑可以简化或移除
+      // Since both success and failure will refresh, this logic can be simplified or removed
       // 但为了防止未来修改刷新逻辑，暂时保留，但可能不会执行
       setTimeout(() => {
         if (
@@ -487,7 +487,7 @@ function showVerificationResultModal(data) {
             "success"
           )
         )
-        .catch(() => showNotification("复制失败", "error"));
+        .catch(() => showNotification("Copy failed", "error"));
     };
     successHeader.appendChild(copySuccessBtn);
     successDiv.appendChild(successHeader);
@@ -532,7 +532,7 @@ function showVerificationResultModal(data) {
             "success"
           )
         )
-        .catch(() => showNotification("复制失败", "error"));
+        .catch(() => showNotification("Copy failed", "error"));
     };
     failHeader.appendChild(copyFailBtn);
     failDiv.appendChild(failHeader);
@@ -602,7 +602,7 @@ function showVerificationResultModal(data) {
               "success"
             )
           )
-          .catch(() => showNotification("复制失败", "error"));
+          .catch(() => showNotification("Copy failed", "error"));
       };
 
       // 密钥列表容器
@@ -2504,7 +2504,7 @@ async function copyAllKeys() {
     
   } catch (error) {
     console.error('复制全部密钥失败:', error);
-    showNotification(`复制失败: ${error.message}`, "error");
+    showNotification(`Copy failed: ${error.message}`, "error");
   }
 }
 
