@@ -965,7 +965,7 @@ function initializeGlobalBatchVerificationHandlers() {
     titleElement.textContent = "Batch Verify Keys";
     if (count > 0) {
       messageElement.textContent = `Are you sure you want to batch verify ${count} selected ${
-        type === "valid" ? "有效" : "无效"
+        type === "valid" ? "Valid" : "Invalid"
       }密钥吗？此操作可能需要一些时间。`;
       confirmButton.disabled = false;
     } else {
@@ -994,7 +994,7 @@ function initializeGlobalBatchVerificationHandlers() {
     const batchSizeInput = document.getElementById("batchSize");
     const batchSize = parseInt(batchSizeInput.value, 10) || 10;
 
-    showProgressModal(`批量验证 ${keysToVerify.length} 个密钥`);
+    showProgressModal(`Batch verifying ${keysToVerify.length} keys`);
 
     let allSuccessfulKeys = [];
     let allFailedKeys = {};
@@ -1002,10 +1002,10 @@ function initializeGlobalBatchVerificationHandlers() {
 
     for (let i = 0; i < keysToVerify.length; i += batchSize) {
       const batch = keysToVerify.slice(i, i + batchSize);
-      const progressText = `正在验证批次 ${Math.floor(i / batchSize) + 1} / ${Math.ceil(keysToVerify.length / batchSize)} (密钥 ${i + 1}-${Math.min(i + batchSize, keysToVerify.length)})`;
+      const progressText = `Verifying batch ${Math.floor(i / batchSize) + 1} / ${Math.ceil(keysToVerify.length / batchSize)} (keys ${i + 1}-${Math.min(i + batchSize, keysToVerify.length)})`;
       
       updateProgress(i, keysToVerify.length, progressText);
-      addProgressLog(`处理批次: ${batch.length}个密钥...`);
+      addProgressLog(`Processing batch: ${batch.length} keys...`);
 
       try {
         const options = {
@@ -1018,17 +1018,17 @@ function initializeGlobalBatchVerificationHandlers() {
         if (data) {
           if (data.successful_keys && data.successful_keys.length > 0) {
             allSuccessfulKeys = allSuccessfulKeys.concat(data.successful_keys);
-            addProgressLog(`✅ 批次成功: ${data.successful_keys.length} 个`);
+            addProgressLog(`✅ Batch successful: ${data.successful_keys.length} keys`);
           }
           if (data.failed_keys && Object.keys(data.failed_keys).length > 0) {
             Object.assign(allFailedKeys, data.failed_keys);
-             addProgressLog(`❌ 批次失败: ${Object.keys(data.failed_keys).length} 个`, true);
+             addProgressLog(`❌ Batch failed: ${Object.keys(data.failed_keys).length} keys`, true);
           }
         } else {
-           addProgressLog(`- 批次返回空数据`, true);
+           addProgressLog(`- Batch returned empty data`, true);
         }
       } catch (apiError) {
-         addProgressLog(`❌ 批次请求失败: ${apiError.message}`, true);
+         addProgressLog(`❌ Batch request failed: ${apiError.message}`, true);
          // Mark all keys in this batch as failed due to API error
          batch.forEach(key => {
             allFailedKeys[key] = apiError.message;
@@ -1041,7 +1041,7 @@ function initializeGlobalBatchVerificationHandlers() {
     updateProgress(
       keysToVerify.length,
       keysToVerify.length,
-      `所有批次验证完成！`
+      `All batch verification completed!`
     );
     
     // Close progress modal and show final results
@@ -1282,8 +1282,8 @@ function createKeyListItem(key, fail_count, type) {
     li.dataset.failCount = fail_count;
 
     const statusBadge = type === 'valid'
-        ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success-50 text-success-600"><i class="fas fa-check mr-1"></i> 有效</span>`
-        : `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-danger-50 text-danger-600"><i class="fas fa-times mr-1"></i> 无效</span>`;
+        ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success-50 text-success-600"><i class="fas fa-check mr-1"></i> Valid</span>`
+        : `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-danger-50 text-danger-600"><i class="fas fa-times mr-1"></i> Invalid</span>`;
 
     li.innerHTML = `
         <input type="checkbox" class="form-checkbox h-5 w-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mt-1 key-checkbox" data-key-type="${type}" value="${key}">
@@ -1299,15 +1299,15 @@ function createKeyListItem(key, fail_count, type) {
                     </div>
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-600">
                         <i class="fas fa-exclamation-triangle mr-1"></i>
-                        失败: ${fail_count}
+                        Failed: ${fail_count}
                     </span>
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
-                    <button class="flex items-center gap-1 bg-success-600 hover:bg-success-700 text-white px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-200" onclick="verifyKey('${key}', this)"><i class="fas fa-check-circle"></i> 验证</button>
-                    <button class="flex items-center gap-1 bg-gray-500 hover:bg-gray-600 text-white px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-200" onclick="resetKeyFailCount('${key}', this)"><i class="fas fa-redo-alt"></i> 重置</button>
-                    <button class="flex items-center gap-1 bg-blue-500 hover:bg-blue-600 text-white px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-200" onclick="copyKey('${key}')"><i class="fas fa-copy"></i> 复制</button>
-                    <button class="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-200" onclick="showKeyUsageDetails('${key}')"><i class="fas fa-chart-pie"></i> 详情</button>
-                    <button class="flex items-center gap-1 bg-red-800 hover:bg-red-900 text-white px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-200" onclick="showSingleKeyDeleteConfirmModal('${key}', this)"><i class="fas fa-trash-alt"></i> 删除</button>
+                    <button class="flex items-center gap-1 bg-success-600 hover:bg-success-700 text-white px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-200" onclick="verifyKey('${key}', this)"><i class="fas fa-check-circle"></i> Verify</button>
+                    <button class="flex items-center gap-1 bg-gray-500 hover:bg-gray-600 text-white px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-200" onclick="resetKeyFailCount('${key}', this)"><i class="fas fa-redo-alt"></i> Reset</button>
+                    <button class="flex items-center gap-1 bg-blue-500 hover:bg-blue-600 text-white px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-200" onclick="copyKey('${key}')"><i class="fas fa-copy"></i> Copy</button>
+                    <button class="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-200" onclick="showKeyUsageDetails('${key}')"><i class="fas fa-chart-pie"></i> Details</button>
+                    <button class="flex items-center gap-1 bg-red-800 hover:bg-red-900 text-white px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-200" onclick="showSingleKeyDeleteConfirmModal('${key}', this)"><i class="fas fa-trash-alt"></i> Delete</button>
                 </div>
             </div>
         </div>
@@ -1414,10 +1414,10 @@ function registerServiceWorker() {
       navigator.serviceWorker
         .register("/static/service-worker.js")
         .then((registration) => {
-          console.log("ServiceWorker注册成功:", registration.scope);
+          console.log("ServiceWorker registered successfully:", registration.scope);
         })
         .catch((error) => {
-          console.log("ServiceWorker注册失败:", error);
+          console.log("ServiceWorker registration failed:", error);
         });
     });
   }
@@ -1452,7 +1452,7 @@ function buildChartConfig(labels, successData, failureData) {
       labels,
       datasets: [
         {
-          label: '成功',
+          label: 'Success',
           data: successData,
           borderColor: 'rgba(16,185,129,1)', // emerald-500
           backgroundColor: 'rgba(16,185,129,0.15)',
@@ -1461,7 +1461,7 @@ function buildChartConfig(labels, successData, failureData) {
           pointRadius: 2,
         },
         {
-          label: '失败',
+          label: 'Failed',
           data: failureData,
           borderColor: 'rgba(239,68,68,1)', // red-500
           backgroundColor: 'rgba(239,68,68,0.15)',
@@ -1851,14 +1851,14 @@ async function executeDeleteSelectedKeys(type) {
       // 使用 resultModal 显示更详细的结果
       const message =
         response.message ||
-        `成功删除 ${response.deleted_count || selectedKeys.length} 个密钥。`;
+        `Successfully deleted ${response.deleted_count || selectedKeys.length} keys.`;
       showResultModal(true, message, true); // true 表示成功，message，true 表示关闭后刷新
     } else {
-      showResultModal(false, response.message || "批量删除密钥失败", true); // false 表示失败，message，true 表示关闭后刷新
+      showResultModal(false, response.message || "Batch delete keys failed", true); // false indicates failure, message, true indicates refresh after close
     }
   } catch (error) {
-    console.error("批量删除 API 请求失败:", error);
-    showResultModal(false, `批量删除请求失败: ${error.message}`, true);
+    console.error("Batch delete API request failed:", error);
+    showResultModal(false, `Batch delete request failed: ${error.message}`, true);
   } finally {
     // resultModal 关闭时会刷新页面，所以通常不需要在这里恢复按钮状态。
     // 如果不刷新，则需要恢复按钮状态：
@@ -1906,7 +1906,7 @@ async function showApiCallDetails(
   const titleElement = document.getElementById("apiCallDetailsModalTitle");
 
   if (!modal || !contentArea || !titleElement) {
-    console.error("无法找到 API 调用详情模态框元素");
+    console.error("Unable to find API call details modal elements");
     showNotification("Unable to show details, page elements missing", "error");
     return;
   }
@@ -1915,16 +1915,16 @@ async function showApiCallDetails(
   let periodText = "";
   switch (period) {
     case "1m":
-      periodText = "最近 1 分钟";
+      periodText = "Last 1 Minute";
       break;
     case "1h":
-      periodText = "最近 1 小时";
+      periodText = "Last 1 Hour";
       break;
     case "24h":
-      periodText = "最近 24 小时";
+      periodText = "Last 24 Hours";
       break;
     default:
-      periodText = "指定时间段";
+      periodText = "Custom Time Period";
   }
   titleElement.textContent = `${periodText} API Call Details`;
 
@@ -1956,7 +1956,7 @@ async function showApiCallDetails(
       ); // Show empty state if no data
     }
   } catch (apiError) {
-    console.error("获取 API 调用详情失败:", apiError);
+    console.error("Failed to get API call details:", apiError);
     contentArea.innerHTML = `
             <div class="text-center py-10 text-danger-500">
                 <i class="fas fa-exclamation-triangle text-3xl"></i>
@@ -1970,7 +1970,7 @@ async function fetchAndShowErrorDetail(logId) {
   try {
     const detail = await fetchAPI(`/api/logs/errors/${logId}/details`);
     if (!detail) {
-      showResultModal(false, `未找到日志 ${logId}`, false);
+      showResultModal(false, `Log ${logId} not found`, false);
       return;
     }
     const container = document.createElement('div');
@@ -1978,9 +1978,9 @@ async function fetchAndShowErrorDetail(logId) {
     const basic = document.createElement('div');
     basic.innerHTML = `
       <div><span class="font-semibold">Key:</span> ${detail.gemini_key ? detail.gemini_key.substring(0,4)+'...'+detail.gemini_key.slice(-4) : 'N/A'}</div>
-      <div><span class="font-semibold">模型:</span> ${detail.model_name || 'N/A'}</div>
-      <div><span class="font-semibold">时间:</span> ${detail.request_time ? new Date(detail.request_time).toLocaleString() : 'N/A'}</div>
-      <div><span class="font-semibold">错误类型:</span> ${detail.error_type || 'N/A'}</div>
+      <div><span class="font-semibold">Model:</span> ${detail.model_name || 'N/A'}</div>
+      <div><span class="font-semibold">Time:</span> ${detail.request_time ? new Date(detail.request_time).toLocaleString() : 'N/A'}</div>
+      <div><span class="font-semibold">Error Type:</span> ${detail.error_type || 'N/A'}</div>
     `;
     const codeBlock = document.createElement('pre');
     codeBlock.className = 'bg-red-50 border border-red-200 rounded p-3 whitespace-pre-wrap break-words text-red-700';
@@ -1993,7 +1993,7 @@ async function fetchAndShowErrorDetail(logId) {
     if (detail.request_msg) container.appendChild(reqBlock);
     showResultModal(false, container, false);
   } catch (e) {
-    showResultModal(false, `加载日志详情失败: ${e.message}`, false);
+    showResultModal(false, `Failed to load log details: ${e.message}`, false);
   }
 }
 
@@ -2001,7 +2001,7 @@ async function fetchAndShowErrorDetail(logId) {
 async function fetchAndShowErrorDetailByInfo(geminiKey, statusCode, timestampISO) {
   try {
     if (!geminiKey || !timestampISO) {
-      showResultModal(false, '缺少必要参数，无法查询错误详情', false);
+      showResultModal(false, 'Missing required parameters, unable to query error details', false);
       return;
     }
     const params = new URLSearchParams();
@@ -2013,7 +2013,7 @@ async function fetchAndShowErrorDetailByInfo(geminiKey, statusCode, timestampISO
     params.set('window_seconds', '100');
     const detail = await fetchAPI(`/api/logs/errors/lookup?${params.toString()}`);
     if (!detail) {
-      showResultModal(false, '未找到匹配的错误日志', false);
+      showResultModal(false, 'No matching error log found', false);
       return;
     }
     const container = document.createElement('div');
@@ -2021,10 +2021,10 @@ async function fetchAndShowErrorDetailByInfo(geminiKey, statusCode, timestampISO
     const basic = document.createElement('div');
     basic.innerHTML = `
       <div><span class="font-semibold">Key:</span> ${detail.gemini_key ? detail.gemini_key.substring(0,4)+'...'+detail.gemini_key.slice(-4) : 'N/A'}</div>
-      <div><span class="font-semibold">模型:</span> ${detail.model_name || 'N/A'}</div>
-      <div><span class="font-semibold">时间:</span> ${detail.request_time ? new Date(detail.request_time).toLocaleString() : 'N/A'}</div>
-      <div><span class="font-semibold">错误码:</span> ${detail.error_code ?? 'N/A'}</div>
-      <div><span class="font-semibold">错误类型:</span> ${detail.error_type || 'N/A'}</div>
+      <div><span class="font-semibold">Model:</span> ${detail.model_name || 'N/A'}</div>
+      <div><span class="font-semibold">Time:</span> ${detail.request_time ? new Date(detail.request_time).toLocaleString() : 'N/A'}</div>
+      <div><span class="font-semibold">Error Code:</span> ${detail.error_code ?? 'N/A'}</div>
+      <div><span class="font-semibold">Error Type:</span> ${detail.error_type || 'N/A'}</div>
     `;
     const codeBlock = document.createElement('pre');
     codeBlock.className = 'bg-red-50 border border-red-200 rounded p-3 whitespace-pre-wrap break-words text-red-700';
@@ -2037,7 +2037,7 @@ async function fetchAndShowErrorDetailByInfo(geminiKey, statusCode, timestampISO
     if (detail.request_msg) container.appendChild(reqBlock);
     showResultModal(false, container, false);
   } catch (e) {
-    showResultModal(false, `加载日志详情失败: ${e.message}`, false);
+    showResultModal(false, `Failed to load log details: ${e.message}`, false);
   }
 }
 
@@ -2076,10 +2076,10 @@ function renderApiCallDetails(
           <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 rounded-lg overflow-hidden">
             <thead class="bg-gray-50 dark:bg-gray-700/50">
               <tr>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">总计</th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">成功</th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">失败</th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">成功率</th>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Total</th>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Success</th>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Failed</th>
+                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Success Rate</th>
               </tr>
             </thead>
             <tbody class="bg-white dark:bg-gray-800">
@@ -2101,7 +2101,7 @@ function renderApiCallDetails(
       `
             <div class="text-center py-10 text-gray-500 dark:text-gray-400">
                 <i class="fas fa-info-circle text-3xl"></i>
-                <p class="mt-2">该时间段内没有 API 调用记录。</p>
+                <p class="mt-2">No API call records in this time period.</p>
             </div>`;
     return;
   }
@@ -2111,13 +2111,13 @@ function renderApiCallDetails(
         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead class="bg-gray-50 dark:bg-gray-700/50">
                 <tr>
-                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">时间</th>
-                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">密钥 (部分)</th>
-                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">模型</th>
-                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">状态码</th>
-                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">耗时(ms)</th>
-                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">状态</th>
-                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">详情</th>
+                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Time</th>
+                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Key (Partial)</th>
+                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Model</th>
+                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status Code</th>
+                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Latency(ms)</th>
+                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Details</th>
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -2180,7 +2180,7 @@ window.showKeyUsageDetails = async function (key) {
     key.substring(0, 4) + "..." + key.substring(key.length - 4);
 
   if (!modal || !contentArea || !titleElement) {
-    console.error("无法找到密钥使用详情模态框元素");
+    console.error("Unable to find key usage details modal elements");
     showNotification("Unable to show details, page elements missing", "error");
     return;
   }
@@ -2188,9 +2188,9 @@ window.showKeyUsageDetails = async function (key) {
   // 构建内容框架（时间范围按钮 + 图表 + 表格容器）
   const controlsHtml = `
     <div class="flex items-center gap-2 mb-3 text-xs">
-      <button id="keyBtn1h" class="px-2 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700">1小时</button>
-      <button id="keyBtn8h" class="px-2 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700">8小时</button>
-      <button id="keyBtn24h" class="px-2 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700">24小时</button>
+      <button id="keyBtn1h" class="px-2 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700">1 Hour</button>
+      <button id="keyBtn8h" class="px-2 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700">8 Hours</button>
+      <button id="keyBtn24h" class="px-2 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700">24 Hours</button>
     </div>
     <div class="h-48 mb-4">
       <canvas id="keyUsageChart"></canvas>
@@ -2218,7 +2218,7 @@ window.showKeyUsageDetails = async function (key) {
       container.innerHTML = `
                 <div class="text-center py-10 text-gray-500">
                     <i class="fas fa-info-circle text-3xl"></i>
-                    <p class="mt-2">该时间段内没有 API 调用记录。</p>
+                    <p class="mt-2">No API call records in this time period.</p>
                 </div>`;
       return;
     }
@@ -2226,12 +2226,12 @@ window.showKeyUsageDetails = async function (key) {
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                   <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">时间</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">模型</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">状态码</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">耗时(ms)</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">状态</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">详情</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Model</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status Code</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Latency(ms)</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">`;
@@ -2269,7 +2269,7 @@ window.showKeyUsageDetails = async function (key) {
       }
       renderKeyUsageTable(details || []);
     } catch (e) {
-      console.error('加载密钥期内详情失败:', e);
+      console.error('Failed to load key details:', e);
       const tableContainer = document.getElementById('keyUsageTable');
       if (tableContainer) {
         tableContainer.innerHTML = `<div class="text-center py-10 text-danger-500">
@@ -2492,16 +2492,16 @@ async function copyAllKeys() {
     const allKeys = [...response.valid_keys, ...response.invalid_keys];
     
     if (allKeys.length === 0) {
-      showNotification("没有找到任何密钥", "warning");
+      showNotification("No keys found", "warning");
       return;
     }
     
     const keysText = allKeys.join('\n');
     await copyToClipboard(keysText);
-    showNotification(`已成功复制 ${allKeys.length} 个密钥到剪贴板`);
+    showNotification(`Successfully copied ${allKeys.length} keys to clipboard`);
     
   } catch (error) {
-    console.error('复制全部密钥失败:', error);
+    console.error('Copy all keys failed:', error);
     showNotification(`Copy failed: ${error.message}`, "error");
   }
 }
@@ -2517,7 +2517,7 @@ window.verifyAllKeys = async function() {
     const allKeys = [...response.valid_keys, ...response.invalid_keys];
     
     if (allKeys.length === 0) {
-      showNotification("没有找到任何密钥可验证", "warning");
+      showNotification("No keys found for verification", "warning");
       return;
     }
     
@@ -2525,8 +2525,8 @@ window.verifyAllKeys = async function() {
     showVerifyModalForAllKeys(allKeys);
     
   } catch (error) {
-    console.error('获取所有密钥失败:', error);
-    showNotification(`获取密钥失败: ${error.message}`, "error");
+    console.error('Get all keys failed:', error);
+    showNotification(`Failed to get keys: ${error.message}`, "error");
   }
 }
 
@@ -2557,7 +2557,7 @@ async function executeVerifyAllKeys(allKeys) {
   const batchSize = parseInt(batchSizeInput.value, 10) || 10;
   
   // 开始批量验证
-  showProgressModal(`批量验证所有 ${allKeys.length} 个密钥`);
+  showProgressModal(`Batch verify all ${allKeys.length} keys`);
   
   let allSuccessfulKeys = [];
   let allFailedKeys = {};
@@ -2565,10 +2565,10 @@ async function executeVerifyAllKeys(allKeys) {
   
   for (let i = 0; i < allKeys.length; i += batchSize) {
     const batch = allKeys.slice(i, i + batchSize);
-    const progressText = `正在验证批次 ${Math.floor(i / batchSize) + 1} / ${Math.ceil(allKeys.length / batchSize)} (密钥 ${i + 1}-${Math.min(i + batchSize, allKeys.length)})`;
+    const progressText = `Verifying batch ${Math.floor(i / batchSize) + 1} / ${Math.ceil(allKeys.length / batchSize)} (keys ${i + 1}-${Math.min(i + batchSize, allKeys.length)})`;
     
     updateProgress(i, allKeys.length, progressText);
-    addProgressLog(`处理批次: ${batch.length}个密钥...`);
+    addProgressLog(`Processing batch: ${batch.length} keys...`);
     
     try {
       const options = {
@@ -2581,17 +2581,17 @@ async function executeVerifyAllKeys(allKeys) {
       if (data) {
         if (data.successful_keys && data.successful_keys.length > 0) {
           allSuccessfulKeys = allSuccessfulKeys.concat(data.successful_keys);
-          addProgressLog(`✅ 批次成功: ${data.successful_keys.length} 个`);
+          addProgressLog(`✅ Batch successful: ${data.successful_keys.length} keys`);
         }
         if (data.failed_keys && Object.keys(data.failed_keys).length > 0) {
           Object.assign(allFailedKeys, data.failed_keys);
-          addProgressLog(`❌ 批次失败: ${Object.keys(data.failed_keys).length} 个`, true);
+          addProgressLog(`❌ Batch failed: ${Object.keys(data.failed_keys).length} keys`, true);
         }
       } else {
-        addProgressLog(`- 批次返回空数据`, true);
+        addProgressLog(`- Batch returned empty data`, true);
       }
     } catch (apiError) {
-      addProgressLog(`❌ 批次请求失败: ${apiError.message}`, true);
+      addProgressLog(`❌ Batch request failed: ${apiError.message}`, true);
       // 将此批次的所有密钥标记为失败
       batch.forEach(key => {
         allFailedKeys[key] = apiError.message;
@@ -2604,7 +2604,7 @@ async function executeVerifyAllKeys(allKeys) {
   updateProgress(
     allKeys.length,
     allKeys.length,
-    `所有批次验证完成！`
+    `All batch verification completed!`
   );
   
   // 关闭进度模态框并显示最终结果
