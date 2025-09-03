@@ -516,12 +516,12 @@ function updateSelectedState() {
     copySelectedKeysBtn.disabled = selectedCount === 0;
 
     // 可选：根据选中项数量更新按钮标题属性
-    copySelectedKeysBtn.setAttribute("title", `复制${selectedCount}项选中密钥`);
+    copySelectedKeysBtn.setAttribute("title", `Copy ${selectedCount} selected keys`);
   }
   // 新增：更新批量删除按钮的禁用状态
   if (deleteSelectedBtn) {
     deleteSelectedBtn.disabled = selectedCount === 0;
-    deleteSelectedBtn.setAttribute("title", `删除${selectedCount}项选中日志`);
+    deleteSelectedBtn.setAttribute("title", `Delete ${selectedCount} selected logs`);
   }
 
   // 更新"全选"复选框的状态
@@ -790,7 +790,7 @@ function _createLogRowHtml(log, sequentialId) {
         <td class="text-gray-700">${sequentialId}</td>
         <td class="relative group text-gray-700" title="${fullKey}">
             ${maskedKey}
-            <button class="copy-btn absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-200 hover:bg-gray-300 text-gray-600 p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity text-xs" data-copy-text="${fullKey}" title="复制完整密钥">
+            <button class="copy-btn absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-200 hover:bg-gray-300 text-gray-600 p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity text-xs" data-copy-text="${fullKey}" title="Copy full key">
                 <i class="far fa-copy"></i>
             </button>
         </td>

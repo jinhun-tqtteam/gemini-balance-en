@@ -964,7 +964,7 @@ function initializeGlobalBatchVerificationHandlers() {
     const count = selectedKeys.length;
     titleElement.textContent = "Batch Verify Keys";
     if (count > 0) {
-      messageElement.textContent = `确定要批量验证选中的 ${count} 个${
+      messageElement.textContent = `Are you sure you want to batch verify ${count} selected ${
         type === "valid" ? "有效" : "无效"
       }密钥吗？此操作可能需要一些时间。`;
       confirmButton.disabled = false;
@@ -1480,8 +1480,8 @@ function buildChartConfig(labels, successData, failureData) {
       },
       interaction: { mode: 'nearest', axis: 'x', intersect: false },
       scales: {
-        x: { title: { display: true, text: '时间' } },
-        y: { title: { display: true, text: '调用次数' }, beginAtZero: true, ticks: { precision: 0 } },
+        x: { title: { display: true, text: 'Time' } },
+        y: { title: { display: true, text: 'API Calls' }, beginAtZero: true, ticks: { precision: 0 } },
       },
     },
   };
@@ -1600,10 +1600,10 @@ async function fetchAndRenderAttentionKeys(statusCode = 429, limit = 10) {
           <span class="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded">${code}: ${item.count}</span>
         </div>
         <div class="flex items-center gap-2">
-          <button class="px-2 py-1 text-xs rounded bg-success-600 hover:bg-success-700 text-white" title="验证此Key">验证</button>
-          <button class="px-2 py-1 text-xs rounded bg-blue-600 hover:bg-blue-700 text-white" title="查看24小时详情">详情</button>
-          <button class="px-2 py-1 text-xs rounded bg-blue-500 hover:bg-blue-600 text-white" title="复制Key">复制</button>
-          <button class="px-2 py-1 text-xs rounded bg-red-800 hover:bg-red-900 text-white" title="删除此Key">删除</button>
+          <button class="px-2 py-1 text-xs rounded bg-success-600 hover:bg-success-700 text-white" title="Verify this Key">Verify</button>
+          <button class="px-2 py-1 text-xs rounded bg-blue-600 hover:bg-blue-700 text-white" title="View 24-hour details">Details</button>
+          <button class="px-2 py-1 text-xs rounded bg-blue-500 hover:bg-blue-600 text-white" title="Copy Key">Copy</button>
+          <button class="px-2 py-1 text-xs rounded bg-red-800 hover:bg-red-900 text-white" title="Delete this Key">Delete</button>
         </div>`;
       const [verifyBtn, detailBtn, copyBtn, deleteBtn] = li.querySelectorAll('button');
       verifyBtn.addEventListener('click', (e) => { e.stopPropagation(); verifyKey(item.key, e.currentTarget); });
@@ -1883,12 +1883,12 @@ function toggleKeyVisibility(button) {
     keyTextSpan.textContent = fullKey;
     eyeIcon.classList.remove("fa-eye");
     eyeIcon.classList.add("fa-eye-slash");
-    button.title = "隐藏密钥";
+    button.title = "Hide key";
   } else {
     keyTextSpan.textContent = maskedKey;
     eyeIcon.classList.remove("fa-eye-slash");
     eyeIcon.classList.add("fa-eye");
-    button.title = "显示密钥";
+    button.title = "Show key";
   }
 }
 
@@ -2199,7 +2199,7 @@ window.showKeyUsageDetails = async function (key) {
   contentArea.innerHTML = controlsHtml;
 
   // 设置标题
-  titleElement.textContent = `密钥 ${keyDisplay} - 请求详情`;
+  titleElement.textContent = `Key ${keyDisplay} - Request Details`;
 
   // 显示模态框
   modal.classList.remove("hidden");
@@ -2537,8 +2537,8 @@ function showVerifyModalForAllKeys(allKeys) {
   const messageElement = document.getElementById("verifyModalMessage");
   const confirmButton = document.getElementById("confirmVerifyBtn");
   
-  titleElement.textContent = "批量验证所有密钥";
-  messageElement.textContent = `确定要验证所有 ${allKeys.length} 个密钥吗？此操作可能需要较长时间。`;
+  titleElement.textContent = "Batch Verify All Keys";
+  messageElement.textContent = `Are you sure you want to verify all ${allKeys.length} keys? This operation may take a long time.`;
   confirmButton.disabled = false;
   
   // 设置确认按钮事件

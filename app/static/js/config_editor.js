@@ -2463,7 +2463,7 @@ async function openModelHelperModal() {
         `label[for="${currentModelHelperTarget.target.id}"]`
       );
       modelHelperTitleElement.textContent = label
-        ? `为 "${label.textContent.trim()}" 选择模型`
+        ? `Select model for "${label.textContent.trim()}"`
         : "选择模型";
     } else if (currentModelHelperTarget.type === "array") {
       modelHelperTitleElement.textContent = `Add model for ${currentModelHelperTarget.targetKey}`;

@@ -1154,7 +1154,7 @@ endblock %} {% block head_extra_styles %}
             class="w-full px-4 py-3 rounded-lg form-input-themed"
           />
           <small class="text-gray-500 mt-1 block"
-            >Base URL for Vertex Express API</small
+            >Model list for "thinking process"</small
           >
         </div>
         <!-- Smart Routing Configuration -->
@@ -1477,7 +1477,7 @@ endblock %} {% block head_extra_styles %}
           <label
             for="URL_CONTEXT_MODELS"
             class="block font-semibold mb-2 text-gray-700"
-            >网址上下文模型列表</label
+            >URL Context Model List</label
           >
           <div class="array-container" id="URL_CONTEXT_MODELS_container">
             <!-- Array items will be dynamically added here -->
@@ -1857,7 +1857,7 @@ endblock %} {% block head_extra_styles %}
           <label
             for="PICGO_API_KEY"
             class="block font-semibold mb-2 text-gray-700"
-            >PicGo API密钥</label
+            >PicGo API Key</label
           >
           <input
             type="text"
@@ -1866,7 +1866,7 @@ endblock %} {% block head_extra_styles %}
             placeholder="xxxx"
             class="w-full px-4 py-3 rounded-lg sensitive-input form-input-themed"
           />
-          <small class="text-gray-500 mt-1 block">PicGo的API密钥</small>
+          <small class="text-gray-500 mt-1 block">PicGo API key</small>
         </div>
 
         <!-- Cloudflare图床URL -->
@@ -1874,7 +1874,7 @@ endblock %} {% block head_extra_styles %}
           <label
             for="CLOUDFLARE_IMGBED_URL"
             class="block font-semibold mb-2 text-gray-700"
-            >Cloudflare图床URL</label
+            >Cloudflare Image Hosting URL</label
           >
           <input
             type="text"
@@ -1883,7 +1883,7 @@ endblock %} {% block head_extra_styles %}
             placeholder="https://xxxxxxx.pages.dev/upload"
             class="w-full px-4 py-3 rounded-lg form-input-themed"
           />
-          <small class="text-gray-500 mt-1 block">Cloudflare图床的URL</small>
+          <small class="text-gray-500 mt-1 block">Cloudflare image hosting URL</small>
         </div>
 
         <!-- Cloudflare认证码 -->
@@ -1891,7 +1891,7 @@ endblock %} {% block head_extra_styles %}
           <label
             for="CLOUDFLARE_IMGBED_AUTH_CODE"
             class="block font-semibold mb-2 text-gray-700"
-            >Cloudflare认证码</label
+            >Cloudflare Auth Code</label
           >
           <input
             type="text"
@@ -1900,7 +1900,7 @@ endblock %} {% block head_extra_styles %}
             placeholder="xxxxxxxxx"
             class="w-full px-4 py-3 rounded-lg sensitive-input form-input-themed"
           />
-          <small class="text-gray-500 mt-1 block">Cloudflare图床的认证码</small>
+          <small class="text-gray-500 mt-1 block">Cloudflare image hosting authentication code</small>
         </div>
 
         <!-- Cloudflare上传文件夹 -->
@@ -1908,7 +1908,7 @@ endblock %} {% block head_extra_styles %}
           <label
             for="CLOUDFLARE_IMGBED_UPLOAD_FOLDER"
             class="block font-semibold mb-2 text-gray-700"
-            >Cloudflare上传文件夹</label
+            >Cloudflare Upload Folder</label
           >
           <input
             type="text"
@@ -1918,7 +1918,7 @@ endblock %} {% block head_extra_styles %}
             class="w-full px-4 py-3 rounded-lg form-input-themed"
           />
           <small class="text-gray-500 mt-1 block"
-            >Cloudflare图床的上传文件夹路径（可选）</small
+            >Cloudflare image hosting upload folder path (optional)</small
           >
         </div>
       </div>
@@ -1959,7 +1959,7 @@ endblock %} {% block head_extra_styles %}
           <label
             for="STREAM_MIN_DELAY"
             class="block font-semibold mb-2 text-gray-700"
-            >最小延迟（秒）</label
+            >Minimum Delay (seconds)</label
           >
           <input
             type="number"
@@ -1970,7 +1970,7 @@ endblock %} {% block head_extra_styles %}
             step="0.001"
             class="w-full px-4 py-3 rounded-lg form-input-themed"
           />
-          <small class="text-gray-500 mt-1 block">流式输出的最小延迟时间</small>
+          <small class="text-gray-500 mt-1 block">Minimum delay time for stream output</small>
         </div>
 
         <!-- 最大延迟 -->
@@ -1978,7 +1978,7 @@ endblock %} {% block head_extra_styles %}
           <label
             for="STREAM_MAX_DELAY"
             class="block font-semibold mb-2 text-gray-700"
-            >最大延迟（秒）</label
+            >Maximum Delay (seconds)</label
           >
           <input
             type="number"
@@ -1989,7 +1989,7 @@ endblock %} {% block head_extra_styles %}
             step="0.001"
             class="w-full px-4 py-3 rounded-lg form-input-themed"
           />
-          <small class="text-gray-500 mt-1 block">流式输出的最大延迟时间</small>
+          <small class="text-gray-500 mt-1 block">Maximum delay time for stream output</small>
         </div>
 
         <!-- 短文本阈值 -->
@@ -1997,7 +1997,7 @@ endblock %} {% block head_extra_styles %}
           <label
             for="STREAM_SHORT_TEXT_THRESHOLD"
             class="block font-semibold mb-2 text-gray-700"
-            >短文本阈值</label
+            >Short Text Threshold</label
           >
           <input
             type="number"
@@ -2007,7 +2007,7 @@ endblock %} {% block head_extra_styles %}
             max="100"
             class="w-full px-4 py-3 rounded-lg form-input-themed"
           />
-          <small class="text-gray-500 mt-1 block">短文本的字符阈值</small>
+          <small class="text-gray-500 mt-1 block">Character threshold for short text</small>
         </div>
 
         <!-- Long Text Threshold -->
@@ -2571,7 +2571,7 @@ endblock %} {% block head_extra_styles %}
     <div class="p-6">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-bold text-gray-800">
-          批量添加 Vertex Express API 密钥
+          Batch Add Vertex Express API Keys
         </h2>
         <button
           id="closeVertexApiKeyModalBtn"
@@ -2581,8 +2581,8 @@ endblock %} {% block head_extra_styles %}
         </button>
       </div>
       <p class="text-gray-300 mb-4">
-        每行粘贴一个或多个密钥，将自动提取有效密钥 (格式: AQ.开头，共53位)
-        并去重。
+        Paste one or more keys per line. Valid keys will be automatically extracted (Format: Starting with AQ., 53 characters total)
+        and deduplicated.
       </p>
       <textarea
         id="vertexApiKeyBulkInput"
