@@ -791,7 +791,7 @@ endblock %} {% block head_extra_styles %}
       >
         <div class="pagination-container text-sm text-gray-700">
           <label for="pageSize" class="font-medium pagination-text"
-            >每页显示:</label
+            >Items per page:</label
           >
           <select
             id="pageSize"
@@ -802,7 +802,7 @@ endblock %} {% block head_extra_styles %}
             <option value="50">50</option>
             <option value="100">100</option>
           </select>
-          <span class="pagination-text">条</span>
+          <span class="pagination-text">items</span>
         </div>
         <div class="flex items-center gap-4">
           <ul class="pagination flex items-center gap-1" id="pagination">
@@ -814,13 +814,13 @@ endblock %} {% block head_extra_styles %}
               id="pageInput"
               min="1"
               class="w-16 px-2 py-1 rounded-md text-sm form-input-themed"
-              placeholder="页码"
+              placeholder="Page number"
             />
             <button
               id="goToPageBtn"
               class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-md transition"
             >
-              跳转
+              Go
             </button>
           </div>
         </div>
@@ -831,10 +831,10 @@ endblock %} {% block head_extra_styles %}
 
 <!-- Scroll buttons are now in base.html -->
 <div class="scroll-buttons">
-  <button class="scroll-button" onclick="scrollToTop()" title="回到顶部">
+  <button class="scroll-button" onclick="scrollToTop()" title="Back to top">
     <i class="fas fa-chevron-up"></i>
   </button>
-  <button class="scroll-button" onclick="scrollToBottom()" title="滚动到底部">
+  <button class="scroll-button" onclick="scrollToBottom()" title="Scroll to bottom">
     <i class="fas fa-chevron-down"></i>
   </button>
 </div>
@@ -873,7 +873,7 @@ endblock %} {% block head_extra_styles %}
           style="background-color: #f8fafc"
         >
           <h6 class="text-sm font-semibold text-blue-600 mb-1">
-            Gemini密钥:
+            Gemini Key:
           </h6>
           <pre
             id="modalGeminiKey"
@@ -884,7 +884,7 @@ endblock %} {% block head_extra_styles %}
             class="copy-btn absolute top-2 right-2 hover:bg-gray-200 text-gray-600 p-1.5 rounded opacity-0 group-hover:opacity-100 transition-opacity"
             style="background-color: #e2e8f0"
             data-target="modalGeminiKey"
-            title="复制密钥"
+            title="Copy key"
           >
             <i class="far fa-copy"></i>
           </button>
@@ -894,13 +894,13 @@ endblock %} {% block head_extra_styles %}
           class="p-4 rounded-lg relative group"
           style="background-color: #f8fafc"
         >
-          <h6 class="text-sm font-semibold text-blue-600 mb-1">错误类型:</h6>
+          <h6 class="text-sm font-semibold text-blue-600 mb-1">Error Type:</h6>
           <p id="modalErrorType" class="text-red-600 font-medium pr-8"></p>
           <button
             class="copy-btn absolute top-2 right-2 hover:bg-gray-200 text-gray-600 p-1.5 rounded opacity-0 group-hover:opacity-100 transition-opacity"
             style="background-color: #e2e8f0"
             data-target="modalErrorType"
-            title="复制错误类型"
+            title="Copy error type"
           >
             <i class="far fa-copy"></i>
           </button>
@@ -920,7 +920,7 @@ endblock %} {% block head_extra_styles %}
             class="copy-btn absolute top-2 right-2 hover:bg-gray-200 text-gray-600 p-1.5 rounded opacity-0 group-hover:opacity-100 transition-opacity"
             style="background-color: #e2e8f0"
             data-target="modalErrorLog"
-            title="复制错误日志"
+            title="Copy error log"
           >
             <i class="far fa-copy"></i>
           </button>
@@ -930,7 +930,7 @@ endblock %} {% block head_extra_styles %}
           class="p-4 rounded-lg relative group"
           style="background-color: #f8fafc"
         >
-          <h6 class="text-sm font-semibold text-blue-600 mb-1">请求消息:</h6>
+          <h6 class="text-sm font-semibold text-blue-600 mb-1">Request Message:</h6>
           <pre
             id="modalRequestMsg"
             class="font-mono text-sm p-3 rounded overflow-x-auto whitespace-pre-wrap"
@@ -940,7 +940,7 @@ endblock %} {% block head_extra_styles %}
             class="copy-btn absolute top-2 right-2 hover:bg-gray-200 text-gray-600 p-1.5 rounded opacity-0 group-hover:opacity-100 transition-opacity"
             style="background-color: #e2e8f0"
             data-target="modalRequestMsg"
-            title="复制请求消息"
+            title="Copy request message"
           >
             <i class="far fa-copy"></i>
           </button>
@@ -950,13 +950,13 @@ endblock %} {% block head_extra_styles %}
           class="p-4 rounded-lg relative group"
           style="background-color: #f8fafc"
         >
-          <h6 class="text-sm font-semibold text-blue-600 mb-1">模型名称:</h6>
+          <h6 class="text-sm font-semibold text-blue-600 mb-1">Model Name:</h6>
           <p id="modalModelName" class="font-medium pr-8 text-gray-700"></p>
           <button
             class="copy-btn absolute top-2 right-2 hover:bg-gray-200 text-gray-600 p-1.5 rounded opacity-0 group-hover:opacity-100 transition-opacity"
             style="background-color: #e2e8f0"
             data-target="modalModelName"
-            title="复制模型名称"
+            title="Copy model name"
           >
             <i class="far fa-copy"></i>
           </button>
@@ -966,13 +966,13 @@ endblock %} {% block head_extra_styles %}
           class="p-4 rounded-lg relative group"
           style="background-color: #f8fafc"
         >
-          <h6 class="text-sm font-semibold text-blue-600 mb-1">请求时间:</h6>
+          <h6 class="text-sm font-semibold text-blue-600 mb-1">Request Time:</h6>
           <p id="modalRequestTime" class="font-medium pr-8 text-gray-700"></p>
           <button
             class="copy-btn absolute top-2 right-2 hover:bg-gray-200 text-gray-600 p-1.5 rounded opacity-0 group-hover:opacity-100 transition-opacity"
             style="background-color: #e2e8f0"
             data-target="modalRequestTime"
-            title="复制请求时间"
+            title="Copy request time"
           >
             <i class="far fa-copy"></i>
           </button>
@@ -988,7 +988,7 @@ endblock %} {% block head_extra_styles %}
           id="closeModalFooterBtn"
           class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-medium transition"
         >
-          关闭
+          Close
         </button>
       </div>
     </div>
@@ -1010,7 +1010,7 @@ endblock %} {% block head_extra_styles %}
         class="flex justify-between items-center pb-3 mb-4"
         style="border-bottom: 1px solid #e5e7eb"
       >
-        <h2 class="text-lg font-semibold text-gray-800">确认删除</h2>
+        <h2 class="text-lg font-semibold text-gray-800">Confirm Delete</h2>
         <button
           id="closeDeleteConfirmModalBtn"
           class="text-gray-600 hover:text-gray-800 text-xl"
@@ -1019,7 +1019,7 @@ endblock %} {% block head_extra_styles %}
         </button>
       </div>
       <p id="deleteConfirmMessage" class="text-gray-700 mb-6">
-        你确定要删除选中的项目吗？此操作不可恢复！
+        Are you sure you want to delete the selected items? This operation cannot be undone!
       </p>
       <div class="flex justify-end gap-3">
         <button
@@ -1027,14 +1027,14 @@ endblock %} {% block head_extra_styles %}
           type="button"
           class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-lg font-medium transition"
         >
-          取消
+          Cancel
         </button>
         <button
           id="confirmDeleteBtn"
           type="button"
           class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg font-medium transition"
         >
-          确认删除
+          Confirm Delete
         </button>
       </div>
     </div>

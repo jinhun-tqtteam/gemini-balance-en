@@ -13,15 +13,15 @@ const SHOW_CLASS = "show"; // For modals
 const API_KEY_REGEX = /AIzaSy\S{33}/g;
 const PROXY_REGEX =
   /(?:https?|socks5):\/\/(?:[^:@\/]+(?::[^@\/]+)?@)?(?:[^:\/\s]+)(?::\d+)?/g;
-const VERTEX_API_KEY_REGEX = /AQ\.[a-zA-Z0-9_\-]{50}/g; // 新增 Vertex Express API Key 正则
+const VERTEX_API_KEY_REGEX = /AQ\.[a-zA-Z0-9_\-]{50}/g; // Vertex Express API Key regex
 const MASKED_VALUE = "••••••••";
 
 // API Keys Pagination Constants
-const API_KEYS_PER_PAGE = 20; // 每页显示的API密钥数量
+const API_KEYS_PER_PAGE = 20; // Number of API keys displayed per page
 let currentApiKeyPage = 1;
 let totalApiKeyPages = 1;
-let allApiKeys = []; // 存储所有API密钥数据
-let filteredApiKeys = []; // 存储过滤后的API密钥数据
+let allApiKeys = []; // Store all API key data
+let filteredApiKeys = []; // Store filtered API key data
 
 // DOM Elements - Global Scope for frequently accessed elements
 const safetySettingsContainer = document.getElementById(
@@ -231,7 +231,7 @@ document.addEventListener("DOMContentLoaded", function () {
   
   if (retryFailedProxiesBtn) {
     retryFailedProxiesBtn.addEventListener("click", () => {
-      // 重试失败的代理检测
+    // Retry failed proxy detection
       checkAllProxies();
     });
   }
@@ -302,8 +302,8 @@ document.addEventListener("DOMContentLoaded", function () {
       bulkDeleteApiKeyModal,
       proxyModal,
       bulkDeleteProxyModal,
-      vertexApiKeyModal, // 新增
-      bulkDeleteVertexApiKeyModal, // 新增
+      vertexApiKeyModal, // Added
+      bulkDeleteVertexApiKeyModal, // Added
       modelHelperModal,
     ];
     modals.forEach((modal) => {
@@ -329,7 +329,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         authTokenInput.dispatchEvent(event);
       }
-      showNotification("已生成新认证令牌", "success");
+      showNotification("New authentication token generated", "success");
     });
   }
 
@@ -388,7 +388,7 @@ document.addEventListener("DOMContentLoaded", function () {
           );
           if (budgetContainer && budgetContainer.children.length === 0) {
             budgetContainer.innerHTML =
-              '<div class="text-gray-500 text-sm italic">请在上方添加思考模型，预算将自动关联。</div>';
+              '<div class="text-gray-500 text-sm italic">Please add thinking models above, budgets will be automatically associated.</div>';
           }
         }
         arrayItem.remove();
@@ -399,7 +399,7 @@ document.addEventListener("DOMContentLoaded", function () {
           parentContainer.children.length === 0
         ) {
           parentContainer.innerHTML =
-            '<div class="text-gray-500 text-sm italic">定义模型的安全过滤阈值。</div>';
+            '<div class="text-gray-500 text-sm italic">Define safety filtering thresholds for models.</div>';
         }
       } else if (
         generateButton &&
@@ -418,7 +418,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
             inputField.dispatchEvent(event);
           }
-          showNotification("已生成新令牌", "success");
+          showNotification("New token generated", "success");
         }
       }
     });
@@ -681,13 +681,13 @@ async function initConfig() {
 
     const config = await response.json();
 
-    // 确保数组字段有默认值
+    // Ensure array fields have default values
     if (
       !config.API_KEYS ||
       !Array.isArray(config.API_KEYS) ||
       config.API_KEYS.length === 0
     ) {
-      config.API_KEYS = ["请在此处输入 API 密钥"];
+      config.API_KEYS = ["Please enter API key here"];
     }
 
     if (
@@ -721,42 +721,42 @@ async function initConfig() {
     ) {
       config.FILTERED_MODELS = ["gemini-1.0-pro-latest"];
     }
-    // --- 新增：处理 VERTEX_API_KEYS 默认值 ---
+    // --- Added: Handle VERTEX_API_KEYS default value ---
     if (!config.VERTEX_API_KEYS || !Array.isArray(config.VERTEX_API_KEYS)) {
       config.VERTEX_API_KEYS = [];
     }
-    // --- 新增：处理 VERTEX_EXPRESS_BASE_URL 默认值 ---
+    // --- Added: Handle VERTEX_EXPRESS_BASE_URL default value ---
     if (typeof config.VERTEX_EXPRESS_BASE_URL === "undefined") {
       config.VERTEX_EXPRESS_BASE_URL = "";
     }
-    // --- 新增：处理 PROXIES 默认值 ---
+    // --- Added: Handle PROXIES default value ---
     if (!config.PROXIES || !Array.isArray(config.PROXIES)) {
-      config.PROXIES = []; // 默认为空数组
+      config.PROXIES = []; // Default to empty array
     }
-    // --- 新增：处理新字段的默认值 ---
+    // --- Added: Handle default values for new fields ---
     if (!config.THINKING_MODELS || !Array.isArray(config.THINKING_MODELS)) {
-      config.THINKING_MODELS = []; // 默认为空数组
+      config.THINKING_MODELS = []; // Default to empty array
     }
     if (
       !config.THINKING_BUDGET_MAP ||
       typeof config.THINKING_BUDGET_MAP !== "object" ||
       config.THINKING_BUDGET_MAP === null
     ) {
-      config.THINKING_BUDGET_MAP = {}; // 默认为空对象
+      config.THINKING_BUDGET_MAP = {}; // Default to empty object
     }
-    // --- 新增：处理 CUSTOM_HEADERS 默认值 ---
+    // --- Added: Handle CUSTOM_HEADERS default value ---
     if (
       !config.CUSTOM_HEADERS ||
       typeof config.CUSTOM_HEADERS !== "object" ||
       config.CUSTOM_HEADERS === null
     ) {
-      config.CUSTOM_HEADERS = {}; // 默认为空对象
+      config.CUSTOM_HEADERS = {}; // Default to empty object
     }
-    // --- 新增：处理 SAFETY_SETTINGS 默认值 ---
+    // --- Added: Handle SAFETY_SETTINGS default value ---
     if (!config.SAFETY_SETTINGS || !Array.isArray(config.SAFETY_SETTINGS)) {
-      config.SAFETY_SETTINGS = []; // 默认为空数组
+      config.SAFETY_SETTINGS = []; // Default to empty array
     }
-    // --- 结束：处理 SAFETY_SETTINGS 默认值 ---
+    // --- End: Handle SAFETY_SETTINGS default value ---
     if (typeof config.URL_CONTEXT_ENABLED === "undefined") {
       config.URL_CONTEXT_ENABLED = true;
     }
@@ -764,32 +764,32 @@ async function initConfig() {
       config.URL_CONTEXT_MODELS = [];
     }
  
-    // --- 新增：处理自动Delete错误日志配置的默认值 ---
+    // --- Added: Handle auto delete error log configuration default values ---
     if (typeof config.AUTO_DELETE_ERROR_LOGS_ENABLED === "undefined") {
       config.AUTO_DELETE_ERROR_LOGS_ENABLED = false;
     }
     if (typeof config.AUTO_DELETE_ERROR_LOGS_DAYS === "undefined") {
       config.AUTO_DELETE_ERROR_LOGS_DAYS = 7;
     }
-    // --- 结束：处理自动Delete错误日志配置的默认值 ---
+    // --- End: Handle auto delete error log configuration default values ---
 
-    // --- 新增：处理自动Delete请求日志配置的默认值 ---
+    // --- Added: Handle auto delete request log configuration default values ---
     if (typeof config.AUTO_DELETE_REQUEST_LOGS_ENABLED === "undefined") {
       config.AUTO_DELETE_REQUEST_LOGS_ENABLED = false;
     }
     if (typeof config.AUTO_DELETE_REQUEST_LOGS_DAYS === "undefined") {
       config.AUTO_DELETE_REQUEST_LOGS_DAYS = 30;
     }
-    // --- 结束：处理自动Delete请求日志配置的默认值 ---
+    // --- End: Handle auto delete request log configuration default values ---
 
-    // --- 新增：处理假流式配置的默认值 ---
+    // --- Added: Handle fake streaming configuration default values ---
     if (typeof config.FAKE_STREAM_ENABLED === "undefined") {
       config.FAKE_STREAM_ENABLED = false;
     }
     if (typeof config.FAKE_STREAM_EMPTY_DATA_INTERVAL_SECONDS === "undefined") {
       config.FAKE_STREAM_EMPTY_DATA_INTERVAL_SECONDS = 5;
     }
-    // --- 结束：处理假流式配置的默认值 ---
+    // --- End: Handle fake streaming configuration default values ---
 
     populateForm(config);
     // After populateForm, initialize masking for all populated sensitive fields
@@ -828,10 +828,10 @@ async function initConfig() {
       AUTO_DELETE_ERROR_LOGS_DAYS: 7, // 新增默认值
       AUTO_DELETE_REQUEST_LOGS_ENABLED: false, // 新增默认值
       AUTO_DELETE_REQUEST_LOGS_DAYS: 30, // 新增默认值
-      // --- 新增：处理假流式配置的默认值 ---
+      // --- Added: Handle fake streaming configuration default values ---
       FAKE_STREAM_ENABLED: false,
       FAKE_STREAM_EMPTY_DATA_INTERVAL_SECONDS: 5,
-      // --- 结束：处理假流式配置的默认值 ---
+      // --- End: Handle fake streaming configuration default values ---
     };
 
     populateForm(defaultConfig);
@@ -919,7 +919,7 @@ function populateForm(config) {
   }
   if (!budgetItemsAdded && budgetMapContainer) {
     budgetMapContainer.innerHTML =
-      '<div class="text-gray-500 text-sm italic">请在上方添加思考模型，预算将自动关联。</div>';
+      '<div class="text-gray-500 text-sm italic">Please add thinking models above, budgets will be automatically associated.</div>';
   }
 
   // Populate CUSTOM_HEADERS
@@ -939,7 +939,7 @@ function populateForm(config) {
   }
   if (!customHeadersAdded && customHeadersContainer) {
     customHeadersContainer.innerHTML =
-      '<div class="text-gray-500 text-sm italic">添加自定义请求头，例如 X-Api-Key: your-key</div>';
+      '<div class="text-gray-500 text-sm italic">Add custom request headers, e.g. X-Api-Key: your-key</div>';
   }
 
   // 4. Populate other array fields (excluding THINKING_MODELS and API_KEYS)
@@ -1019,7 +1019,7 @@ function populateForm(config) {
   }
   if (safetySettingsContainer && !safetyItemsAdded) {
     safetySettingsContainer.innerHTML =
-      '<div class="text-gray-500 text-sm italic">定义模型的安全过滤阈值。</div>';
+      '<div class="text-gray-500 text-sm italic">Define safety filtering thresholds for models.</div>';
   }
 
   // --- 新增：处理自动Delete错误日志的字段 ---
@@ -1118,7 +1118,7 @@ function handleBulkAddApiKeys() {
   updateApiKeyPagination();
 
   closeModal(apiKeyModal);
-  showNotification(`添加/更新了 ${uniqueKeys.length} 个唯一密钥`, "success");
+  showNotification(`Added/updated ${uniqueKeys.length} unique keys`, "success");
 }
 
 /**
@@ -1171,8 +1171,8 @@ function renderApiKeyPage() {
     const emptyMessage = document.createElement("div");
     emptyMessage.className = "text-gray-500 text-sm italic text-center py-4";
     emptyMessage.textContent = filteredApiKeys.length === 0 ?
-      (allApiKeys.length === 0 ? "暂无API密钥" : "未找到匹配的密钥") :
-      "当前页无数据";
+      (allApiKeys.length === 0 ? "No API keys" : "No matching keys found") :
+      "No data on current page";
     apiKeyContainer.appendChild(emptyMessage);
   }
 }
@@ -1202,7 +1202,7 @@ function updateApiKeyPagination() {
   // 更新页码信息
   const pageInfo = document.getElementById("apiKeyPageInfo");
   if (pageInfo) {
-    pageInfo.textContent = `第 ${currentApiKeyPage} 页，共 ${totalApiKeyPages} 页 (${filteredApiKeys.length} 个密钥)`;
+    pageInfo.textContent = `Page ${currentApiKeyPage} of ${totalApiKeyPages} (${filteredApiKeys.length} keys)`;
   }
 
   // 更新按钮状态
@@ -1268,7 +1268,7 @@ function handleBulkDeleteApiKeys() {
   const keysToDelete = new Set(bulkText.match(API_KEY_REGEX) || []);
 
   if (keysToDelete.size === 0) {
-    showNotification("未在输入内容中提取到有效的 API 密钥格式", "warning");
+    showNotification("No valid API key format found in input content", "warning");
     return;
   }
 
@@ -1333,7 +1333,7 @@ function handleBulkAddProxies() {
   });
 
   closeModal(proxyModal);
-  showNotification(`添加/更新了 ${uniqueProxies.length} 个唯一代理`, "success");
+  showNotification(`Added/updated ${uniqueProxies.length} unique proxies`, "success");
 }
 
 /**
@@ -1352,7 +1352,7 @@ function handleBulkDeleteProxies() {
   const proxiesToDelete = new Set(bulkText.match(PROXY_REGEX) || []);
 
   if (proxiesToDelete.size === 0) {
-    showNotification("未在输入内容中提取到有效的代理地址格式", "warning");
+    showNotification("No valid proxy address format found in input content", "warning");
     return;
   }
 
@@ -1458,7 +1458,7 @@ function handleBulkDeleteVertexApiKeys() {
 
   if (keysToDelete.size === 0) {
     showNotification(
-      "未在输入内容中提取到有效的 Vertex Express API 密钥格式",
+      "No valid Vertex Express API key format found in input content",
       "warning"
     );
     return;
@@ -1575,7 +1575,7 @@ function createArrayInput(key, value, isSensitive, modelId = null) {
   input.className = inputClasses;
   if (modelId) {
     input.setAttribute("data-model-id", modelId);
-    input.placeholder = "思考模型名称";
+    input.placeholder = "Thinking model name";
   }
   return input;
 }
@@ -1590,7 +1590,7 @@ function createGenerateTokenButton() {
   generateBtn.className =
     "generate-btn px-2 py-2 text-gray-500 hover:text-primary-600 focus:outline-none rounded-r-md bg-gray-100 hover:bg-gray-200 transition-colors";
   generateBtn.innerHTML = '<i class="fas fa-dice"></i>';
-  generateBtn.title = "生成随机令牌";
+  generateBtn.title = "Generate random token";
   // Event listener will be added via delegation in DOMContentLoaded
   return generateBtn;
 }
@@ -1617,7 +1617,7 @@ function createRemoveButton() {
 function createProxyStatusIcon() {
   const statusIcon = document.createElement("span");
   statusIcon.className = "proxy-status-icon px-2 py-2 text-gray-400";
-  statusIcon.innerHTML = '<i class="fas fa-question-circle" title="未检测"></i>';
+  statusIcon.innerHTML = '<i class="fas fa-question-circle" title="Not detected"></i>';
   statusIcon.setAttribute("data-status", "unknown");
   return statusIcon;
 }
@@ -1632,7 +1632,7 @@ function createProxyCheckButton() {
   checkBtn.className =
     "proxy-check-btn px-2 py-2 text-blue-500 hover:text-blue-700 focus:outline-none transition-colors duration-150 rounded-r-md";
   checkBtn.innerHTML = '<i class="fas fa-globe"></i>';
-  checkBtn.title = "检测此代理";
+  checkBtn.title = "Check this proxy";
   
   // 添加点击事件监听器
   checkBtn.addEventListener("click", function(e) {
@@ -1642,7 +1642,7 @@ function createProxyCheckButton() {
     if (inputElement && inputElement.value.trim()) {
       checkSingleProxy(inputElement.value.trim(), this);
     } else {
-      showNotification("请先输入代理地址", "warning");
+      showNotification("Please enter proxy address first", "warning");
     }
   });
   
@@ -1772,7 +1772,7 @@ function createAndAppendBudgetMapItem(mapKey, mapValue, modelId) {
   const keyInput = document.createElement("input");
   keyInput.type = "text";
   keyInput.value = mapKey;
-  keyInput.placeholder = "模型名称 (自动关联)";
+  keyInput.placeholder = "Model name (auto-associated)";
   keyInput.readOnly = true;
   keyInput.className = `${MAP_KEY_INPUT_CLASS} flex-grow px-3 py-2 border border-gray-300 rounded-md focus:outline-none bg-gray-100 text-gray-500`;
   keyInput.setAttribute("data-model-id", modelId);
@@ -1781,7 +1781,7 @@ function createAndAppendBudgetMapItem(mapKey, mapValue, modelId) {
   valueInput.type = "number";
   const intValue = parseInt(mapValue, 10);
   valueInput.value = isNaN(intValue) ? -1 : intValue;
-  valueInput.placeholder = "预算 (整数)";
+  valueInput.placeholder = "Budget (integer)";
   valueInput.className = `${MAP_VALUE_INPUT_CLASS} w-24 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primary-500 focus:ring focus:ring-primary-200 focus:ring-opacity-50`;
   valueInput.min = -1;
   valueInput.max = 32767;
@@ -1860,7 +1860,7 @@ function createAndAppendCustomHeaderItem(key, value) {
     headerItem.remove();
     if (container.children.length === 0) {
       container.innerHTML =
-        '<div class="text-gray-500 text-sm italic">添加自定义请求头，例如 X-Api-Key: your-key</div>';
+        '<div class="text-gray-500 text-sm italic">Add custom request headers, e.g. X-Api-Key: your-key</div>';
     }
   });
 
@@ -2101,7 +2101,7 @@ async function saveConfig() {
   try {
     const formData = collectFormData();
 
-    showNotification("正在保存配置...", "info");
+    showNotification("Saving configuration...", "info");
 
     // 1. 停止定时任务
     await stopScheduler();
@@ -2125,17 +2125,17 @@ async function saveConfig() {
 
     // 移除居中的 saveStatus 提示
 
-    showNotification("配置保存成功", "success");
+    showNotification("Configuration saved successfully", "success");
 
     // 3. 启动新的定时任务
     await startScheduler();
   } catch (error) {
-    console.error("保存配置失败:", error);
+    console.error("Failed to save configuration:", error);
     // 保存失败时，也尝试重启定时任务，以防万一
     await startScheduler();
     // 移除居中的 saveStatus 提示
 
-    showNotification("保存配置失败: " + error.message, "error");
+    showNotification("Failed to save configuration: " + error.message, "error");
   }
 }
 
@@ -2167,7 +2167,7 @@ function resetConfig(event) {
       console.error(
         "Reset confirmation modal not found! Falling back to default confirm."
       );
-      if (confirm("确定要重置所有配置吗？这将恢复到默认值。")) {
+      if (confirm("Are you sure you want to reset all configurations? This will restore to default values.")) {
         executeReset();
       }
     }
@@ -2179,7 +2179,7 @@ function resetConfig(event) {
  */
 async function executeReset() {
   try {
-    showNotification("正在重置配置...", "info");
+    showNotification("Resetting configuration...", "info");
 
     // 1. 停止定时任务
     await stopScheduler();
@@ -2209,13 +2209,13 @@ async function executeReset() {
         }
       });
     }
-    showNotification("配置已重置为默认值", "success");
+    showNotification("Configuration has been reset to default values", "success");
 
     // 3. 启动新的定时任务
     await startScheduler();
   } catch (error) {
-    console.error("重置配置失败:", error);
-    showNotification("重置配置失败: " + error.message, "error");
+    console.error("Failed to reset configuration:", error);
+    showNotification("Failed to reset configuration: " + error.message, "error");
     // 重置失败时，也尝试重启定时任务
     await startScheduler();
   }
@@ -2309,7 +2309,7 @@ function addSafetySettingItem(category = "", threshold = "") {
     return;
   }
 
-  // 如果容器当前只有占位符，则清除它
+  // If the container currently only has a placeholder, clear it
   const placeholder = container.querySelector(".text-gray-500.italic");
   if (
     placeholder &&
@@ -2364,7 +2364,7 @@ function addSafetySettingItem(category = "", threshold = "") {
   removeBtn.className =
     "remove-btn text-gray-400 hover:text-red-500 focus:outline-none transition-colors duration-150";
   removeBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
-  removeBtn.title = "Delete此设置";
+  removeBtn.title = "Delete this setting";
   // Event listener for removeBtn is now handled by event delegation in DOMContentLoaded
 
   settingItem.appendChild(categorySelect);
@@ -2380,7 +2380,7 @@ async function fetchModels() {
     return cachedModelsList;
   }
   try {
-    showNotification("正在从 /api/config/ui/models 加载模型列表...", "info");
+    showNotification("Loading model list from /api/config/ui/models...", "info");
     const response = await fetch("/api/config/ui/models");
     if (!response.ok) {
       const errorData = await response.text();
@@ -2394,15 +2394,15 @@ async function fetchModels() {
       Array.isArray(responseData.data)
     ) {
       cachedModelsList = responseData.data; // Use responseData.data
-      showNotification("模型列表加载成功", "success");
+      showNotification("Model list loaded successfully", "success");
       return cachedModelsList;
     } else {
       console.error("Invalid model list format received:", responseData);
-      throw new Error("模型列表格式无效或请求未成功");
+      throw new Error("Invalid model list format or request failed");
     }
   } catch (error) {
-    console.error("加载模型列表失败:", error);
-    showNotification(`加载模型列表失败: ${error.message}`, "error");
+    console.error("Failed to load model list:", error);
+    showNotification(`Failed to load model list: ${error.message}`, "error");
     cachedModelsList = []; // Avoid repeated fetches on error for this session, or set to null to retry
     return [];
   }
@@ -2447,7 +2447,7 @@ function renderModelsInModal() {
 async function openModelHelperModal() {
   if (!currentModelHelperTarget) {
     console.error("Model helper target not set.");
-    showNotification("无法打开模型助手：目标未设置", "error");
+    showNotification("Cannot open model helper: target not set", "error");
     return;
   }
 
@@ -2466,9 +2466,9 @@ async function openModelHelperModal() {
         ? `为 "${label.textContent.trim()}" 选择模型`
         : "选择模型";
     } else if (currentModelHelperTarget.type === "array") {
-      modelHelperTitleElement.textContent = `为 ${currentModelHelperTarget.targetKey} 添加模型`;
+      modelHelperTitleElement.textContent = `Add model for ${currentModelHelperTarget.targetKey}`;
     } else {
-      modelHelperTitleElement.textContent = "选择模型";
+      modelHelperTitleElement.textContent = "Select Model";
     }
   }
   if (modelHelperSearchInput) modelHelperSearchInput.value = ""; // Clear search on open
@@ -2528,7 +2528,7 @@ async function checkSingleProxy(proxy, buttonElement) {
     buttonElement.disabled = true;
     if (statusIcon) {
       statusIcon.className = "proxy-status-icon px-2 py-2 text-blue-500";
-      statusIcon.innerHTML = '<i class="fas fa-spinner fa-spin" title="检测中..."></i>';
+      statusIcon.innerHTML = '<i class="fas fa-spinner fa-spin" title="Checking..."></i>';
       statusIcon.setAttribute("data-status", "checking");
     }
     
@@ -2544,7 +2544,7 @@ async function checkSingleProxy(proxy, buttonElement) {
     });
     
     if (!response.ok) {
-      throw new Error(`检测请求失败: ${response.status}`);
+      throw new Error(`Detection request failed: ${response.status}`);
     }
     
     const result = await response.json();
@@ -2552,19 +2552,19 @@ async function checkSingleProxy(proxy, buttonElement) {
     
     // 显示检测结果通知
     if (result.is_available) {
-      showNotification(`代理可用 (${result.response_time}s)`, "success");
+      showNotification(`Proxy available (${result.response_time}s)`, "success");
     } else {
-      showNotification(`代理不可用: ${result.error_message}`, "error");
+      showNotification(`Proxy unavailable: ${result.error_message}`, "error");
     }
     
   } catch (error) {
-    console.error('代理检测失败:', error);
+    console.error('Proxy detection failed:', error);
     if (statusIcon) {
       statusIcon.className = "proxy-status-icon px-2 py-2 text-red-500";
-      statusIcon.innerHTML = '<i class="fas fa-times-circle" title="检测失败"></i>';
+      statusIcon.innerHTML = '<i class="fas fa-times-circle" title="Detection failed"></i>';
       statusIcon.setAttribute("data-status", "error");
     }
-    showNotification(`检测失败: ${error.message}`, "error");
+    showNotification(`Detection failed: ${error.message}`, "error");
   } finally {
     // 恢复按钮状态
     buttonElement.innerHTML = originalButtonContent;
@@ -2582,11 +2582,11 @@ function updateProxyStatus(statusIcon, result) {
   
   if (result.is_available) {
     statusIcon.className = "proxy-status-icon px-2 py-2 text-green-500";
-    statusIcon.innerHTML = `<i class="fas fa-check-circle" title="可用 (${result.response_time}s)"></i>`;
+    statusIcon.innerHTML = `<i class="fas fa-check-circle" title="Available (${result.response_time}s)"></i>`;
     statusIcon.setAttribute("data-status", "available");
   } else {
     statusIcon.className = "proxy-status-icon px-2 py-2 text-red-500";
-    statusIcon.innerHTML = `<i class="fas fa-times-circle" title="不可用: ${result.error_message}"></i>`;
+    statusIcon.innerHTML = `<i class="fas fa-times-circle" title="Unavailable: ${result.error_message}"></i>`;
     statusIcon.setAttribute("data-status", "unavailable");
   }
 }
@@ -2604,7 +2604,7 @@ async function checkAllProxies() {
     .filter(proxy => proxy.length > 0);
   
   if (proxies.length === 0) {
-    showNotification("没有代理需要检测", "warning");
+    showNotification("No proxies to check", "warning");
     return;
   }
   
@@ -2649,9 +2649,9 @@ async function checkAllProxies() {
       
     } catch (error) {
       console.error('批量代理检测失败:', error);
-      showNotification(`批量检测失败: ${error.message}`, "error");
+      showNotification(`Batch check failed: ${error.message}`, "error");
       if (resultsContainer) {
-        resultsContainer.innerHTML = `<div class="text-red-500 text-center py-4">检测失败: ${error.message}</div>`;
+        resultsContainer.innerHTML = `<div class="text-red-500 text-center py-4">Check failed: ${error.message}</div>`;
       }
     } finally {
       // 隐藏进度
@@ -2718,7 +2718,7 @@ function displayProxyCheckResults(results) {
       </div>
       <div class="flex items-center">
         <span class="text-sm ${result.is_available ? 'text-green-700' : 'text-red-700'}">
-          ${result.is_available ? '可用' : '不可用'}
+          ${result.is_available ? 'Available' : 'Unavailable'}
         </span>
         ${errorText}
       </div>

@@ -59,62 +59,62 @@ endblock %} {% block head_extra_styles %}
     /* theming: style for unchecked state */
     background-color: rgba(156, 163, 175, 0.3); /* gray-400 */
   }
-  /* 统一通知样式为黑色半透明，确保与 keys_status 一致 */
+  /* Unified notification style as black translucent, ensuring consistency with keys_status */
   .notification {
     background: rgba(0, 0, 0, 0.8) !important;
     color: #fff !important;
   }
 
-  /* Theming for input fields - 修复边框重影问题 */
+  /* Theming for input fields - Fix border shadow issues */
   .form-input-themed {
     background-color: rgba(255, 255, 255, 0.95) !important;
-    border: 1px solid rgba(0, 0, 0, 0.12) !important; /* 为独立输入框提供边框 */
+    border: 1px solid rgba(0, 0, 0, 0.12) !important; /* Provide border for standalone input boxes */
     color: #374151 !important; /* gray-700 */
-    outline: none !important; /* 移除默认outline */
-    box-shadow: none !important; /* 移除默认box-shadow */
+    outline: none !important; /* Remove default outline */
+    box-shadow: none !important; /* Remove default box-shadow */
     transition: border-color 0.15s ease-in-out !important;
   }
   .form-input-themed::placeholder {
     color: #9ca3af !important; /* gray-400 */
   }
   .form-input-themed:focus {
-    border-color: #3b82f6 !important; /* focus时改变边框颜色 */
-    box-shadow: none !important; /* 移除focus阴影，只保留边框变化 */
-    outline: none !important; /* 确保没有outline */
+    border-color: #3b82f6 !important; /* Change border color on focus */
+    box-shadow: none !important; /* Remove focus shadow, keep only border change */
+    outline: none !important; /* Ensure no outline */
   }
 
-  /* 对于在包装器内的输入框，移除边框 */
+  /* For input boxes within wrappers, remove borders */
   .flex.items-center .form-input-themed,
   .array-container .form-input-themed {
-    border: none !important; /* 在包装器内的输入框移除边框 */
+    border: none !important; /* Remove borders for input boxes within wrappers */
   }
 
   .flex.items-center .form-input-themed:focus,
   .array-container .form-input-themed:focus {
-    border: none !important; /* 确保focus时也没有边框 */
+    border: none !important; /* Ensure no border on focus */
   }
 
-  /* Theming for select fields - 改进下拉框样式 */
+  /* Theming for select fields - Improve dropdown styling */
   .form-select-themed {
-    background-color: rgba(255, 255, 255, 0.95) !important; /* 白色背景 */
-    border: 1px solid rgba(0, 0, 0, 0.12) !important; /* 灰色边框 */
-    color: #374151 !important; /* gray-700 文字颜色 */
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important; /* 灰色箭头 */
+    background-color: rgba(255, 255, 255, 0.95) !important; /* White background */
+    border: 1px solid rgba(0, 0, 0, 0.12) !important; /* Gray border */
+    color: #374151 !important; /* gray-700 text color */
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important; /* Gray arrow */
     appearance: none !important;
-    padding: 0.6rem 2.5rem 0.6rem 0.8rem !important; /* 调整内边距 */
+    padding: 0.6rem 2.5rem 0.6rem 0.8rem !important; /* Adjust padding */
     background-repeat: no-repeat !important;
     background-position: right 0.6rem center !important;
     background-size: 1.5em 1.5em !important;
-    border-radius: 0.5rem !important; /* 圆角 */
-    font-weight: 500 !important; /* 半粗体 */
-    height: auto !important; /* 自动高度 */
-    box-shadow: none !important; /* 移除阴影 */
+    border-radius: 0.5rem !important; /* Rounded corners */
+    font-weight: 500 !important; /* Semi-bold */
+    height: auto !important; /* Auto height */
+    box-shadow: none !important; /* Remove shadow */
     cursor: pointer !important;
   }
 
   .form-select-themed:focus {
     border-color: #3b82f6 !important; /* blue-500 */
-    box-shadow: none !important; /* 移除focus阴影 */
+    box-shadow: none !important; /* Remove focus shadow */
     outline: none !important;
   }
 
@@ -129,15 +129,15 @@ endblock %} {% block head_extra_styles %}
     padding: 8px !important;
   }
 
-  /* 日志级别样式 - 浅色主题统一设计 */
+  /* Log level styles - Unified design for light theme */
   #LOG_LEVEL {
     font-weight: 600 !important;
   }
 
-  /* 统一的日志级别选项样式 - 使用浅色主题 */
+  /* Unified log level option styles - Using light theme */
   #LOG_LEVEL option[value="DEBUG"] {
-    background-color: rgba(255, 255, 255, 0.98) !important; /* 白色背景 */
-    color: #374151 !important; /* gray-700 深灰色文字 */
+    background-color: rgba(255, 255, 255, 0.98) !important; /* White background */
+    color: #374151 !important; /* gray-700 dark gray text */
   }
 
   #LOG_LEVEL option[value="INFO"] {
@@ -146,8 +146,8 @@ endblock %} {% block head_extra_styles %}
       250,
       251,
       0.98
-    ) !important; /* gray-50 浅灰背景 */
-    color: #374151 !important; /* gray-700 深灰色文字 */
+    ) !important; /* gray-50 light gray background */
+    color: #374151 !important; /* gray-700 dark gray text */
   }
 
   #LOG_LEVEL option[value="WARNING"] {
@@ -156,8 +156,8 @@ endblock %} {% block head_extra_styles %}
       244,
       246,
       0.98
-    ) !important; /* gray-100 稍深灰背景 */
-    color: #374151 !important; /* gray-700 深灰色文字 */
+    ) !important; /* gray-100 slightly darker gray background */
+    color: #374151 !important; /* gray-700 dark gray text */
   }
 
   #LOG_LEVEL option[value="ERROR"] {
@@ -166,8 +166,8 @@ endblock %} {% block head_extra_styles %}
       231,
       235,
       0.98
-    ) !important; /* gray-200 中灰背景 */
-    color: #374151 !important; /* gray-700 深灰色文字 */
+    ) !important; /* gray-200 medium gray background */
+    color: #374151 !important; /* gray-700 dark gray text */
   }
 
   #LOG_LEVEL option[value="CRITICAL"] {
@@ -176,8 +176,8 @@ endblock %} {% block head_extra_styles %}
       213,
       219,
       0.98
-    ) !important; /* gray-300 深灰背景 */
-    color: #374151 !important; /* gray-700 深灰色文字 */
+    ) !important; /* gray-300 dark gray background */
+    color: #374151 !important; /* gray-700 dark gray text */
   }
 
   /* Thinking model budget mapping styles */
@@ -215,11 +215,11 @@ endblock %} {% block head_extra_styles %}
   .map-value-input:focus {
     background-color: rgba(255, 255, 255, 1) !important;
     border-color: #3b82f6 !important; /* blue-500 */
-    box-shadow: none !important; /* 移除focus阴影 */
+    box-shadow: none !important; /* Remove focus shadow */
     outline: none !important;
   }
 
-  /* 警告文字样式 */
+  /* Warning text styles */
   .warning-text {
     color: #f87171 !important; /* red-400 */
     font-weight: 600 !important;
@@ -238,7 +238,7 @@ endblock %} {% block head_extra_styles %}
     color: #ef4444 !important; /* red-500 */
   }
 
-  /* 令牌生成按钮样式 */
+  /* Token generation button styles */
   .generate-btn {
     background-color: rgba(59, 130, 246, 0.1) !important; /* blue-500 light */
     color: #3b82f6 !important; /* blue-500 */
@@ -263,29 +263,29 @@ endblock %} {% block head_extra_styles %}
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5) !important;
   }
 
-  /* 导航链接悬停样式 - 优化以避免遮挡内容 */
+  /* Navigation link hover styles - Optimized to avoid blocking content */
   .nav-link {
     transition: all 0.2s ease-in-out;
     position: relative;
-    z-index: 1; /* 确保不会遮挡重要内容 */
+    z-index: 1; /* Ensure it doesn't block important content */
   }
 
   .nav-link:hover {
     background-color: rgba(59, 130, 246, 0.1) !important; /* blue-500 light */
-    transform: scale(1.02); /* 使用缩放代替向上移动 */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* 增强阴影效果 */
+    transform: scale(1.02); /* Use scaling instead of moving up */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow effect */
   }
 
-  /* 导航按钮容器样式 - 为悬停效果预留空间 */
+  /* Navigation button container styles - Reserve space for hover effects */
   .nav-buttons-container {
-    padding-top: 0.5rem; /* 为悬停效果预留上方空间 */
-    padding-bottom: 0.75rem; /* 为悬停效果预留下方空间 */
+    padding-top: 0.5rem; /* Reserve space above for hover effects */
+    padding-bottom: 0.75rem; /* Reserve space below for hover effects */
   }
 
-  /* 主导航按钮的优化悬停效果 */
+  /* Optimized hover effects for main navigation buttons */
   .main-nav-btn:hover {
-    transform: scale(1.02) !important; /* 使用缩放代替向上移动 */
-    box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3) !important; /* 蓝色阴影 */
+    transform: scale(1.02) !important; /* Use scaling instead of moving up */
+    box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3) !important; /* Blue shadow */
   }
 
   /* 操作按钮的优化悬停效果 */
@@ -295,7 +295,7 @@ endblock %} {% block head_extra_styles %}
   }
 
   .action-btn:hover {
-    transform: scale(1.02) !important; /* 使用缩放代替向上移动 */
+    transform: scale(1.02) !important; /* Use scaling instead of moving up */
   }
 
   .action-btn:hover#saveBtn {
@@ -696,7 +696,7 @@ endblock %} {% block head_extra_styles %}
   .focus-within\\:border-violet-400:focus-within,
   .focus-within\\:ring-violet-400:focus-within {
     border-color: #3b82f6 !important; /* blue-500 */
-    box-shadow: none !important; /* 移除focus阴影 */
+    box-shadow: none !important; /* Remove focus shadow */
   }
 
   /* Fix focus-within border color for auth token wrapper */
@@ -744,7 +744,7 @@ endblock %} {% block head_extra_styles %}
 
   .form-select-themed:focus {
     border-color: #3b82f6 !important; /* blue-500 */
-    box-shadow: none !important; /* 移除focus阴影 */
+    box-shadow: none !important; /* Remove focus shadow */
     outline: none !important;
   }
 
@@ -768,7 +768,7 @@ endblock %} {% block head_extra_styles %}
   .focus-within\\:border-violet-400:focus-within,
   .focus-within\\:ring-violet-400:focus-within {
     border-color: #3b82f6 !important; /* blue-500 */
-    box-shadow: none !important; /* 移除focus阴影 */
+    box-shadow: none !important; /* Remove focus shadow */
   }
 
   /* Ensure all array input wrappers use blue theme */
@@ -778,7 +778,7 @@ endblock %} {% block head_extra_styles %}
 
   .array-container .flex.items-center.flex-grow.rounded-md:focus-within {
     border-color: #3b82f6 !important; /* blue-500 */
-    box-shadow: none !important; /* 移除focus阴影 */
+    box-shadow: none !important; /* Remove focus shadow */
   }
 </style>
 {% endblock %} {% block content %}
@@ -1200,14 +1200,14 @@ endblock %} {% block head_extra_styles %}
             class="w-full px-4 py-3 rounded-lg form-input-themed"
           />
           <small class="text-gray-500 mt-1 block"
-            >API密钥失败后标记为无效的次数</small
+            >Number of failures before marking API key as invalid</small
           >
         </div>
 
-        <!-- 请求超时时间 -->
+        <!-- Request Timeout -->
         <div class="mb-6">
           <label for="TIME_OUT" class="block font-semibold mb-2 text-gray-700"
-            >请求超时时间（秒）</label
+            >Request Timeout (Seconds)</label
           >
           <input
             type="number"
@@ -1217,15 +1217,15 @@ endblock %} {% block head_extra_styles %}
             max="600"
             class="w-full px-4 py-3 rounded-lg form-input-themed"
           />
-          <small class="text-gray-500 mt-1 block">API请求的超时时间</small>
+          <small class="text-gray-500 mt-1 block">API request timeout</small>
         </div>
 
-        <!-- 最大重试次数 -->
+        <!-- Max Retry Count -->
         <div class="mb-6">
           <label
             for="MAX_RETRIES"
             class="block font-semibold mb-2 text-gray-700"
-            >最大重试次数</label
+            >Maximum Retry Count</label
           >
           <input
             type="number"
@@ -1236,13 +1236,13 @@ endblock %} {% block head_extra_styles %}
             class="w-full px-4 py-3 rounded-lg form-input-themed"
           />
           <small class="text-gray-500 mt-1 block"
-            >API请求失败后的最大重试次数</small
+            >Maximum retry count after API request failure</small
           >
         </div>
         <!-- 代理服务器列表 -->
         <div class="mb-6">
           <label for="PROXIES" class="block font-semibold mb-2 text-gray-700"
-            >代理服务器列表</label
+            >Proxy Server List</label
           >
           <div class="array-container" id="PROXIES_container">
             <!-- 代理项将在这里动态添加 -->
@@ -1253,27 +1253,27 @@ endblock %} {% block head_extra_styles %}
               class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2"
               id="bulkDeleteProxyBtn"
             >
-              <i class="fas fa-trash-alt"></i> 删除代理
+              <i class="fas fa-trash-alt"></i> Delete Proxy
             </button>
             <button
               type="button"
               class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2"
               id="checkAllProxiesBtn"
             >
-              <i class="fas fa-globe"></i> 检测所有代理
+              <i class="fas fa-globe"></i> Check All Proxies
             </button>
             <button
               type="button"
               class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2"
               id="addProxyBtn"
             >
-              <i class="fas fa-plus"></i> 添加代理
+              <i class="fas fa-plus"></i> Add Proxy
             </button>
           </div>
           <small class="text-gray-500 mt-1 block"
-            >代理服务器列表，支持 http 和 socks5 格式，例如:
-            http://user:pass@host:port 或
-            socks5://host:port。点击按钮可批量添加或删除。</small
+            >Proxy server list supporting http and socks5 formats, e.g.:
+            http://user:pass@host:port or
+            socks5://host:port. Click buttons to batch add or delete.</small
           >
         </div>
         <!-- 代理使用策略 -->
@@ -1300,7 +1300,7 @@ endblock %} {% block head_extra_styles %}
             </div>
           </div>
           <small class="text-gray-500 mt-1 block"
-            >开启后，对于每一个API_KEY将根据算法从代理列表中选取同一个代理IP，防止一个API_KEY同时被多个IP访问，也同时防止了一个IP访问了过多的API_KEY。</small
+            >When enabled, each API_KEY will select the same proxy IP from the proxy list based on an algorithm, preventing one API_KEY from being accessed by multiple IPs simultaneously, and also preventing one IP from accessing too many API_KEYs.</small
           >
         </div>
       </div>
@@ -1328,7 +1328,7 @@ endblock %} {% block head_extra_styles %}
             />
             <button
               type="button"
-              title="选择模型"
+              title="Select Model"
               class="model-helper-trigger-btn p-2 rounded-md text-violet-300 hover:bg-violet-700 transition-colors"
               data-target-input-id="TEST_MODEL"
             >
@@ -1500,14 +1500,14 @@ endblock %} {% block head_extra_styles %}
             </button>
           </div>
           <small class="text-gray-500 mt-1 block"
-            >支持网址上下文功能的模型列表</small
+            >Models supporting web context functionality</small
           >
         </div>
 
         <!-- 显示搜索链接 -->
         <div class="mb-6 flex items-center justify-between">
           <label for="SHOW_SEARCH_LINK" class="font-semibold text-gray-700"
-            >显示搜索链接</label
+            >Show Search Link</label
           >
           <div
             class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in"
@@ -1607,7 +1607,7 @@ endblock %} {% block head_extra_styles %}
                         </div> -->
           <small class="text-gray-500 mt-1 block"
             >Set budget for each thinking model (-1 for auto, maximum value
-            32767），此项与上方模型列表自动关联。</small
+            32767），this item is automatically associated with the model list above.</small
           >
         </div>
         <!-- 安全设置 -->
@@ -1615,7 +1615,7 @@ endblock %} {% block head_extra_styles %}
           <label
             for="SAFETY_SETTINGS"
             class="block font-semibold mb-2 text-gray-700"
-            >安全设置 (Safety Settings)</label
+            >Safety Settings (Safety Settings)</label
           >
           <div
             class="bg-white rounded-lg border border-gray-200 p-4 mb-2 space-y-3"
@@ -1626,9 +1626,9 @@ endblock %} {% block head_extra_styles %}
               color: #374151;
             "
           >
-            <!-- 安全设置项将在这里动态添加 -->
+            <!-- Safety setting items will be dynamically added here -->
             <div class="text-gray-500 text-sm italic">
-              定义模型的安全过滤阈值。
+              Define safety filtering thresholds for models.
             </div>
           </div>
           <div class="flex justify-end">
@@ -1637,17 +1637,17 @@ endblock %} {% block head_extra_styles %}
               class="bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2"
               id="addSafetySettingBtn"
             >
-              <i class="fas fa-plus"></i> 添加Security Settings
+              <i class="fas fa-plus"></i> Add Safety Settings
             </button>
           </div>
           <small class="text-gray-500 mt-1 block"
-            >配置模型的安全过滤级别，例如 HARM_CATEGORY_HARASSMENT:
-            BLOCK_NONE。</small
+            >Configure the safety filtering level for models, such as HARM_CATEGORY_HARASSMENT:
+            BLOCK_NONE.</small
           >
           <div class="warning-text">
             <i class="fas fa-exclamation-triangle"></i>
             <span
-              >建议设置成OFF，其他值会影响输出速度，非必要不要随便改动。</span
+              >Recommended to set to OFF. Other values affect output speed. Do not change unless necessary.</span
             >
           </div>
         </div>
@@ -1664,7 +1664,7 @@ endblock %} {% block head_extra_styles %}
         <!-- TTS 模型 -->
         <div class="mb-6">
           <label for="TTS_MODEL" class="block font-semibold mb-2 text-gray-700"
-            >TTS 模型</label
+            >TTS Model</label
           >
           <select
             id="TTS_MODEL"
@@ -1678,7 +1678,7 @@ endblock %} {% block head_extra_styles %}
               gemini-2.5-pro-preview-tts
             </option>
           </select>
-          <small class="text-gray-500 mt-1 block">用于TTS的模型</small>
+          <small class="text-gray-500 mt-1 block">Model used for TTS</small>
         </div>
 
         <!-- TTS 语音名称 -->
@@ -1686,68 +1686,68 @@ endblock %} {% block head_extra_styles %}
           <label
             for="TTS_VOICE_NAME"
             class="block font-semibold mb-2 text-gray-700"
-            >TTS 语音名称</label
+            >TTS Voice Name</label
           >
           <select
             id="TTS_VOICE_NAME"
             name="TTS_VOICE_NAME"
             class="w-full px-4 py-3 rounded-lg form-select-themed"
           >
-            <option value="Zephyr">Zephyr (明亮)</option>
-            <option value="Puck">Puck (欢快)</option>
-            <option value="Charon">Charon (信息丰富)</option>
-            <option value="Kore">Kore (坚定)</option>
-            <option value="Fenrir">Fenrir (易激动)</option>
-            <option value="Leda">Leda (年轻)</option>
-            <option value="Orus">Orus (坚定)</option>
-            <option value="Aoede">Aoede (轻松)</option>
-            <option value="Callirrhoe">Callirrhoe (随和)</option>
-            <option value="Autonoe">Autonoe (明亮)</option>
-            <option value="Enceladus">Enceladus (呼吸感)</option>
-            <option value="Iapetus">Iapetus (清晰)</option>
-            <option value="Umbriel">Umbriel (随和)</option>
-            <option value="Algieba">Algieba (平滑)</option>
-            <option value="Despina">Despina (平滑)</option>
-            <option value="Erinome">Erinome (清晰)</option>
-            <option value="Algenib">Algenib (沙哑)</option>
-            <option value="Rasalgethi">Rasalgethi (信息丰富)</option>
-            <option value="Laomedeia">Laomedeia (欢快)</option>
-            <option value="Achernar">Achernar (轻柔)</option>
-            <option value="Alnilam">Alnilam (坚定)</option>
-            <option value="Schedar">Schedar (平稳)</option>
-            <option value="Gacrux">Gacrux (成熟)</option>
-            <option value="Pulcherrima">Pulcherrima (向前)</option>
-            <option value="Achird">Achird (友好)</option>
-            <option value="Zubenelgenubi">Zubenelgenubi (休闲)</option>
-            <option value="Vindemiatrix">Vindemiatrix (温柔)</option>
-            <option value="Sadachbia">Sadachbia (活泼)</option>
-            <option value="Sadaltager">Sadaltager (博学)</option>
-            <option value="Sulafat">Sulafat (温暖)</option>
+            <option value="Zephyr">Zephyr (Bright)</option>
+            <option value="Puck">Puck (Cheerful)</option>
+            <option value="Charon">Charon (Informative)</option>
+            <option value="Kore">Kore (Firm)</option>
+            <option value="Fenrir">Fenrir (Excitable)</option>
+            <option value="Leda">Leda (Young)</option>
+            <option value="Orus">Orus (Firm)</option>
+            <option value="Aoede">Aoede (Relaxed)</option>
+            <option value="Callirrhoe">Callirrhoe (Easygoing)</option>
+            <option value="Autonoe">Autonoe (Bright)</option>
+            <option value="Enceladus">Enceladus (Breathy)</option>
+            <option value="Iapetus">Iapetus (Clear)</option>
+            <option value="Umbriel">Umbriel (Easygoing)</option>
+            <option value="Algieba">Algieba (Smooth)</option>
+            <option value="Despina">Despina (Smooth)</option>
+            <option value="Erinome">Erinome (Clear)</option>
+            <option value="Algenib">Algenib (Husky)</option>
+            <option value="Rasalgethi">Rasalgethi (Informative)</option>
+            <option value="Laomedeia">Laomedeia (Cheerful)</option>
+            <option value="Achernar">Achernar (Gentle)</option>
+            <option value="Alnilam">Alnilam (Firm)</option>
+            <option value="Schedar">Schedar (Steady)</option>
+            <option value="Gacrux">Gacrux (Mature)</option>
+            <option value="Pulcherrima">Pulcherrima (Forward)</option>
+            <option value="Achird">Achird (Friendly)</option>
+            <option value="Zubenelgenubi">Zubenelgenubi (Casual)</option>
+            <option value="Vindemiatrix">Vindemiatrix (Gentle)</option>
+            <option value="Sadachbia">Sadachbia (Lively)</option>
+            <option value="Sadaltager">Sadaltager (Knowledgeable)</option>
+            <option value="Sulafat">Sulafat (Warm)</option>
           </select>
           <small class="text-gray-500 mt-1 block"
-            >TTS 的语音名称，控制风格、语调、口音和节奏</small
+            >TTS voice name controlling style, tone, accent and rhythm</small
           >
         </div>
 
         <!-- TTS 语速 -->
         <div class="mb-6">
           <label for="TTS_SPEED" class="block font-semibold mb-2 text-gray-700"
-            >TTS 语速</label
+            >TTS Speed</label
           >
           <select
             id="TTS_SPEED"
             name="TTS_SPEED"
             class="w-full px-4 py-3 rounded-lg form-select-themed"
           >
-            <option value="slow">慢</option>
-            <option value="normal">正常</option>
-            <option value="fast">快</option>
+            <option value="slow">Slow</option>
+            <option value="normal">Normal</option>
+            <option value="fast">Fast</option>
           </select>
-          <small class="text-gray-500 mt-1 block">选择 TTS 的语速</small>
+          <small class="text-gray-500 mt-1 block">Select TTS speed</small>
         </div>
       </div>
 
-      <!-- 图像生成相关配置 -->
+      <!-- Image Generation Related Configuration -->
       <div class="config-section" id="image-section">
         <h2
           class="text-xl font-bold mb-6 pb-3 border-b flex items-center gap-2 text-gray-800 border-violet-300 border-opacity-30"
@@ -1755,10 +1755,10 @@ endblock %} {% block head_extra_styles %}
           <i class="fas fa-image text-violet-400"></i> Image Generation Configuration
         </h2>
 
-        <!-- 付费API密钥 -->
+        <!-- Paid API Key -->
         <div class="mb-6">
           <label for="PAID_KEY" class="block font-semibold mb-2 text-gray-700"
-            >付费API密钥</label
+            >Paid API Key</label
           >
           <input
             type="text"
@@ -1768,16 +1768,16 @@ endblock %} {% block head_extra_styles %}
             class="w-full px-4 py-3 rounded-lg sensitive-input form-input-themed"
           />
           <small class="text-gray-500 mt-1 block"
-            >用于图像生成的付费API密钥</small
+            >Paid API key for image generation</small
           >
         </div>
 
-        <!-- 图像生成模型 -->
+        <!-- Image Generation Model -->
         <div class="mb-6">
           <label
             for="CREATE_IMAGE_MODEL"
             class="block font-semibold mb-2 text-gray-700"
-            >图像生成模型</label
+            >Image Generation Model</label
           >
           <div class="flex items-center gap-2">
             <input
@@ -1789,22 +1789,22 @@ endblock %} {% block head_extra_styles %}
             />
             <button
               type="button"
-              title="选择模型"
+              title="Select Model"
               class="model-helper-trigger-btn p-2 rounded-md text-violet-300 hover:bg-violet-700 transition-colors"
               data-target-input-id="CREATE_IMAGE_MODEL"
             >
               <i class="fas fa-list-ul"></i>
             </button>
           </div>
-          <small class="text-gray-500 mt-1 block">用于图像生成的模型</small>
+          <small class="text-gray-500 mt-1 block">Model for image generation</small>
         </div>
 
-        <!-- 上传提供商 -->
+        <!-- Upload Provider -->
         <div class="mb-6">
           <label
             for="UPLOAD_PROVIDER"
             class="block font-semibold mb-2 text-gray-700"
-            >上传提供商</label
+            >Upload Provider</label
           >
           <select
             id="UPLOAD_PROVIDER"
@@ -1815,7 +1815,7 @@ endblock %} {% block head_extra_styles %}
             <option value="picgo">PicGo</option>
             <option value="cloudflare_imgbed">Cloudflare</option>
           </select>
-          <small class="text-gray-500 mt-1 block">图片上传服务提供商</small>
+          <small class="text-gray-500 mt-1 block">Image upload service provider</small>
         </div>
 
         <!-- SM.MS密钥 -->
@@ -1823,7 +1823,7 @@ endblock %} {% block head_extra_styles %}
           <label
             for="SMMS_SECRET_TOKEN"
             class="block font-semibold mb-2 text-gray-700"
-            >SM.MS密钥</label
+            >SM.MS Secret Key</label
           >
           <input
             type="text"
@@ -1832,7 +1832,7 @@ endblock %} {% block head_extra_styles %}
             placeholder="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             class="w-full px-4 py-3 rounded-lg sensitive-input form-input-themed"
           />
-          <small class="text-gray-500 mt-1 block">SM.MS图床的密钥</small>
+          <small class="text-gray-500 mt-1 block">SM.MS image hosting secret key</small>
         </div>
 
         <!-- PicGo API URL -->
@@ -1840,7 +1840,7 @@ endblock %} {% block head_extra_styles %}
           <label
             for="PICGO_API_URL"
             class="block font-semibold mb-2 text-gray-700"
-            >PicGo API地址</label
+            >PicGo API URL</label
           >
           <input
             type="text"
@@ -1849,7 +1849,7 @@ endblock %} {% block head_extra_styles %}
             placeholder="https://www.picgo.net/api/1/upload"
             class="w-full px-4 py-3 rounded-lg form-input-themed"
           />
-          <small class="text-gray-500 mt-1 block">PicGo服务器的API地址，默认为 https://www.picgo.net/api/1/upload</small>
+          <small class="text-gray-500 mt-1 block">PicGo server API address, defaults to https://www.picgo.net/api/1/upload</small>
         </div>
 
         <!-- PicGo API密钥 -->
@@ -2010,12 +2010,12 @@ endblock %} {% block head_extra_styles %}
           <small class="text-gray-500 mt-1 block">短文本的字符阈值</small>
         </div>
 
-        <!-- 长文本阈值 -->
+        <!-- Long Text Threshold -->
         <div class="mb-6">
           <label
             for="STREAM_LONG_TEXT_THRESHOLD"
             class="block font-semibold mb-2 text-gray-700"
-            >长文本阈值</label
+            >Long Text Threshold</label
           >
           <input
             type="number"
@@ -2025,15 +2025,15 @@ endblock %} {% block head_extra_styles %}
             max="1000"
             class="w-full px-4 py-3 rounded-lg form-input-themed"
           />
-          <small class="text-gray-500 mt-1 block">长文本的字符阈值</small>
+          <small class="text-gray-500 mt-1 block">Character threshold for long text</small>
         </div>
 
-        <!-- 分块大小 -->
+        <!-- Chunk Size -->
         <div class="mb-6">
           <label
             for="STREAM_CHUNK_SIZE"
             class="block font-semibold mb-2 text-gray-700"
-            >分块大小</label
+            >Chunk Size</label
           >
           <input
             type="number"
@@ -2043,14 +2043,14 @@ endblock %} {% block head_extra_styles %}
             max="100"
             class="w-full px-4 py-3 rounded-lg form-input-themed"
           />
-          <small class="text-gray-500 mt-1 block">流式输出的分块大小</small>
+          <small class="text-gray-500 mt-1 block">Chunk size for streaming output</small>
         </div>
 
         <!-- Fake Streaming Configuration -->
         <h3
           class="text-lg font-semibold mb-4 pt-4 border-t border-violet-300 border-opacity-20 text-gray-200"
         >
-          <i class="fas fa-ghost text-violet-400"></i> 假流式配置 (Fake
+          <i class="fas fa-ghost text-violet-400"></i> Fake Streaming Configuration (Fake
           Streaming)
         </h3>
 
@@ -2075,15 +2075,15 @@ endblock %} {% block head_extra_styles %}
           </div>
         </div>
         <small class="text-gray-500 mt-1 block mb-4"
-          >当启用时，将调用非流式接口，并在等待响应期间发送空数据以维持连接。</small
+          >When enabled, calls the non-streaming interface and sends empty data while waiting for response to maintain connection.</small
         >
 
-        <!-- 假流式发送空数据的间隔时间 -->
+        <!-- Fake streaming empty data sending interval -->
         <div class="mb-6">
           <label
             for="FAKE_STREAM_EMPTY_DATA_INTERVAL_SECONDS"
             class="block font-semibold mb-2 text-gray-700"
-            >假流式空数据发送间隔（秒）</label
+            >Fake Streaming Empty Data Interval (seconds)</label
           >
           <input
             type="number"
@@ -2095,26 +2095,26 @@ endblock %} {% block head_extra_styles %}
             class="w-full px-4 py-3 rounded-lg form-input-themed"
           />
           <small class="text-gray-500 mt-1 block"
-            >在Enable Fake Stream Output时，向客户端发送空数据以维持连接状态的时间间隔（建议
-            3-10 秒）。</small
+            >When Fake Streaming is enabled, time interval for sending empty data to client to maintain connection (recommended
+            3-10 seconds).</small
           >
         </div>
       </div>
 
-      <!-- 定时任务配置 -->
+      <!-- Scheduled Task Configuration -->
       <div class="config-section" id="scheduler-section">
         <h2
           class="text-xl font-bold mb-6 pb-3 border-b flex items-center gap-2 text-gray-800 border-violet-300 border-opacity-30"
         >
-          <i class="fas fa-clock text-violet-400"></i> 定时任务配置
+          <i class="fas fa-clock text-violet-400"></i> Scheduled Task Configuration
         </h2>
 
-        <!-- 检查间隔 -->
+        <!-- Check Interval -->
         <div class="mb-6">
           <label
             for="CHECK_INTERVAL_HOURS"
             class="block font-semibold mb-2 text-gray-700"
-            >检查间隔（小时）</label
+            >Check Interval (hours)</label
           >
           <input
             type="number"
@@ -2124,40 +2124,40 @@ endblock %} {% block head_extra_styles %}
             class="w-full px-4 py-3 rounded-lg form-input-themed"
           />
           <small class="text-gray-500 mt-1 block"
-            >定时检查密钥状态的间隔时间（单位：小时）</small
+            >Interval for regularly checking key status (unit: hours)</small
           >
         </div>
 
-        <!-- 时区 -->
+        <!-- Timezone -->
         <div class="mb-6">
           <label for="TIMEZONE" class="block font-semibold mb-2 text-gray-700"
-            >时区</label
+            >Timezone</label
           >
           <input
             type="text"
             id="TIMEZONE"
             name="TIMEZONE"
-            placeholder="例如: Asia/Shanghai"
+            placeholder="For example: Asia/Shanghai"
             class="w-full px-4 py-3 rounded-lg form-input-themed"
           />
           <small class="text-gray-500 mt-1 block"
-            >定时任务使用的时区，格式如 "Asia/Shanghai" 或 "UTC"</small
+            >Timezone used for scheduled tasks, format like "Asia/Shanghai" or "UTC"</small
           >
         </div>
       </div>
 
-      <!-- 日志配置 -->
+      <!-- Log Configuration -->
       <div class="config-section" id="logging-section">
         <h2
           class="text-xl font-bold mb-6 pb-3 border-b flex items-center gap-2 text-gray-800 border-violet-300 border-opacity-30"
         >
-          <i class="fas fa-file-alt text-violet-400"></i> 日志配置
+          <i class="fas fa-file-alt text-violet-400"></i> Log Configuration
         </h2>
 
-        <!-- 日志级别 -->
+        <!-- Log Level -->
         <div class="mb-6">
           <label for="LOG_LEVEL" class="block font-semibold mb-2 text-gray-700"
-            >日志级别</label
+            >Log Level</label
           >
           <select
             id="LOG_LEVEL"
@@ -2171,17 +2171,17 @@ endblock %} {% block head_extra_styles %}
             <option value="CRITICAL">CRITICAL</option>
           </select>
           <small class="text-gray-500 mt-1 block"
-            >设置应用程序的日志记录详细程度</small
+            >Set the logging verbosity of the application</small
           >
         </div>
 
-        <!-- 自动删除错误日志 -->
+        <!-- Auto Delete Error Logs -->
         <div class="mb-6">
           <div class="flex items-center justify-between">
             <label
               for="AUTO_DELETE_ERROR_LOGS_ENABLED"
               class="font-semibold text-gray-700"
-              >是否开启自动删除错误日志</label
+              >Enable Auto Delete Error Logs</label
             >
             <div
               class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in"
@@ -2199,38 +2199,38 @@ endblock %} {% block head_extra_styles %}
             </div>
           </div>
           <small class="text-gray-500 mt-1 block"
-            >开启后，将自动删除指定天数前的错误日志。</small
+            >When enabled, will automatically delete error logs older than specified days.</small
           >
         </div>
 
-        <!-- 自动删除日志天数 -->
+        <!-- Auto Delete Log Days -->
         <div class="mb-6">
           <label
             for="AUTO_DELETE_ERROR_LOGS_DAYS"
             class="block font-semibold mb-2 text-gray-700"
-            >自动删除多少天前的错误日志</label
+            >Auto Delete Error Logs (Days)</label
           >
           <select
             id="AUTO_DELETE_ERROR_LOGS_DAYS"
             name="AUTO_DELETE_ERROR_LOGS_DAYS"
             class="w-full px-4 py-3 rounded-lg form-select-themed"
           >
-            <option value="1">1 天</option>
-            <option value="7">7 天</option>
-            <option value="30">30 天</option>
+            <option value="1">1 Day</option>
+            <option value="7">7 Days</option>
+            <option value="30">30 Days</option>
           </select>
           <small class="text-gray-500 mt-1 block"
-            >选择自动删除错误日志的天数。</small
+            >Select the number of days for auto-deleting error logs.</small
           >
         </div>
 
-        <!-- 自动删除请求日志 -->
+        <!-- Auto Delete Request Logs -->
         <div class="mb-6">
           <div class="flex items-center justify-between">
             <label
               for="AUTO_DELETE_REQUEST_LOGS_ENABLED"
               class="font-semibold text-gray-700"
-              >是否开启自动删除请求日志</label
+              >Enable Auto Delete Request Logs</label
             >
             <div
               class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in"
@@ -2248,28 +2248,28 @@ endblock %} {% block head_extra_styles %}
             </div>
           </div>
           <small class="text-gray-500 mt-1 block"
-            >开启后，将自动删除指定天数前的请求日志。</small
+            >When enabled, will automatically delete request logs older than specified days.</small
           >
         </div>
 
-        <!-- 自动删除请求日志天数 -->
+        <!-- Auto Delete Request Log Days -->
         <div class="mb-6">
           <label
             for="AUTO_DELETE_REQUEST_LOGS_DAYS"
             class="block font-semibold mb-2 text-gray-700"
-            >自动删除多少天前的请求日志</label
+            >Auto Delete Request Logs (Days)</label
           >
           <select
             id="AUTO_DELETE_REQUEST_LOGS_DAYS"
             name="AUTO_DELETE_REQUEST_LOGS_DAYS"
             class="w-full px-4 py-3 rounded-lg form-select-themed"
           >
-            <option value="1">1 天</option>
-            <option value="7">7 天</option>
-            <option value="30">30 天</option>
+            <option value="1">1 Day</option>
+            <option value="7">7 Days</option>
+            <option value="30">30 Days</option>
           </select>
           <small class="text-gray-500 mt-1 block"
-            >选择自动删除请求日志的天数。</small
+            >Select the number of days for auto-deleting request logs.</small
           >
         </div>
       </div>
@@ -2307,10 +2307,10 @@ endblock %} {% block head_extra_styles %}
 
 <!-- Scroll buttons are now in base.html -->
 <div class="scroll-buttons">
-  <button class="scroll-button" onclick="scrollToTop()" title="回到顶部">
+  <button class="scroll-button" onclick="scrollToTop()" title="Back to Top">
     <i class="fas fa-chevron-up"></i>
   </button>
-  <button class="scroll-button" onclick="scrollToBottom()" title="滚动到底部">
+  <button class="scroll-button" onclick="scrollToBottom()" title="Scroll to Bottom">
     <i class="fas fa-chevron-down"></i>
   </button>
 </div>
@@ -2331,7 +2331,7 @@ endblock %} {% block head_extra_styles %}
   >
     <div class="p-6">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold text-gray-800">批量添加 API 密钥</h2>
+        <h2 class="text-xl font-bold text-gray-800">Batch Add API Keys</h2>
         <button
           id="closeApiKeyModalBtn"
           class="text-gray-300 hover:text-gray-800 text-xl"
@@ -2340,12 +2340,12 @@ endblock %} {% block head_extra_styles %}
         </button>
       </div>
       <p class="text-gray-300 mb-4">
-        每行粘贴一个或多个密钥，将自动提取有效密钥并去重。
+        Paste one or more keys per line, valid keys will be automatically extracted and deduplicated.
       </p>
       <textarea
         id="apiKeyBulkInput"
         rows="10"
-        placeholder="在此处粘贴 API 密钥..."
+        placeholder="Paste API keys here..."
         class="w-full px-4 py-3 rounded-lg font-mono text-sm form-input-themed"
       ></textarea>
       <div class="flex justify-end gap-3 mt-6">
@@ -2354,14 +2354,14 @@ endblock %} {% block head_extra_styles %}
           id="confirmAddApiKeyBtn"
           class="bg-violet-600 hover:bg-violet-700 text-white px-6 py-2 rounded-lg font-medium transition"
         >
-          确认添加
+          Confirm Add
         </button>
         <button
           type="button"
           id="cancelAddApiKeyBtn"
           class="bg-gray-500 bg-opacity-50 hover:bg-opacity-70 text-gray-200 px-6 py-2 rounded-lg font-medium transition"
         >
-          取消
+          Cancel
         </button>
       </div>
     </div>
@@ -2380,7 +2380,7 @@ endblock %} {% block head_extra_styles %}
   >
     <div class="p-6">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold text-gray-800">批量删除 API 密钥</h2>
+        <h2 class="text-xl font-bold text-gray-800">Batch Delete API Keys</h2>
         <button
           id="closeBulkDeleteModalBtn"
           class="text-gray-300 hover:text-gray-800 text-xl"
@@ -2389,12 +2389,12 @@ endblock %} {% block head_extra_styles %}
         </button>
       </div>
       <p class="text-gray-300 mb-4">
-        每行粘贴一个或多个密钥，将自动提取有效密钥并从列表中删除。
+        Paste one or more keys per line, valid keys will be automatically extracted and removed from the list.
       </p>
       <textarea
         id="bulkDeleteApiKeyInput"
         rows="10"
-        placeholder="在此处粘贴要删除的 API 密钥..."
+        placeholder="Paste API keys to delete here..."
         class="w-full px-4 py-3 rounded-lg font-mono text-sm form-input-themed"
       ></textarea>
       <div class="flex justify-end gap-3 mt-6">
@@ -2403,14 +2403,14 @@ endblock %} {% block head_extra_styles %}
           id="confirmBulkDeleteApiKeyBtn"
           class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition"
         >
-          确认删除
+          Confirm Delete
         </button>
         <button
           type="button"
           id="cancelBulkDeleteApiKeyBtn"
           class="bg-gray-500 bg-opacity-50 hover:bg-opacity-70 text-gray-200 px-6 py-2 rounded-lg font-medium transition"
         >
-          取消
+          Cancel
         </button>
       </div>
     </div>
@@ -2429,7 +2429,7 @@ endblock %} {% block head_extra_styles %}
   >
     <div class="p-6">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold text-gray-800">批量添加代理服务器</h2>
+        <h2 class="text-xl font-bold text-gray-800">Batch Add Proxy Servers</h2>
         <button
           id="closeProxyModalBtn"
           class="text-gray-300 hover:text-gray-800 text-xl"
@@ -2438,12 +2438,12 @@ endblock %} {% block head_extra_styles %}
         </button>
       </div>
       <p class="text-gray-300 mb-4">
-        每行粘贴一个或多个代理地址，将自动提取有效地址并去重。
+        Paste one or more proxy addresses per line, valid addresses will be automatically extracted and deduplicated.
       </p>
       <textarea
         id="proxyBulkInput"
         rows="10"
-        placeholder="在此处粘贴代理地址 (例如 http://user:pass@host:port 或 socks5://host:port)..."
+        placeholder="Paste proxy addresses here (e.g., http://user:pass@host:port or socks5://host:port)..."
         class="w-full px-4 py-3 rounded-lg font-mono text-sm form-input-themed"
       ></textarea>
       <div class="flex justify-end gap-3 mt-6">
@@ -2452,14 +2452,14 @@ endblock %} {% block head_extra_styles %}
           id="confirmAddProxyBtn"
           class="bg-violet-600 hover:bg-violet-700 text-white px-6 py-2 rounded-lg font-medium transition"
         >
-          确认添加
+          Confirm Add
         </button>
         <button
           type="button"
           id="cancelAddProxyBtn"
           class="bg-gray-500 bg-opacity-50 hover:bg-opacity-70 text-gray-200 px-6 py-2 rounded-lg font-medium transition"
         >
-          取消
+          Cancel
         </button>
       </div>
     </div>
@@ -2478,7 +2478,7 @@ endblock %} {% block head_extra_styles %}
   >
     <div class="p-6">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold text-gray-800">批量删除代理服务器</h2>
+        <h2 class="text-xl font-bold text-gray-800">Batch Delete Proxy Servers</h2>
         <button
           id="closeBulkDeleteProxyModalBtn"
           class="text-gray-300 hover:text-gray-800 text-xl"
@@ -2487,12 +2487,12 @@ endblock %} {% block head_extra_styles %}
         </button>
       </div>
       <p class="text-gray-300 mb-4">
-        每行粘贴一个或多个代理地址，将自动提取有效地址并从列表中删除。
+        Paste one or more proxy addresses per line, valid addresses will be automatically extracted and removed from the list.
       </p>
       <textarea
         id="bulkDeleteProxyInput"
         rows="10"
-        placeholder="在此处粘贴要删除的代理地址..."
+        placeholder="Paste proxy addresses to delete here..."
         class="w-full px-4 py-3 rounded-lg font-mono text-sm form-input-themed"
       ></textarea>
       <div class="flex justify-end gap-3 mt-6">
@@ -2501,14 +2501,14 @@ endblock %} {% block head_extra_styles %}
           id="confirmBulkDeleteProxyBtn"
           class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition"
         >
-          确认删除
+          Confirm Delete
         </button>
         <button
           type="button"
           id="cancelBulkDeleteProxyBtn"
           class="bg-gray-500 bg-opacity-50 hover:bg-opacity-70 text-gray-200 px-6 py-2 rounded-lg font-medium transition"
         >
-          取消
+          Cancel
         </button>
       </div>
     </div>
@@ -2536,7 +2536,7 @@ endblock %} {% block head_extra_styles %}
         </button>
       </div>
       <p class="text-gray-300 mb-6">
-        确定要重置所有配置吗？<br />这将恢复到默认值，此操作不可撤销。
+        Are you sure you want to reset all configurations?<br />This will restore to default values and this operation is irreversible.
       </p>
       <div class="flex justify-end gap-3">
         <button
@@ -2544,14 +2544,14 @@ endblock %} {% block head_extra_styles %}
           id="confirmResetBtn"
           class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg font-medium transition"
         >
-          确认重置
+          Confirm Reset
         </button>
         <button
           type="button"
           id="cancelResetBtn"
           class="bg-violet-600 hover:bg-violet-700 text-white px-6 py-2 rounded-lg font-medium transition"
         >
-          取消
+          Cancel
         </button>
       </div>
     </div>
@@ -2596,14 +2596,14 @@ endblock %} {% block head_extra_styles %}
           id="confirmAddVertexApiKeyBtn"
           class="bg-violet-600 hover:bg-violet-700 text-white px-6 py-2 rounded-lg font-medium transition"
         >
-          确认添加
+          Confirm Add
         </button>
         <button
           type="button"
           id="cancelAddVertexApiKeyBtn"
           class="bg-gray-500 bg-opacity-50 hover:bg-opacity-70 text-gray-200 px-6 py-2 rounded-lg font-medium transition"
         >
-          取消
+          Cancel
         </button>
       </div>
     </div>
@@ -2623,7 +2623,7 @@ endblock %} {% block head_extra_styles %}
     <div class="p-6">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-bold text-gray-800">
-          批量删除 Vertex Express API 密钥
+          Batch Delete Vertex Express API Keys
         </h2>
         <button
           id="closeBulkDeleteVertexModalBtn"
@@ -2633,12 +2633,12 @@ endblock %} {% block head_extra_styles %}
         </button>
       </div>
       <p class="text-gray-300 mb-4">
-        每行粘贴一个或多个密钥，将自动提取有效密钥并从列表中删除。
+        Paste one or more keys per line, valid keys will be automatically extracted and removed from the list.
       </p>
       <textarea
         id="bulkDeleteVertexApiKeyInput"
         rows="10"
-        placeholder="在此处粘贴要删除的 Vertex Express API 密钥..."
+        placeholder="Paste Vertex Express API keys to delete here..."
         class="w-full px-4 py-3 rounded-lg font-mono text-sm form-input-themed"
       ></textarea>
       <div class="flex justify-end gap-3 mt-6">
@@ -2647,14 +2647,14 @@ endblock %} {% block head_extra_styles %}
           id="confirmBulkDeleteVertexApiKeyBtn"
           class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition"
         >
-          确认删除
+          Confirm Delete
         </button>
         <button
           type="button"
           id="cancelBulkDeleteVertexApiKeyBtn"
           class="bg-gray-500 bg-opacity-50 hover:bg-opacity-70 text-gray-200 px-6 py-2 rounded-lg font-medium transition"
         >
-          取消
+          Cancel
         </button>
       </div>
     </div>
@@ -2673,7 +2673,7 @@ endblock %} {% block head_extra_styles %}
   >
     <div class="p-6">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold text-gray-800">代理检测结果</h2>
+        <h2 class="text-xl font-bold text-gray-800">Proxy Check Results</h2>
         <button
           id="closeProxyCheckModalBtn"
           class="text-gray-300 hover:text-gray-800 text-xl"
@@ -2682,41 +2682,41 @@ endblock %} {% block head_extra_styles %}
         </button>
       </div>
       
-      <!-- 检测状态和进度 -->
+      <!-- Check status and progress -->
       <div id="proxyCheckProgress" class="mb-4 hidden">
         <div class="flex items-center gap-2 mb-2">
           <div class="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-          <span class="text-sm text-gray-600">检测中...</span>
+          <span class="text-sm text-gray-600">Checking...</span>
         </div>
         <div class="w-full bg-gray-200 rounded-full h-2">
           <div id="progressBar" class="bg-blue-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
         </div>
         <div class="text-xs text-gray-500 mt-1">
-          <span id="progressText">准备开始检测...</span>
+          <span id="progressText">Preparing to start check...</span>
         </div>
       </div>
       
-      <!-- 检测结果概览 -->
+      <!-- Check results overview -->
       <div id="proxyCheckSummary" class="mb-4 hidden">
         <div class="grid grid-cols-3 gap-4 text-center">
           <div class="bg-green-50 border border-green-200 rounded-lg p-3">
             <div class="text-2xl font-bold text-green-600" id="availableCount">0</div>
-            <div class="text-sm text-green-700">可用</div>
+            <div class="text-sm text-green-700">Available</div>
           </div>
           <div class="bg-red-50 border border-red-200 rounded-lg p-3">
             <div class="text-2xl font-bold text-red-600" id="unavailableCount">0</div>
-            <div class="text-sm text-red-700">不可用</div>
+            <div class="text-sm text-red-700">Unavailable</div>
           </div>
           <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
             <div class="text-2xl font-bold text-blue-600" id="totalCount">0</div>
-            <div class="text-sm text-blue-700">总数</div>
+            <div class="text-sm text-blue-700">Total</div>
           </div>
         </div>
       </div>
       
-      <!-- 检测结果列表 -->
+      <!-- Check results list -->
       <div id="proxyCheckResults" class="space-y-2" style="max-height: 400px; overflow-y: auto;">
-        <!-- 检测结果将在这里动态添加 -->
+        <!-- Check results will be dynamically added here -->
       </div>
       
       <div class="flex justify-end gap-3 mt-6">
@@ -2725,14 +2725,14 @@ endblock %} {% block head_extra_styles %}
           id="retryFailedProxiesBtn"
           class="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-lg font-medium transition hidden"
         >
-          重试失败的代理
+          Retry Failed Proxies
         </button>
         <button
           type="button"
           id="closeProxyCheckBtn"
           class="bg-gray-500 bg-opacity-50 hover:bg-opacity-70 text-gray-200 px-6 py-2 rounded-lg font-medium transition"
         >
-          关闭
+          Close
         </button>
       </div>
     </div>
@@ -2764,7 +2764,7 @@ endblock %} {% block head_extra_styles %}
       <input
         type="text"
         id="modelHelperSearchInput"
-        placeholder="搜索模型..."
+        placeholder="Search models..."
         class="w-full px-4 py-3 mb-4 rounded-lg font-mono text-sm form-input-themed"
       />
       <div
@@ -2773,7 +2773,7 @@ endblock %} {% block head_extra_styles %}
         style="max-height: 300px; overflow-y: auto"
       >
         <!-- Model items will be populated here -->
-        <p class="text-gray-400 text-sm italic">正在加载模型列表...</p>
+        <p class="text-gray-400 text-sm italic">Loading model list...</p>
       </div>
       <div class="flex justify-end gap-3 mt-6">
         <button
@@ -2781,7 +2781,7 @@ endblock %} {% block head_extra_styles %}
           id="cancelModelHelperBtn"
           class="bg-gray-500 bg-opacity-50 hover:bg-opacity-70 text-gray-200 px-6 py-2 rounded-lg font-medium transition"
         >
-          关闭
+          Close
         </button>
       </div>
     </div>
@@ -2790,7 +2790,7 @@ endblock %} {% block head_extra_styles %}
 
 {% endblock %} {% block body_scripts %}
 <script src="/static/js/config_editor.js"></script>
-<!-- 增强下拉框样式和交互性 -->
+<!-- Enhanced dropdown styles and interactivity -->
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     // 增强所有下拉框的交互性
@@ -2881,7 +2881,7 @@ endblock %} {% block head_extra_styles %}
         }
       });
 
-      // 输入限制为正整数且不超过最大值
+      // Input restriction to positive integers and not exceeding maximum value
       input.addEventListener("input", function () {
         let val = this.value.replace(/[^0-9]/g, "");
         if (val !== "") {
@@ -2890,7 +2890,7 @@ endblock %} {% block head_extra_styles %}
         }
         this.value = val;
 
-        // 添加微小动画反馈
+        // Add slight animation feedback
         this.style.transform = "scale(1.05)";
         setTimeout(() => {
           this.style.transform = "scale(1)";

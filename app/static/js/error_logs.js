@@ -229,7 +229,7 @@ function initializePaginationJumpControls() {
         loadErrorLogs();
         pageInput.value = "";
       } else {
-        showNotification("请输入有效的页码", "error", 2000);
+        showNotification("Please enter a valid page number", "error", 2000);
         pageInput.value = "";
       }
     });
@@ -402,7 +402,7 @@ function _performCopy(text, buttonElement) {
       handleCopyResult(buttonElement, copySuccess);
     } else {
       showNotification(
-        copySuccess ? "已复制到剪贴板" : "复制失败",
+        copySuccess ? "Copied to clipboard" : "Copy failed",
         copySuccess ? "success" : "error"
       );
     }
@@ -439,7 +439,7 @@ function handleCopyButtonClick() {
       textToCopy = targetElement.textContent;
     } else {
       console.error("Target element not found:", targetId);
-      showNotification("复制出错：找不到目标元素", "error");
+      showNotification("Copy error: Target element not found", "error");
       return; // Exit if target element not found
     }
   } else {
@@ -447,7 +447,7 @@ function handleCopyButtonClick() {
       "No data-target or data-copy-text attribute found on button:",
       button
     );
-    showNotification("复制出错：未指定复制内容", "error");
+    showNotification("Copy error: No content specified", "error");
     return; // Exit if no source specified
   }
 
@@ -458,7 +458,7 @@ function handleCopyButtonClick() {
       "No text found to copy for target:",
       targetId || "direct text"
     );
-    showNotification("没有内容可复制", "warning");
+    showNotification("No content to copy", "warning");
   }
 } // End of handleCopyButtonClick function
 
@@ -556,7 +556,7 @@ function handleCopySelectedKeys() {
     const textToCopy = keysToCopy.join("\n"); // 每行一个密钥
     _performCopy(textToCopy, copySelectedKeysBtn); // 使用新的辅助函数
   } else {
-    showNotification("没有选中的密钥可复制", "warning");
+    showNotification("No selected keys to copy", "warning");
   }
 }
 
@@ -574,12 +574,12 @@ function handleDeleteSelected() {
   });
 
   if (logIdsToDelete.length === 0) {
-    showNotification("没有选中的日志可删除", "warning");
+    showNotification("No selected logs to delete", "warning");
     return;
   }
 
   if (logIdsToDelete.length === 0) {
-    showNotification("没有选中的日志可删除", "warning");
+    showNotification("No selected logs to delete", "warning");
     return;
   }
 
@@ -623,7 +623,7 @@ async function performActualDelete(logIds) {
     loadErrorLogs();
   } catch (error) {
     console.error("批量删除错误日志失败:", error);
-    showNotification(`批量删除失败: ${error.message}`, "error", 5000);
+    showNotification(`Batch delete failed: ${error.message}`, "error", 5000);
   }
 }
 
@@ -794,31 +794,31 @@ function _createLogRowHtml(log, sequentialId) {
                 <i class="far fa-copy"></i>
             </button>
         </td>
-        <td class="text-gray-700">${log.error_type || "未知"}</td>
+        <td class="text-gray-700">${log.error_type || "Unknown"}</td>
         <td class="error-code-content text-gray-700" title="${
           log.error_code || ""
         }">${errorCodeContent}</td>
-        <td class="text-gray-700">${log.model_name || "未知"}</td>
+        <td class="text-gray-700">${log.model_name || "Unknown"}</td>
         <td class="text-gray-700">${formattedTime}</td>
         <td>
             <button class="btn-view-details mr-2 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition-all duration-200" data-log-id="${log.id}">
-                <i class="fas fa-eye mr-1"></i>详情
+                <i class="fas fa-eye mr-1"></i>Details
             </button>
             <button class="btn-delete-row bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-sm transition-all duration-200" data-log-id="${
               log.id
-            }" title="删除此日志">
+            }" title="Delete this log">
                 <i class="fas fa-trash-alt"></i>
             </button>
         </td>
     `;
 }
 
-// 渲染错误日志表格
+// Render error logs table
 function renderErrorLogs(logs) {
   if (!tableBody) return;
   tableBody.innerHTML = ""; // Clear previous entries
 
-  // 重置全选复选框状态（在清空表格后）
+  // Reset select all checkbox status (after clearing table)
   if (selectAllCheckbox) {
     selectAllCheckbox.checked = false;
     selectAllCheckbox.indeterminate = false;
@@ -866,12 +866,12 @@ async function showLogDetails(logId) {
 
   // Show loading state in modal (optional)
   // Clear previous content and show a spinner or message
-  document.getElementById("modalGeminiKey").textContent = "加载中...";
-  document.getElementById("modalErrorType").textContent = "加载中...";
-  document.getElementById("modalErrorLog").textContent = "加载中...";
-  document.getElementById("modalRequestMsg").textContent = "加载中...";
-  document.getElementById("modalModelName").textContent = "加载中...";
-  document.getElementById("modalRequestTime").textContent = "加载中...";
+  document.getElementById("modalGeminiKey").textContent = "Loading...";
+  document.getElementById("modalErrorType").textContent = "Loading...";
+  document.getElementById("modalErrorLog").textContent = "Loading...";
+  document.getElementById("modalRequestMsg").textContent = "Loading...";
+  document.getElementById("modalModelName").textContent = "Loading...";
+  document.getElementById("modalRequestTime").textContent = "Loading...";
 
   logDetailModal.classList.add("show");
   document.body.style.overflow = "hidden"; // Prevent body scrolling
@@ -953,16 +953,16 @@ async function showLogDetails(logId) {
   } catch (error) {
     console.error("获取日志详情失败:", error);
     // Show error in modal
-    document.getElementById("modalGeminiKey").textContent = "错误";
-    document.getElementById("modalErrorType").textContent = "错误";
+    document.getElementById("modalGeminiKey").textContent = "Error";
+    document.getElementById("modalErrorType").textContent = "Error";
     document.getElementById(
       "modalErrorLog"
-    ).textContent = `加载失败: ${error.message}`;
-    document.getElementById("modalRequestMsg").textContent = "错误";
-    document.getElementById("modalModelName").textContent = "错误";
-    document.getElementById("modalRequestTime").textContent = "错误";
+    ).textContent = `Loading failed: ${error.message}`;
+    document.getElementById("modalRequestMsg").textContent = "Error";
+    document.getElementById("modalModelName").textContent = "Error";
+    document.getElementById("modalRequestTime").textContent = "Error";
     // Optionally show a notification
-    showNotification(`加载日志详情失败: ${error.message}`, "error", 5000);
+    showNotification(`Failed to load log details: ${error.message}`, "error", 5000);
   }
 }
 
