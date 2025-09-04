@@ -2,7 +2,7 @@ name: Build & Push Docker
 
 on:
   push:
-    branches: [ main ]
+    branches: [ sync ]
   workflow_dispatch:
 
 jobs:
@@ -29,7 +29,7 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/gemini-balance:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/gemini-balance:sync
             ${{ secrets.DOCKERHUB_USERNAME }}/gemini-balance:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
