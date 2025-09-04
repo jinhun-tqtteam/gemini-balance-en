@@ -1,4 +1,4 @@
-// 统计数据可视化交互效果
+// Statistics data visualization interaction effects
 
 function copyToClipboard(text) {
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -82,7 +82,7 @@ async function fetchAPI(url, options = {}) {
   }
 }
 
-// 添加统计项动画效果
+// Add statistics item animation effects
 function initStatItemAnimations() {
   const statItems = document.querySelectorAll(".stat-item");
   statItems.forEach((item) => {
