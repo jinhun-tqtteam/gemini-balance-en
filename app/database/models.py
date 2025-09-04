@@ -63,20 +63,7 @@ class RequestLog(Base):
         return f"<RequestLog(id='{self.id}', key='{self.api_key[:4]}...', success='{self.is_success}')>"
 
 
-class Proxy(Base):
-    """
-    代理表
-    """
-    __tablename__ = "t_proxies"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    url = Column(String(255), nullable=False, unique=True, comment="代理地址")
-    status = Column(String(20), nullable=True, comment="代理状态")
-    last_checked = Column(DateTime, nullable=True, comment="最后检查时间")
-    created_at = Column(DateTime, default=datetime.datetime.now, comment="创建时间")
-
-    def __repr__(self):
-        return f"<Proxy(url='{self.url}', status='{self.status}')>"
 
 
 class FileState(enum.Enum):

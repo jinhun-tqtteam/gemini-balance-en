@@ -304,8 +304,7 @@ def get_files_logger():
 def get_vertex_express_logger():
     return Logger.setup_logger("vertex_express")
 
-def get_proxy_logger():
-    return Logger.setup_logger("proxy")
+
 
 
 def get_gemini_embedding_logger():

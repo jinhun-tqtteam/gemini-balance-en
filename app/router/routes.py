@@ -21,7 +21,6 @@ from app.router import (
     stats_routes,
     version_routes,
     vertex_express_routes,
-    proxy_routes,
 )
 from app.service.key.key_manager import get_key_manager_instance
 from app.service.stats.stats_service import StatsService
@@ -50,7 +49,7 @@ def setup_routers(app: FastAPI) -> None:
     app.include_router(vertex_express_routes.router)
     app.include_router(files_routes.router)
     app.include_router(key_routes.router)
-    app.include_router(proxy_routes.router)
+    
 
     setup_page_routes(app)
 
@@ -185,20 +184,7 @@ def setup_page_routes(app: FastAPI) -> None:
             logger.error(f"Error accessing logs page: {str(e)}")
             raise
 
-    @app.get("/proxies", response_class=HTMLResponse)
-    async def proxies_page(request: Request):
-        """代理管理页面"""
-        try:
-            auth_token = request.cookies.get("auth_token")
-            if not auth_token or not verify_auth_token(auth_token):
-                logger.warning("Unauthorized access attempt to proxies page")
-                return RedirectResponse(url="/", status_code=302)
-
-            logger.info("Proxies page accessed successfully")
-            return templates.TemplateResponse("proxies.html", {"request": request})
-        except Exception as e:
-            logger.error(f"Error accessing proxies page: {str(e)}")
-            raise
+    
 
 
 def setup_health_routes(app: FastAPI) -> None:
