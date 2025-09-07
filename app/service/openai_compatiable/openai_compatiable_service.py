@@ -4,6 +4,8 @@ import re
 import time
 from typing import Any, AsyncGenerator, Dict, Union
 
+from fastapi import Request
+
 from app.config.config import settings
 from app.database.services import (
     add_error_log,
@@ -30,18 +32,19 @@ class OpenAICompatiableService:
 
     async def create_chat_completion(
         self,
-        request: ChatRequest,
+        request_data: ChatRequest,
         api_key: str,
+        request: Request,
     ) -> Union[Dict[str, Any], AsyncGenerator[str, None]]:
         """创建聊天完成"""
-        request_dict = request.model_dump()
+        request_dict = request_data.model_dump()
         # 移除值为null的
         request_dict = {k: v for k, v in request_dict.items() if v is not None}
         del request_dict["top_k"]  # 删除top_k参数，目前不支持该参数
-        if request.stream:
-            return self._handle_stream_completion(request.model, request_dict, api_key)
+        if request_data.stream:
+            return self._handle_stream_completion(request_data.model, request_dict, api_key, request)
         return await self._handle_normal_completion(
-            request.model, request_dict, api_key
+            request_data.model, request_dict, api_key, request
         )
 
     async def generate_images(
@@ -65,22 +68,23 @@ class OpenAICompatiableService:
         return await self.api_client.create_embeddings(input_text, model, api_key)
 
     async def _handle_normal_completion(
-        self, model: str, request: dict, api_key: str
+        self, model: str, payload: dict, api_key: str, request: Request
     ) -> Dict[str, Any]:
         """处理普通聊天完成"""
         start_time = time.perf_counter()
-        request_datetime = datetime.datetime.now()
         is_success = False
         status_code = None
-        response = None
+        response_body = None
         try:
-            response = await self.api_client.generate_content(request, api_key)
+            response = await self.api_client.generate_content(payload, api_key)
             is_success = True
             status_code = 200
+            response_body = json.dumps(response, ensure_ascii=False)
             return response
         except Exception as e:
             is_success = False
             error_log_msg = str(e)
+            response_body = error_log_msg
             logger.error(f"Normal API call failed with error: {error_log_msg}")
             match = re.search(r"status code (\d+)", error_log_msg)
             if match:
@@ -94,23 +98,26 @@ class OpenAICompatiableService:
                 error_type="openai-compatiable-non-stream",
                 error_log=error_log_msg,
                 error_code=status_code,
-                request_msg=request,
+                request_msg=payload,
             )
             raise e
         finally:
             end_time = time.perf_counter()
             latency_ms = int((end_time - start_time) * 1000)
             await add_request_log(
+                ip_address=request.client.host,
+                api_type="openai-compatible",
                 model_name=model,
                 api_key=api_key,
+                request_body=json.dumps(payload, ensure_ascii=False),
+                response_body=response_body,
                 is_success=is_success,
                 status_code=status_code,
                 latency_ms=latency_ms,
-                request_time=request_datetime,
             )
 
     async def _handle_stream_completion(
-        self, model: str, payload: dict, api_key: str
+        self, model: str, payload: dict, api_key: str, request: Request
     ) -> AsyncGenerator[str, None]:
         """处理流式聊天完成，添加重试逻辑"""
         retries = 0
@@ -118,18 +125,18 @@ class OpenAICompatiableService:
         is_success = False
         status_code = None
         final_api_key = api_key
+        response_body_chunks = []
 
         while retries < max_retries:
             start_time = time.perf_counter()
-            request_datetime = datetime.datetime.now()
             current_attempt_key = api_key
             final_api_key = current_attempt_key
             try:
                 async for line in self.api_client.stream_generate_content(
                     payload, current_attempt_key
                 ):
+                    response_body_chunks.append(line)
                     if line.startswith("data:"):
-                        # print(line)
                         yield line + "\n\n"
                 logger.info("Streaming completed successfully")
                 is_success = True
@@ -139,6 +146,7 @@ class OpenAICompatiableService:
                 retries += 1
                 is_success = False
                 error_log_msg = str(e)
+                response_body_chunks.append(error_log_msg)
                 logger.warning(
                     f"Streaming API call failed with error: {error_log_msg}. Attempt {retries} of {max_retries}"
                 )
@@ -155,7 +163,6 @@ class OpenAICompatiableService:
                     error_log=error_log_msg,
                     error_code=status_code,
                     request_msg=payload,
-                    request_datetime=request_datetime,
                 )
 
                 if self.key_manager:
@@ -182,12 +189,15 @@ class OpenAICompatiableService:
                 end_time = time.perf_counter()
                 latency_ms = int((end_time - start_time) * 1000)
                 await add_request_log(
+                    ip_address=request.client.host,
+                    api_type="openai-compatible-stream",
                     model_name=model,
                     api_key=final_api_key,
+                    request_body=json.dumps(payload, ensure_ascii=False),
+                    response_body="".join(response_body_chunks),
                     is_success=is_success,
                     status_code=status_code,
                     latency_ms=latency_ms,
-                    request_time=request_datetime,
                 )
                 if not is_success and retries >= max_retries:
                     yield f"data: {json.dumps({'error': 'Streaming failed after retries'})}\n\n"

@@ -467,39 +467,34 @@ async def delete_all_error_logs() -> int:
         raise
 
 
-# 新增函数：添加请求日志
+# ==================== Request Log Functions ====================
+
 async def add_request_log(
+    ip_address: Optional[str],
+    api_type: Optional[str],
     model_name: Optional[str],
     api_key: Optional[str],
+    request_body: Optional[str],
+    response_body: Optional[str],
     is_success: bool,
     status_code: Optional[int] = None,
     latency_ms: Optional[int] = None,
-    request_time: Optional[datetime] = None,
 ) -> bool:
     """
     添加 API 请求日志
-
-    Args:
-        model_name: 模型名称
-        api_key: 使用的 API 密钥
-        is_success: 请求是否成功
-        status_code: API 响应状态码
-        latency_ms: 请求耗时(毫秒)
-        request_time: 请求发生时间 (如果为 None, 则使用当前时间)
-
-    Returns:
-        bool: 是否添加成功
     """
     try:
-        log_time = request_time if request_time else datetime.now()
-
         query = insert(RequestLog).values(
-            request_time=log_time,
+            ip_address=ip_address,
+            api_type=api_type,
             model_name=model_name,
             api_key=api_key,
+            request_body=request_body,
+            response_body=response_body,
             is_success=is_success,
             status_code=status_code,
             latency_ms=latency_ms,
+            created_at=datetime.now(),
         )
         await database.execute(query)
         return True
@@ -507,6 +502,113 @@ async def add_request_log(
         logger.error(f"Failed to add request log: {str(e)}")
         return False
 
+async def get_request_logs(
+    limit: int = 20,
+    offset: int = 0,
+    api_type_search: Optional[str] = None,
+    model_name_search: Optional[str] = None,
+    key_search: Optional[str] = None,
+    status_code_search: Optional[str] = None,
+    start_date: Optional[datetime] = None,
+    end_date: Optional[datetime] = None,
+    sort_by: str = "id",
+    sort_order: str = "desc",
+) -> List[Dict[str, Any]]:
+    """
+    获取请求日志，支持搜索、过滤和排序
+    """
+    try:
+        query = select(
+            RequestLog.id,
+            RequestLog.ip_address,
+            RequestLog.api_type,
+            RequestLog.model_name,
+            RequestLog.api_key,
+            RequestLog.is_success,
+            RequestLog.status_code,
+            RequestLog.latency_ms,
+            RequestLog.created_at,
+        )
+
+        if api_type_search:
+            query = query.where(RequestLog.api_type.ilike(f"%{api_type_search}%"))
+        if model_name_search:
+            query = query.where(RequestLog.model_name.ilike(f"%{model_name_search}%"))
+        if key_search:
+            query = query.where(RequestLog.api_key.ilike(f"%{key_search}%"))
+        if start_date:
+            query = query.where(RequestLog.created_at >= start_date)
+        if end_date:
+            query = query.where(RequestLog.created_at < end_date)
+        if status_code_search:
+            try:
+                status_code_int = int(status_code_search)
+                query = query.where(RequestLog.status_code == status_code_int)
+            except ValueError:
+                logger.warning(f"Invalid status_code_search: '{status_code_search}'")
+
+        sort_column = getattr(RequestLog, sort_by, RequestLog.id)
+        if sort_order.lower() == "asc":
+            query = query.order_by(asc(sort_column))
+        else:
+            query = query.order_by(desc(sort_column))
+
+        query = query.limit(limit).offset(offset)
+
+        result = await database.fetch_all(query)
+        return [dict(row) for row in result]
+    except Exception as e:
+        logger.exception(f"Failed to get request logs: {str(e)}")
+        raise
+
+async def get_request_logs_count(
+    api_type_search: Optional[str] = None,
+    model_name_search: Optional[str] = None,
+    key_search: Optional[str] = None,
+    status_code_search: Optional[str] = None,
+    start_date: Optional[datetime] = None,
+    end_date: Optional[datetime] = None,
+) -> int:
+    """
+    获取符合条件的请求日志总数
+    """
+    try:
+        query = select(func.count()).select_from(RequestLog)
+
+        if api_type_search:
+            query = query.where(RequestLog.api_type.ilike(f"%{api_type_search}%"))
+        if model_name_search:
+            query = query.where(RequestLog.model_name.ilike(f"%{model_name_search}%"))
+        if key_search:
+            query = query.where(RequestLog.api_key.ilike(f"%{key_search}%"))
+        if start_date:
+            query = query.where(RequestLog.created_at >= start_date)
+        if end_date:
+            query = query.where(RequestLog.created_at < end_date)
+        if status_code_search:
+            try:
+                status_code_int = int(status_code_search)
+                query = query.where(RequestLog.status_code == status_code_int)
+            except ValueError:
+                pass
+
+        count_result = await database.fetch_one(query)
+        return count_result[0] if count_result else 0
+    except Exception as e:
+        logger.exception(f"Failed to count request logs: {str(e)}")
+        raise
+
+async def get_request_log_details(log_id: int) -> Optional[Dict[str, Any]]:
+    """
+    根据 ID 获取单个请求日志的详细信息
+    """
+    try:
+        query = select(RequestLog).where(RequestLog.id == log_id)
+        result = await database.fetch_one(query)
+        return dict(result) if result else None
+    except Exception as e:
+        logger.exception(f"Failed to get request log details for ID {log_id}: {str(e)}")
+        raise
 
 # ==================== 文件记录相关函数 ====================
 

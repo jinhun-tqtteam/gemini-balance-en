@@ -6,6 +6,8 @@ import re
 import time
 from typing import Any, AsyncGenerator, Dict, List
 
+from fastapi import Request
+
 from app.config.config import settings
 from app.core.constants import GEMINI_2_FLASH_EXP_SAFETY_SETTINGS
 from app.database.services import add_error_log, add_request_log, get_file_api_key
@@ -322,7 +324,9 @@ class GeminiChatService:
         return ""
 
     def _create_char_response(
-        self, original_response: Dict[str, Any], text: str
+        self,
+        original_response: Dict[str, Any],
+        text: str,
     ) -> Dict[str, Any]:
         """创建包含指定文本的响应"""
         response_copy = json.loads(json.dumps(original_response))
@@ -333,11 +337,14 @@ class GeminiChatService:
         return response_copy
 
     async def generate_content(
-        self, model: str, request: GeminiRequest, api_key: str
+        self,
+        model: str,
+        request_data: GeminiRequest,
+        api_key: str,
+        request: Request,
     ) -> Dict[str, Any]:
         """生成内容"""
-        # 檢查並獲取文件專用的 API key（如果有文件）
-        file_names = _extract_file_references(request.model_dump().get("contents", []))
+        file_names = _extract_file_references(request_data.model_dump().get("contents", []))
         if file_names:
             logger.info(f"Request contains file references: {file_names}")
             file_api_key = await get_file_api_key(file_names[0])
@@ -345,27 +352,28 @@ class GeminiChatService:
                 logger.info(
                     f"Found API key for file {file_names[0]}: {redact_key_for_logging(file_api_key)}"
                 )
-                api_key = file_api_key  # 使用文件的 API key
+                api_key = file_api_key
             else:
                 logger.warning(
                     f"No API key found for file {file_names[0]}, using default key: {redact_key_for_logging(api_key)}"
                 )
 
-        payload = _build_payload(model, request)
+        payload = _build_payload(model, request_data)
         start_time = time.perf_counter()
-        request_datetime = datetime.datetime.now()
         is_success = False
         status_code = None
-        response = None
+        response_body = None
 
         try:
             response = await self.api_client.generate_content(payload, model, api_key)
             is_success = True
             status_code = 200
+            response_body = json.dumps(response, ensure_ascii=False)
             return self.response_handler.handle_response(response, model, stream=False)
         except Exception as e:
             is_success = False
             error_log_msg = str(e)
+            response_body = error_log_msg
             logger.error(f"Normal API call failed with error: {error_log_msg}")
             match = re.search(r"status code (\d+)", error_log_msg)
             if match:
@@ -380,43 +388,49 @@ class GeminiChatService:
                 error_log=error_log_msg,
                 error_code=status_code,
                 request_msg=payload,
-                request_datetime=request_datetime,
             )
             raise e
         finally:
             end_time = time.perf_counter()
             latency_ms = int((end_time - start_time) * 1000)
             await add_request_log(
+                ip_address=request.client.host,
+                api_type="gemini",
                 model_name=model,
                 api_key=api_key,
+                request_body=json.dumps(payload, ensure_ascii=False),
+                response_body=response_body,
                 is_success=is_success,
                 status_code=status_code,
                 latency_ms=latency_ms,
-                request_time=request_datetime,
             )
 
     async def count_tokens(
-        self, model: str, request: GeminiRequest, api_key: str
+        self,
+        model: str,
+        request_data: GeminiRequest,
+        api_key: str,
+        request: Request,
     ) -> Dict[str, Any]:
         """计算token数量"""
-        # countTokens API只需要contents
         payload = {
-            "contents": _filter_empty_parts(request.model_dump().get("contents", []))
+            "contents": _filter_empty_parts(request_data.model_dump().get("contents", []))
         }
         start_time = time.perf_counter()
-        request_datetime = datetime.datetime.now()
         is_success = False
         status_code = None
-        response = None
+        response_body = None
 
         try:
             response = await self.api_client.count_tokens(payload, model, api_key)
             is_success = True
             status_code = 200
+            response_body = json.dumps(response, ensure_ascii=False)
             return response
         except Exception as e:
             is_success = False
             error_log_msg = str(e)
+            response_body = error_log_msg
             logger.error(f"Count tokens API call failed with error: {error_log_msg}")
             match = re.search(r"status code (\d+)", error_log_msg)
             if match:
@@ -437,20 +451,26 @@ class GeminiChatService:
             end_time = time.perf_counter()
             latency_ms = int((end_time - start_time) * 1000)
             await add_request_log(
+                ip_address=request.client.host,
+                api_type="gemini-count-tokens",
                 model_name=model,
                 api_key=api_key,
+                request_body=json.dumps(payload, ensure_ascii=False),
+                response_body=response_body,
                 is_success=is_success,
                 status_code=status_code,
                 latency_ms=latency_ms,
-                request_time=request_datetime,
             )
 
     async def stream_generate_content(
-        self, model: str, request: GeminiRequest, api_key: str
+        self,
+        model: str,
+        request_data: GeminiRequest,
+        api_key: str,
+        request: Request,
     ) -> AsyncGenerator[str, None]:
         """流式生成内容"""
-        # 檢查並獲取文件專用的 API key（如果有文件）
-        file_names = _extract_file_references(request.model_dump().get("contents", []))
+        file_names = _extract_file_references(request_data.model_dump().get("contents", []))
         if file_names:
             logger.info(f"Request contains file references: {file_names}")
             file_api_key = await get_file_api_key(file_names[0])
@@ -458,7 +478,7 @@ class GeminiChatService:
                 logger.info(
                     f"Found API key for file {file_names[0]}: {redact_key_for_logging(file_api_key)}"
                 )
-                api_key = file_api_key  # 使用文件的 API key
+                api_key = file_api_key
             else:
                 logger.warning(
                     f"No API key found for file {file_names[0]}, using default key: {redact_key_for_logging(api_key)}"
@@ -466,13 +486,13 @@ class GeminiChatService:
 
         retries = 0
         max_retries = settings.MAX_RETRIES
-        payload = _build_payload(model, request)
+        payload = _build_payload(model, request_data)
         is_success = False
         status_code = None
         final_api_key = api_key
+        response_body_chunks = []
 
         while retries < max_retries:
-            request_datetime = datetime.datetime.now()
             start_time = time.perf_counter()
             current_attempt_key = api_key
             final_api_key = current_attempt_key
@@ -480,16 +500,14 @@ class GeminiChatService:
                 async for line in self.api_client.stream_generate_content(
                     payload, model, current_attempt_key
                 ):
-                    # print(line)
+                    response_body_chunks.append(line)
                     if line.startswith("data:"):
                         line = line[6:]
                         response_data = self.response_handler.handle_response(
                             json.loads(line), model, stream=True
                         )
                         text = self._extract_text_from_response(response_data)
-                        # 如果有文本内容，且开启了流式输出优化器，则使用流式输出优化器处理
                         if text and settings.STREAM_OPTIMIZER_ENABLED:
-                            # 使用流式输出优化器处理文本输出
                             async for (
                                 optimized_chunk
                             ) in gemini_optimizer.optimize_stream_output(
@@ -499,9 +517,7 @@ class GeminiChatService:
                             ):
                                 yield optimized_chunk
                         else:
-                            # 如果没有文本内容（如工具调用等），整块输出
                             yield "data: " + json.dumps(response_data) + "\n\n"
-                logger.info("Streaming completed successfully")
                 is_success = True
                 status_code = 200
                 break
@@ -509,6 +525,7 @@ class GeminiChatService:
                 retries += 1
                 is_success = False
                 error_log_msg = str(e)
+                response_body_chunks.append(error_log_msg)
                 logger.warning(
                     f"Streaming API call failed with error: {error_log_msg}. Attempt {retries} of {max_retries}"
                 )
@@ -525,7 +542,6 @@ class GeminiChatService:
                     error_log=error_log_msg,
                     error_code=status_code,
                     request_msg=payload,
-                    request_datetime=request_datetime,
                 )
 
                 api_key = await self.key_manager.handle_api_failure(
@@ -546,10 +562,13 @@ class GeminiChatService:
                 end_time = time.perf_counter()
                 latency_ms = int((end_time - start_time) * 1000)
                 await add_request_log(
+                    ip_address=request.client.host,
+                    api_type="gemini-stream",
                     model_name=model,
                     api_key=final_api_key,
+                    request_body=json.dumps(payload, ensure_ascii=False),
+                    response_body="".join(response_body_chunks),
                     is_success=is_success,
                     status_code=status_code,
                     latency_ms=latency_ms,
-                    request_time=request_datetime,
                 )

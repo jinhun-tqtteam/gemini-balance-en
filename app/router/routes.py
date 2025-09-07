@@ -17,6 +17,7 @@ from app.router import (
     key_routes,
     openai_compatiable_routes,
     openai_routes,
+    request_log_routes,
     scheduler_routes,
     stats_routes,
     version_routes,
@@ -42,6 +43,7 @@ def setup_routers(app: FastAPI) -> None:
     app.include_router(gemini_routes.router_v1beta)
     app.include_router(config_routes.router)
     app.include_router(error_log_routes.router)
+    app.include_router(request_log_routes.router)
     app.include_router(scheduler_routes.router)
     app.include_router(stats_routes.router)
     app.include_router(version_routes.router)

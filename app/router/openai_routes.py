@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from fastapi.responses import StreamingResponse
 
 from app.config.config import settings
@@ -69,7 +69,8 @@ async def list_models(
 @router.post("/hf/v1/chat/completions")
 @RetryHandler(key_arg="api_key")
 async def chat_completion(
-    request: ChatRequest,
+    request_data: ChatRequest,
+    request: Request,
     _=Depends(security_service.verify_authorization),
     api_key: str = Depends(get_next_working_key_wrapper),
     key_manager: KeyManager = Depends(get_key_manager),
@@ -77,29 +78,29 @@ async def chat_completion(
 ):
     """处理 OpenAI 聊天补全请求，支持流式响应和特定模型切换。"""
     operation_name = "chat_completion"
-    is_image_chat = request.model == f"{settings.CREATE_IMAGE_MODEL}-chat"
+    is_image_chat = request_data.model == f"{settings.CREATE_IMAGE_MODEL}-chat"
     current_api_key = api_key
     if is_image_chat:
         current_api_key = await key_manager.get_paid_key()
 
     async with handle_route_errors(logger, operation_name):
-        logger.info(f"Handling chat completion request for model: {request.model}")
-        logger.debug(f"Request: \n{request.model_dump_json(indent=2)}")
+        logger.info(f"Handling chat completion request for model: {request_data.model}")
+        logger.debug(f"Request: \n{request_data.model_dump_json(indent=2)}")
         logger.info(f"Using API key: {redact_key_for_logging(current_api_key)}")
 
-        if not await model_service.check_model_support(request.model):
+        if not await model_service.check_model_support(request_data.model):
             raise HTTPException(
-                status_code=400, detail=f"Model {request.model} is not supported"
+                status_code=400, detail=f"Model {request_data.model} is not supported"
             )
 
         if is_image_chat:
-            response = await chat_service.create_image_chat_completion(request, current_api_key)
-            if request.stream:
+            response = await chat_service.create_image_chat_completion(request_data, current_api_key, request)
+            if request_data.stream:
                 return StreamingResponse(response, media_type="text/event-stream")
             return response
         else:
-            response = await chat_service.create_chat_completion(request, current_api_key)
-            if request.stream:
+            response = await chat_service.create_chat_completion(request_data, current_api_key, request)
+            if request_data.stream:
                 return StreamingResponse(response, media_type="text/event-stream")
             return response
 

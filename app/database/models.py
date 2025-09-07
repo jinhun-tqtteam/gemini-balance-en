@@ -52,15 +52,19 @@ class RequestLog(Base):
     __tablename__ = "t_request_log"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    request_time = Column(DateTime, default=datetime.datetime.now, comment="请求时间")
+    ip_address = Column(String(50), nullable=True, comment="请求IP地址")
+    api_type = Column(String(50), nullable=True, comment="API类型 (e.g., gemini, openai)")
     model_name = Column(String(100), nullable=True, comment="模型名称")
     api_key = Column(String(100), nullable=True, comment="使用的API密钥")
+    request_body = Column(Text, nullable=True, comment="请求体")
+    response_body = Column(Text, nullable=True, comment="响应体")
     is_success = Column(Boolean, nullable=False, comment="请求是否成功")
     status_code = Column(Integer, nullable=True, comment="API响应状态码")
     latency_ms = Column(Integer, nullable=True, comment="请求耗时(毫秒)")
+    created_at = Column(DateTime, default=datetime.datetime.now, comment="创建时间")
 
     def __repr__(self):
-        return f"<RequestLog(id='{self.id}', key='{self.api_key[:4]}...', success='{self.is_success}')>"
+        return f"<RequestLog(id='{self.id}', ip='{self.ip_address}', type='{self.api_type}', success='{self.is_success}')>"
 
 
 

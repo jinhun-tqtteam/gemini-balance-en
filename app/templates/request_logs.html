@@ -1,0 +1,157 @@
+{% extends "base.html" %} {% block title %}Request Log - Gemini Balance{% endblock %} 
+{% block head_extra_styles %}
+<style>
+  .styled-table th {
+    position: sticky;
+    top: 0;
+    background-color: rgba(249, 250, 251, 0.95) !important;
+    z-index: 10;
+  }
+  .status-success {
+    color: #10b981; /* green-500 */
+    font-weight: 600;
+  }
+  .status-failure {
+    color: #ef4444; /* red-500 */
+    font-weight: 600;
+  }
+</style>
+{% endblock %} 
+
+{% block content %}
+<div class="container mx-auto px-4">
+  <div
+    class="rounded-2xl shadow-xl p-6 md:p-8"
+    style="
+      background-color: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+    "
+  >
+    <h1 class="text-3xl font-extrabold text-center text-gray-800 mb-4">
+      <img src="/static/icons/logo.png" alt="Logo" class="h-9 inline-block align-middle mr-2" />
+      Request Logs
+    </h1>
+
+    <div class="nav-buttons-container flex justify-center mb-8 overflow-x-auto gap-2">
+        <a href="/config" class="nav-link whitespace-nowrap flex items-center justify-center gap-2 px-6 py-3 font-medium rounded-lg text-gray-700 hover:text-gray-900 transition-all duration-200" style="background-color: rgba(229, 231, 235, 0.8)">
+            <i class="fas fa-cog"></i> Configuration
+        </a>
+        <a href="/keys" class="nav-link whitespace-nowrap flex items-center justify-center gap-2 px-6 py-3 font-medium rounded-lg text-gray-700 hover:text-gray-900 transition-all duration-200" style="background-color: rgba(229, 231, 235, 0.8)">
+            <i class="fas fa-tachometer-alt"></i> Dashboard
+        </a>
+        <a href="/logs" class="nav-link whitespace-nowrap flex items-center justify-center gap-2 px-6 py-3 font-medium rounded-lg text-gray-700 hover:text-gray-900 transition-all duration-200" style="background-color: rgba(229, 231, 235, 0.8)">
+            <i class="fas fa-exclamation-triangle"></i> Error Logs
+        </a>
+        <a href="/request-logs" class="main-nav-btn whitespace-nowrap flex items-center justify-center gap-2 px-6 py-3 font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-200" style="background-color: #3b82f6 !important; color: #ffffff !important;">
+            <i class="fas fa-list-alt"></i> Request Logs
+        </a>
+    </div>
+
+    <div class="rounded-xl p-6 shadow-inner" style="background-color: rgba(249, 250, 251, 0.9); border: 1px solid rgba(0, 0, 0, 0.05);">
+      <h2 class="text-xl font-bold mb-6 pb-3 border-b flex items-center gap-2 text-gray-800 border-gray-200">
+        <i class="fas fa-history text-blue-500"></i> Request Log List
+      </h2>
+
+      <!-- Search Controls -->
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_auto] items-center gap-4 mb-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 w-full">
+          <input type="text" id="apiTypeSearch" placeholder="Search API Type (e.g., gemini)" class="form-input-themed" />
+          <input type="text" id="modelNameSearch" placeholder="Search Model Name" class="form-input-themed" />
+          <input type="text" id="keySearch" placeholder="Search API Key (partial)" class="form-input-themed" />
+          <input type="text" id="statusCodeSearch" placeholder="Search Status Code" class="form-input-themed" />
+        </div>
+        <div class="flex items-center gap-3 flex-shrink-0">
+          <button id="searchBtn" class="flex items-center justify-center px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md">
+            <i class="fas fa-search mr-1.5"></i>Search
+          </button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="overflow-x-auto rounded-lg border border-gray-200 mb-6">
+        <table class="styled-table w-full min-w-full text-sm">
+          <thead>
+            <tr class="text-left bg-gray-50">
+              <th class="px-5 py-3 font-semibold text-gray-600 cursor-pointer" id="sortById">ID <i class="fas fa-sort ml-1"></i></th>
+              <th class="px-5 py-3 font-semibold text-gray-600">IP Address</th>
+              <th class="px-5 py-3 font-semibold text-gray-600">API Type</th>
+              <th class="px-5 py-3 font-semibold text-gray-600">Model Name</th>
+              <th class="px-5 py-3 font-semibold text-gray-600">API Key</th>
+              <th class="px-5 py-3 font-semibold text-gray-600 text-center">Success</th>
+              <th class="px-5 py-3 font-semibold text-gray-600 text-center">Status</th>
+              <th class="px-5 py-3 font-semibold text-gray-600">Latency (ms)</th>
+              <th class="px-5 py-3 font-semibold text-gray-600">Time</th>
+              <th class="px-5 py-3 font-semibold text-gray-600 text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="requestLogsTable" class="divide-y divide-gray-200"></tbody>
+        </table>
+      </div>
+
+      <!-- Loading/Error Indicators -->
+      <div id="loadingIndicator" class="flex items-center justify-center p-8 hidden">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        <p class="ml-4 text-lg text-gray-600 font-medium">Loading...</p>
+      </div>
+      <div id="noDataMessage" class="text-center py-12 text-gray-500 hidden">
+        <i class="fas fa-inbox text-5xl mb-3"></i>
+        <p class="text-lg">No request log data available.</p>
+      </div>
+      <div id="errorMessage" class="p-4 rounded-lg font-medium text-center hidden bg-red-100 text-red-700"></div>
+
+      <!-- Pagination -->
+      <div class="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
+        <div class="pagination-container text-sm text-gray-700">
+          <label for="pageSize" class="font-medium pagination-text">Items per page:</label>
+          <select id="pageSize" class="form-select-themed">
+            <option value="15" selected>15</option>
+            <option value="30">30</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+        </div>
+        <div class="flex items-center gap-4">
+          <ul class="pagination flex items-center gap-1" id="pagination"></ul>
+          <div class="flex items-center gap-1">
+            <input type="number" id="pageInput" min="1" class="w-16 form-input-themed" placeholder="Page" />
+            <button id="goToPageBtn" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-md transition">Go</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Details Modal -->
+<div id="logDetailModal" class="modal">
+  <div class="w-full max-w-6xl mx-auto rounded-2xl shadow-2xl overflow-hidden animate-fade-in bg-white border border-gray-200">
+    <div class="p-6">
+      <div class="flex justify-between items-center pb-4 mb-4 border-b border-gray-200">
+        <h2 class="text-xl font-bold text-gray-800">Request Log Details</h2>
+        <button id="closeLogDetailModalBtn" class="text-gray-600 hover:text-gray-800 text-xl">&times;</button>
+      </div>
+      <div class="space-y-4 max-h-[70vh] overflow-y-auto p-1">
+        <div class="p-4 rounded-lg bg-gray-50 relative group">
+          <h6 class="text-sm font-semibold text-blue-600 mb-1">Request Body:</h6>
+          <pre id="modalRequestBody" class="font-mono text-sm p-3 rounded overflow-x-auto whitespace-pre-wrap bg-gray-100 text-gray-800"></pre>
+          <button class="copy-btn" data-target="modalRequestBody" title="Copy Request Body"><i class="far fa-copy"></i></button>
+        </div>
+        <div class="p-4 rounded-lg bg-gray-50 relative group">
+          <h6 class="text-sm font-semibold text-blue-600 mb-1">Response Body:</h6>
+          <pre id="modalResponseBody" class="font-mono text-sm p-3 rounded overflow-x-auto whitespace-pre-wrap bg-gray-100 text-gray-800"></pre>
+          <button class="copy-btn" data-target="modalResponseBody" title="Copy Response Body"><i class="far fa-copy"></i></button>
+        </div>
+      </div>
+      <div class="flex justify-end mt-6 pt-4 border-t border-gray-200">
+        <button type="button" id="closeModalFooterBtn" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-medium transition">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} 
+
+{% block body_scripts %}
+<script src="/static/js/request_logs.js"></script>
+{% endblock %}

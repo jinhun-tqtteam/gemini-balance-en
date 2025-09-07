@@ -8,6 +8,8 @@ import time
 from copy import deepcopy
 from typing import Any, AsyncGenerator, Dict, List, Optional, Union
 
+from fastapi import Request
+
 from app.config.config import settings
 from app.core.constants import GEMINI_2_FLASH_EXP_SAFETY_SETTINGS
 from app.database.services import (
@@ -80,7 +82,8 @@ def _clean_json_schema_properties(obj: Any) -> Any:
 
 
 def _build_tools(
-    request: ChatRequest, messages: List[Dict[str, Any]]
+    request: ChatRequest,
+    messages: List[Dict[str, Any]],
 ) -> List[Dict[str, Any]]:
     """构建工具"""
     tool = dict()
@@ -176,7 +179,9 @@ def _get_safety_settings(model: str) -> List[Dict[str, str]]:
 
 
 def _validate_and_set_max_tokens(
-    payload: Dict[str, Any], max_tokens: Optional[int], logger_instance
+    payload: Dict[str, Any],
+    max_tokens: Optional[int],
+    logger_instance
 ) -> None:
     """验证并设置 max_tokens 参数"""
     if max_tokens is None:
@@ -271,7 +276,9 @@ class OpenAIChatService:
         return ""
 
     def _create_char_openai_chunk(
-        self, original_chunk: Dict[str, Any], text: str
+        self,
+        original_chunk: Dict[str, Any],
+        text: str,
     ) -> Dict[str, Any]:
         """创建包含指定文本的OpenAI响应块"""
         chunk_copy = json.loads(json.dumps(original_chunk))
@@ -281,37 +288,41 @@ class OpenAIChatService:
 
     async def create_chat_completion(
         self,
-        request: ChatRequest,
+        request_data: ChatRequest,
         api_key: str,
+        request: Request,
     ) -> Union[Dict[str, Any], AsyncGenerator[str, None]]:
         """创建聊天完成"""
         messages, instruction = self.message_converter.convert(
-            request.messages, request.model
+            request_data.messages, request_data.model
         )
 
-        payload = _build_payload(request, messages, instruction)
+        payload = _build_payload(request_data, messages, instruction)
 
-        if request.stream:
-            return self._handle_stream_completion(request.model, payload, api_key)
-        return await self._handle_normal_completion(request.model, payload, api_key)
+        if request_data.stream:
+            return self._handle_stream_completion(request_data.model, payload, api_key, request)
+        return await self._handle_normal_completion(request_data.model, payload, api_key, request)
 
     async def _handle_normal_completion(
-        self, model: str, payload: Dict[str, Any], api_key: str
+        self,
+        model: str,
+        payload: Dict[str, Any],
+        api_key: str,
+        request: Request,
     ) -> Dict[str, Any]:
         """处理普通聊天完成"""
         start_time = time.perf_counter()
-        request_datetime = datetime.datetime.now()
         is_success = False
         status_code = None
-        response = None
+        response_body = None
 
         try:
             response = await self.api_client.generate_content(payload, model, api_key)
             usage_metadata = response.get("usageMetadata", {})
             is_success = True
             status_code = 200
+            response_body = json.dumps(response, ensure_ascii=False)
 
-            # 尝试处理响应，捕获可能的响应处理异常
             try:
                 result = self.response_handler.handle_response(
                     response,
@@ -325,31 +336,26 @@ class OpenAIChatService:
                 logger.error(
                     f"Response processing failed for model {model}: {str(response_error)}"
                 )
-
-                # 记录详细的错误信息
                 if "parts" in str(response_error):
                     logger.error("Response structure issue - missing or invalid parts")
                     if response.get("candidates"):
                         candidate = response["candidates"][0]
                         content = candidate.get("content", {})
                         logger.error(f"Content structure: {content}")
-
-                # 重新抛出异常
                 raise response_error
 
         except Exception as e:
             is_success = False
             error_log_msg = str(e)
+            response_body = error_log_msg
             logger.error(f"API call failed for model {model}: {error_log_msg}")
 
-            # 特别记录 max_tokens 相关的错误
             gen_config = payload.get("generationConfig", {})
             if "maxOutputTokens" in gen_config:
                 logger.error(
                     f"Request had maxOutputTokens: {gen_config['maxOutputTokens']}"
                 )
 
-            # 如果是响应处理错误，记录更多信息
             if "parts" in error_log_msg:
                 logger.error("This is likely a response processing error")
 
@@ -363,7 +369,6 @@ class OpenAIChatService:
                 error_log=error_log_msg,
                 error_code=status_code,
                 request_msg=payload,
-                request_datetime=request_datetime,
             )
             raise e
         finally:
@@ -374,16 +379,22 @@ class OpenAIChatService:
             )
 
             await add_request_log(
+                ip_address=request.client.host,
+                api_type="openai",
                 model_name=model,
                 api_key=api_key,
+                request_body=json.dumps(payload, ensure_ascii=False),
+                response_body=response_body,
                 is_success=is_success,
                 status_code=status_code,
                 latency_ms=latency_ms,
-                request_time=request_datetime,
             )
 
     async def _fake_stream_logic_impl(
-        self, model: str, payload: Dict[str, Any], api_key: str
+        self,
+        model: str,
+        payload: Dict[str, Any],
+        api_key: str,
     ) -> AsyncGenerator[str, None]:
         """处理伪流式 (fake stream) 的核心逻辑"""
         logger.info(
@@ -435,12 +446,19 @@ class OpenAIChatService:
                 f"No candidates or error in response for fake stream model {model}: {response}"
             )
             error_chunk = self.response_handler.handle_response(
-                {}, model, stream=True, finish_reason="stop", usage_metadata=None
+                {},
+                model,
+                stream=True,
+                finish_reason="stop",
+                usage_metadata=None,
             )
             yield f"data: {json.dumps(error_chunk)}\n\n"
 
     async def _real_stream_logic_impl(
-        self, model: str, payload: Dict[str, Any], api_key: str
+        self,
+        model: str,
+        payload: Dict[str, Any],
+        api_key: str,
     ) -> AsyncGenerator[str, None]:
         """处理真实流式 (real stream) 的核心逻辑"""
         tool_call_flag = False
@@ -495,7 +513,11 @@ class OpenAIChatService:
             yield f"data: {json.dumps(self.response_handler.handle_response({}, model, stream=True, finish_reason='stop', usage_metadata=usage_metadata))}\n\n"
 
     async def _handle_stream_completion(
-        self, model: str, payload: Dict[str, Any], api_key: str
+        self,
+        model: str,
+        payload: Dict[str, Any],
+        api_key: str,
+        request: Request,
     ) -> AsyncGenerator[str, None]:
         """处理流式聊天完成，添加重试逻辑和假流式支持"""
         retries = 0
@@ -503,10 +525,10 @@ class OpenAIChatService:
         is_success = False
         status_code = None
         final_api_key = api_key
+        response_body_chunks = []
 
         while retries < max_retries:
             start_time = time.perf_counter()
-            request_datetime = datetime.datetime.now()
             current_attempt_key = final_api_key
 
             try:
@@ -527,6 +549,7 @@ class OpenAIChatService:
                     )
 
                 async for chunk_data in stream_generator:
+                    response_body_chunks.append(chunk_data)
                     yield chunk_data
 
                 yield "data: [DONE]\n\n"
@@ -541,6 +564,7 @@ class OpenAIChatService:
                 retries += 1
                 is_success = False
                 error_log_msg = str(e)
+                response_body_chunks.append(error_log_msg)
                 logger.warning(
                     f"Streaming API call failed with error: {error_log_msg}. Attempt {retries} of {max_retries} with key {current_attempt_key}"
                 )
@@ -561,7 +585,6 @@ class OpenAIChatService:
                     error_log=error_log_msg,
                     error_code=status_code,
                     request_msg=payload,
-                    request_datetime=request_datetime,
                 )
 
                 if self.key_manager:
@@ -592,12 +615,15 @@ class OpenAIChatService:
                 end_time = time.perf_counter()
                 latency_ms = int((end_time - start_time) * 1000)
                 await add_request_log(
+                    ip_address=request.client.host,
+                    api_type="openai-stream",
                     model_name=model,
                     api_key=current_attempt_key,
+                    request_body=json.dumps(payload, ensure_ascii=False),
+                    response_body="".join(response_body_chunks),
                     is_success=is_success,
                     status_code=status_code,
                     latency_ms=latency_ms,
-                    request_time=request_datetime,
                 )
 
         if not is_success:
@@ -608,32 +634,39 @@ class OpenAIChatService:
             yield "data: [DONE]\n\n"
 
     async def create_image_chat_completion(
-        self, request: ChatRequest, api_key: str
+        self,
+        request_data: ChatRequest,
+        api_key: str,
+        request: Request,
     ) -> Union[Dict[str, Any], AsyncGenerator[str, None]]:
 
         image_generate_request = ImageGenerationRequest()
-        image_generate_request.prompt = request.messages[-1]["content"]
+        image_generate_request.prompt = request_data.messages[-1]["content"]
         image_res = self.image_create_service.generate_images_chat(
             image_generate_request
         )
 
-        if request.stream:
+        if request_data.stream:
             return self._handle_stream_image_completion(
-                request.model, image_res, api_key
+                request_data.model, image_res, api_key, request
             )
         else:
             return await self._handle_normal_image_completion(
-                request.model, image_res, api_key
+                request_data.model, image_res, api_key, request
             )
 
     async def _handle_stream_image_completion(
-        self, model: str, image_data: str, api_key: str
+        self,
+        model: str,
+        image_data: str,
+        api_key: str,
+        request: Request,
     ) -> AsyncGenerator[str, None]:
         logger.info(f"Starting stream image completion for model: {model}")
         start_time = time.perf_counter()
-        request_datetime = datetime.datetime.now()
         is_success = False
         status_code = None
+        response_body_chunks = []
 
         try:
             if image_data:
@@ -641,10 +674,9 @@ class OpenAIChatService:
                     image_data, model, stream=True, finish_reason=None
                 )
                 if openai_chunk:
-                    # 提取文本内容
+                    response_body_chunks.append(json.dumps(openai_chunk, ensure_ascii=False))
                     text = self._extract_text_from_openai_chunk(openai_chunk)
                     if text:
-                        # 使用流式输出优化器处理文本输出
                         async for (
                             optimized_chunk
                         ) in openai_optimizer.optimize_stream_output(
@@ -654,9 +686,10 @@ class OpenAIChatService:
                         ):
                             yield optimized_chunk
                     else:
-                        # 如果没有文本内容（如图片URL等），整块输出
                         yield f"data: {json.dumps(openai_chunk)}\n\n"
-            yield f"data: {json.dumps(self.response_handler.handle_response({}, model, stream=True, finish_reason='stop'))}\n\n"
+            final_chunk = self.response_handler.handle_response({}, model, stream=True, finish_reason='stop')
+            response_body_chunks.append(json.dumps(final_chunk, ensure_ascii=False))
+            yield f"data: {json.dumps(final_chunk)}\n\n"
             logger.info(
                 f"Stream image completion finished successfully for model: {model}"
             )
@@ -666,6 +699,7 @@ class OpenAIChatService:
         except Exception as e:
             is_success = False
             error_log_msg = f"Stream image completion failed for model {model}: {e}"
+            response_body_chunks.append(error_log_msg)
             logger.error(error_log_msg)
             status_code = 500
             await add_error_log(
@@ -675,7 +709,6 @@ class OpenAIChatService:
                 error_log=error_log_msg,
                 error_code=status_code,
                 request_msg={"image_data_truncated": image_data[:1000]},
-                request_datetime=request_datetime,
             )
             yield f"data: {json.dumps({'error': error_log_msg})}\n\n"
             yield "data: [DONE]\n\n"
@@ -686,28 +719,35 @@ class OpenAIChatService:
                 f"Stream image completion for model {model} took {latency_ms} ms. Success: {is_success}"
             )
             await add_request_log(
+                ip_address=request.client.host,
+                api_type="openai-image-stream",
                 model_name=model,
                 api_key=api_key,
+                request_body=image_data[:2000],
+                response_body="".join(response_body_chunks),
                 is_success=is_success,
                 status_code=status_code,
                 latency_ms=latency_ms,
-                request_time=request_datetime,
             )
 
     async def _handle_normal_image_completion(
-        self, model: str, image_data: str, api_key: str
+        self,
+        model: str,
+        image_data: str,
+        api_key: str,
+        request: Request,
     ) -> Dict[str, Any]:
         logger.info(f"Starting normal image completion for model: {model}")
         start_time = time.perf_counter()
-        request_datetime = datetime.datetime.now()
         is_success = False
         status_code = None
-        result = None
+        response_body = None
 
         try:
             result = self.response_handler.handle_image_chat_response(
                 image_data, model, stream=False, finish_reason="stop"
             )
+            response_body = json.dumps(result, ensure_ascii=False)
             logger.info(
                 f"Normal image completion finished successfully for model: {model}"
             )
@@ -717,6 +757,7 @@ class OpenAIChatService:
         except Exception as e:
             is_success = False
             error_log_msg = f"Normal image completion failed for model {model}: {e}"
+            response_body = error_log_msg
             logger.error(error_log_msg)
             status_code = 500
             await add_error_log(
@@ -726,7 +767,6 @@ class OpenAIChatService:
                 error_log=error_log_msg,
                 error_code=status_code,
                 request_msg={"image_data_truncated": image_data[:1000]},
-                request_datetime=request_datetime,
             )
             raise e
         finally:
@@ -736,10 +776,13 @@ class OpenAIChatService:
                 f"Normal image completion for model {model} took {latency_ms} ms. Success: {is_success}"
             )
             await add_request_log(
+                ip_address=request.client.host,
+                api_type="openai-image",
                 model_name=model,
                 api_key=api_key,
+                request_body=image_data[:2000],
+                response_body=response_body,
                 is_success=is_success,
                 status_code=status_code,
                 latency_ms=latency_ms,
-                request_time=request_datetime,
             )
