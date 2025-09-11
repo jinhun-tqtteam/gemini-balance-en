@@ -307,8 +307,12 @@ def get_vertex_express_logger():
 
 
 
-def get_gemini_embedding_logger():
-    return Logger.setup_logger("gemini_embedding")
+def get_gemini_embedding_logger():
+    return Logger.setup_logger("gemini_embedding")
+
+
+def get_monitoring_logger():
+    return Logger.setup_logger("monitoring")
 
 
 def setup_access_logging():

@@ -1278,9 +1278,9 @@ endblock %} {% block head_extra_styles %}
             </button>
           </div>
           <small class="text-gray-500 mt-1 block"
-            >Proxy server list supporting http and socks5 formats, e.g.:
-            http://user:pass@host:port or
-            socks5://host:port. Click buttons to batch add or delete.</small
+            >Proxy server list supporting IP:PORT:USER:PASS format, e.g.:
+            192.168.1.100:8080:username:password or
+            10.0.0.1:3128:admin:secret. Click buttons to batch add or delete.</small
           >
         </div>
         <!-- 代理使用策略 -->
@@ -2450,7 +2450,7 @@ endblock %} {% block head_extra_styles %}
       <textarea
         id="proxyBulkInput"
         rows="10"
-        placeholder="Paste proxy addresses here (e.g., http://user:pass@host:port or socks5://host:port)..."
+        placeholder="Paste proxy addresses here (e.g., 192.168.1.100:8080:username:password or 10.0.0.1:3128:admin:secret)..."
         class="w-full px-4 py-3 rounded-lg font-mono text-sm form-input-themed"
       ></textarea>
       <div class="flex justify-end gap-3 mt-6">

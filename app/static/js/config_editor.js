@@ -12,7 +12,7 @@ const SAFETY_SETTING_ITEM_CLASS = "safety-setting-item";
 const SHOW_CLASS = "show"; // For modals
 const API_KEY_REGEX = /AIzaSy\S{33}/g;
 const PROXY_REGEX =
-  /(?:https?|socks5):\/\/(?:[^:@\/]+(?::[^@\/]+)?@)?(?:[^:\/\s]+)(?::\d+)?/g;
+  /(?:\d{1,3}\.){3}\d{1,3}:\d{1,5}:[^:\s]+:[^:\s]+/g;
 const VERTEX_API_KEY_REGEX = /AQ\.[a-zA-Z0-9_\-]{50}/g; // Vertex Express API Key regex
 const MASKED_VALUE = "••••••••";
 

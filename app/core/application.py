@@ -11,6 +11,8 @@ from app.database.initialization import initialize_database
 from app.exception.exceptions import setup_exception_handlers
 from app.log.logger import get_application_logger, setup_access_logging
 from app.middleware.middleware import setup_middlewares
+from app.middleware.rate_limit_middleware import RateLimitMiddleware
+from app.core.monitoring import setup_monitoring_routes
 from app.router.routes import setup_routers
 from app.scheduler.scheduled_tasks import start_scheduler, stop_scheduler
 from app.service.key.key_manager import get_key_manager_instance
@@ -143,12 +145,23 @@ def create_app() -> FastAPI:
 
     # 配置中间件
     setup_middlewares(app)
+    
+    # 添加速率限制中间件
+    app.add_middleware(
+        RateLimitMiddleware,
+        requests_per_minute=100,
+        requests_per_hour=2000,
+        burst_capacity=20
+    )
 
     # 配置异常处理器
     setup_exception_handlers(app)
 
     # 配置路由
     setup_routers(app)
+    
+    # 配置监控路由
+    setup_monitoring_routes(app)
 
     # 配置访问日志API密钥隐藏
     setup_access_logging()

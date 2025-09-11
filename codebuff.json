@@ -1,0 +1,25 @@
+{
+  "description": "Template configuration for this project. See https://www.codebuff.com/config for all options.",
+  "startupProcesses": [
+    {
+      "name": "server",
+      "command": "python -m uvicorn app.main:app --host 0.0.0.0 --port 8001 --reload",
+      "enabled": true,
+      "stdoutFile": "logs/server.log"
+    }
+  ],
+  "fileChangeHooks": [
+    {
+      "name": "python-format",
+      "command": "python -m black . --check --diff",
+      "filePattern": "**/*.py",
+      "enabled": true
+    },
+    {
+      "name": "python-imports",
+      "command": "python -m isort . --check-only --diff",
+      "filePattern": "**/*.py",
+      "enabled": true
+    }
+  ]
+}

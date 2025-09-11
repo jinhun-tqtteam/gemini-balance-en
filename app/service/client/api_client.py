@@ -1,4 +1,5 @@
 # app/services/chat/api_client.py
+from app.utils.proxy_helper import convert_proxy_for_httpx
 
 from typing import Dict, Any, AsyncGenerator, Optional
 import httpx
@@ -54,10 +55,11 @@ class GeminiApiClient(ApiClient):
         proxy_to_use = None
         if settings.PROXIES:
             if settings.PROXIES_USE_CONSISTENCY_HASH_BY_API_KEY:
-                proxy_to_use = settings.PROXIES[hash(api_key) % len(settings.PROXIES)]
+                selected_proxy = settings.PROXIES[hash(api_key) % len(settings.PROXIES)]
             else:
-                proxy_to_use = random.choice(settings.PROXIES)
-            logger.info(f"Using proxy for getting models: {proxy_to_use}")
+                selected_proxy = random.choice(settings.PROXIES)
+            proxy_to_use = convert_proxy_for_httpx(selected_proxy)
+            logger.info(f"Using proxy: {selected_proxy} -> {proxy_to_use}")
 
         headers = self._prepare_headers()
         async with httpx.AsyncClient(timeout=timeout, proxy=proxy_to_use) as client:
@@ -81,10 +83,11 @@ class GeminiApiClient(ApiClient):
         proxy_to_use = None
         if settings.PROXIES:
             if settings.PROXIES_USE_CONSISTENCY_HASH_BY_API_KEY:
-                proxy_to_use = settings.PROXIES[hash(api_key) % len(settings.PROXIES)]
+                selected_proxy = settings.PROXIES[hash(api_key) % len(settings.PROXIES)]
             else:
-                proxy_to_use = random.choice(settings.PROXIES)
-            logger.info(f"Using proxy for getting models: {proxy_to_use}")
+                selected_proxy = random.choice(settings.PROXIES)
+            proxy_to_use = convert_proxy_for_httpx(selected_proxy)
+            logger.info(f"Using proxy: {selected_proxy} -> {proxy_to_use}")
             
         headers = self._prepare_headers()
         
@@ -124,10 +127,11 @@ class GeminiApiClient(ApiClient):
         proxy_to_use = None
         if settings.PROXIES:
             if settings.PROXIES_USE_CONSISTENCY_HASH_BY_API_KEY:
-                proxy_to_use = settings.PROXIES[hash(api_key) % len(settings.PROXIES)]
+                selected_proxy = settings.PROXIES[hash(api_key) % len(settings.PROXIES)]
             else:
-                proxy_to_use = random.choice(settings.PROXIES)
-            logger.info(f"Using proxy for getting models: {proxy_to_use}")
+                selected_proxy = random.choice(settings.PROXIES)
+            proxy_to_use = convert_proxy_for_httpx(selected_proxy)
+            logger.info(f"Using proxy: {selected_proxy} -> {proxy_to_use}")
 
         headers = self._prepare_headers()
         async with httpx.AsyncClient(timeout=timeout, proxy=proxy_to_use) as client:
@@ -147,10 +151,11 @@ class GeminiApiClient(ApiClient):
         proxy_to_use = None
         if settings.PROXIES:
             if settings.PROXIES_USE_CONSISTENCY_HASH_BY_API_KEY:
-                proxy_to_use = settings.PROXIES[hash(api_key) % len(settings.PROXIES)]
+                selected_proxy = settings.PROXIES[hash(api_key) % len(settings.PROXIES)]
             else:
-                proxy_to_use = random.choice(settings.PROXIES)
-            logger.info(f"Using proxy for counting tokens: {proxy_to_use}")
+                selected_proxy = random.choice(settings.PROXIES)
+            proxy_to_use = convert_proxy_for_httpx(selected_proxy)
+            logger.info(f"Using proxy: {selected_proxy} -> {proxy_to_use}")
 
         headers = self._prepare_headers()
         async with httpx.AsyncClient(timeout=timeout, proxy=proxy_to_use) as client:
@@ -169,10 +174,11 @@ class GeminiApiClient(ApiClient):
         proxy_to_use = None
         if settings.PROXIES:
             if settings.PROXIES_USE_CONSISTENCY_HASH_BY_API_KEY:
-                proxy_to_use = settings.PROXIES[hash(api_key) % len(settings.PROXIES)]
+                selected_proxy = settings.PROXIES[hash(api_key) % len(settings.PROXIES)]
             else:
-                proxy_to_use = random.choice(settings.PROXIES)
-            logger.info(f"Using proxy for embedding: {proxy_to_use}")
+                selected_proxy = random.choice(settings.PROXIES)
+            proxy_to_use = convert_proxy_for_httpx(selected_proxy)
+            logger.info(f"Using proxy: {selected_proxy} -> {proxy_to_use}")
 
         headers = self._prepare_headers()
         async with httpx.AsyncClient(timeout=timeout, proxy=proxy_to_use) as client:
@@ -206,10 +212,11 @@ class GeminiApiClient(ApiClient):
         proxy_to_use = None
         if settings.PROXIES:
             if settings.PROXIES_USE_CONSISTENCY_HASH_BY_API_KEY:
-                proxy_to_use = settings.PROXIES[hash(api_key) % len(settings.PROXIES)]
+                selected_proxy = settings.PROXIES[hash(api_key) % len(settings.PROXIES)]
             else:
-                proxy_to_use = random.choice(settings.PROXIES)
-            logger.info(f"Using proxy for batch embedding: {proxy_to_use}")
+                selected_proxy = random.choice(settings.PROXIES)
+            proxy_to_use = convert_proxy_for_httpx(selected_proxy)
+            logger.info(f"Using proxy: {selected_proxy} -> {proxy_to_use}")
 
         headers = self._prepare_headers()
         async with httpx.AsyncClient(timeout=timeout, proxy=proxy_to_use) as client:
@@ -256,10 +263,11 @@ class OpenaiApiClient(ApiClient):
         proxy_to_use = None
         if settings.PROXIES:
             if settings.PROXIES_USE_CONSISTENCY_HASH_BY_API_KEY:
-                proxy_to_use = settings.PROXIES[hash(api_key) % len(settings.PROXIES)]
+                selected_proxy = settings.PROXIES[hash(api_key) % len(settings.PROXIES)]
             else:
-                proxy_to_use = random.choice(settings.PROXIES)
-            logger.info(f"Using proxy for getting models: {proxy_to_use}")
+                selected_proxy = random.choice(settings.PROXIES)
+            proxy_to_use = convert_proxy_for_httpx(selected_proxy)
+            logger.info(f"Using proxy: {selected_proxy} -> {proxy_to_use}")
 
         headers = self._prepare_headers(api_key)
         async with httpx.AsyncClient(timeout=timeout, proxy=proxy_to_use) as client:
@@ -276,10 +284,11 @@ class OpenaiApiClient(ApiClient):
         proxy_to_use = None
         if settings.PROXIES:
             if settings.PROXIES_USE_CONSISTENCY_HASH_BY_API_KEY:
-                proxy_to_use = settings.PROXIES[hash(api_key) % len(settings.PROXIES)]
+                selected_proxy = settings.PROXIES[hash(api_key) % len(settings.PROXIES)]
             else:
-                proxy_to_use = random.choice(settings.PROXIES)
-            logger.info(f"Using proxy for getting models: {proxy_to_use}")
+                selected_proxy = random.choice(settings.PROXIES)
+            proxy_to_use = convert_proxy_for_httpx(selected_proxy)
+            logger.info(f"Using proxy: {selected_proxy} -> {proxy_to_use}")
 
         headers = self._prepare_headers(api_key)
         async with httpx.AsyncClient(timeout=timeout, proxy=proxy_to_use) as client:
@@ -295,10 +304,11 @@ class OpenaiApiClient(ApiClient):
         proxy_to_use = None
         if settings.PROXIES:
             if settings.PROXIES_USE_CONSISTENCY_HASH_BY_API_KEY:
-                proxy_to_use = settings.PROXIES[hash(api_key) % len(settings.PROXIES)]
+                selected_proxy = settings.PROXIES[hash(api_key) % len(settings.PROXIES)]
             else:
-                proxy_to_use = random.choice(settings.PROXIES)
-            logger.info(f"Using proxy for getting models: {proxy_to_use}")
+                selected_proxy = random.choice(settings.PROXIES)
+            proxy_to_use = convert_proxy_for_httpx(selected_proxy)
+            logger.info(f"Using proxy: {selected_proxy} -> {proxy_to_use}")
 
         headers = self._prepare_headers(api_key)
         async with httpx.AsyncClient(timeout=timeout, proxy=proxy_to_use) as client:
@@ -317,10 +327,11 @@ class OpenaiApiClient(ApiClient):
         proxy_to_use = None
         if settings.PROXIES:
             if settings.PROXIES_USE_CONSISTENCY_HASH_BY_API_KEY:
-                proxy_to_use = settings.PROXIES[hash(api_key) % len(settings.PROXIES)]
+                selected_proxy = settings.PROXIES[hash(api_key) % len(settings.PROXIES)]
             else:
-                proxy_to_use = random.choice(settings.PROXIES)
-            logger.info(f"Using proxy for getting models: {proxy_to_use}")
+                selected_proxy = random.choice(settings.PROXIES)
+            proxy_to_use = convert_proxy_for_httpx(selected_proxy)
+            logger.info(f"Using proxy: {selected_proxy} -> {proxy_to_use}")
 
         headers = self._prepare_headers(api_key)
         async with httpx.AsyncClient(timeout=timeout, proxy=proxy_to_use) as client:
@@ -341,10 +352,11 @@ class OpenaiApiClient(ApiClient):
         proxy_to_use = None
         if settings.PROXIES:
             if settings.PROXIES_USE_CONSISTENCY_HASH_BY_API_KEY:
-                proxy_to_use = settings.PROXIES[hash(api_key) % len(settings.PROXIES)]
+                selected_proxy = settings.PROXIES[hash(api_key) % len(settings.PROXIES)]
             else:
-                proxy_to_use = random.choice(settings.PROXIES)
-            logger.info(f"Using proxy for getting models: {proxy_to_use}")
+                selected_proxy = random.choice(settings.PROXIES)
+            proxy_to_use = convert_proxy_for_httpx(selected_proxy)
+            logger.info(f"Using proxy: {selected_proxy} -> {proxy_to_use}")
 
         headers = self._prepare_headers(api_key)
         async with httpx.AsyncClient(timeout=timeout, proxy=proxy_to_use) as client:

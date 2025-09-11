@@ -6,6 +6,8 @@ from urllib.parse import quote_plus
 from databases import Database
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.orm import sessionmaker
 
 from app.config.config import settings
 from app.log.logger import get_database_logger
@@ -30,6 +32,19 @@ else:
 # 创建数据库引擎
 # pool_pre_ping=True: 在从连接池获取连接前执行简单的 "ping" 测试，确保连接有效
 engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+
+# 创建异步数据库引擎
+if settings.DATABASE_TYPE == "sqlite":
+    ASYNC_DATABASE_URL = DATABASE_URL.replace("sqlite:///", "sqlite+aiosqlite:///")
+else:
+    ASYNC_DATABASE_URL = DATABASE_URL.replace("mysql+pymysql:", "mysql+aiomysql:")
+
+async_engine = create_async_engine(ASYNC_DATABASE_URL, pool_pre_ping=True)
+
+# 创建异步会话工厂
+async_session_factory = sessionmaker(
+    async_engine, class_=AsyncSession, expire_on_commit=False
+)
 
 # 创建元数据对象
 metadata = MetaData()

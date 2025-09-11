@@ -4,12 +4,12 @@ Proxy detection service module
 import asyncio
 import time
 from typing import Dict, List, Optional
-from urllib.parse import urlparse
 
 import httpx
 from pydantic import BaseModel
 
 from app.log.logger import get_config_routes_logger
+from app.utils.proxy_helper import parse_proxy_format, is_valid_proxy_format
 
 logger = get_config_routes_logger()
 
@@ -37,12 +37,8 @@ class ProxyCheckService:
         self._cache: Dict[str, ProxyCheckResult] = {}
     
     def _is_valid_proxy_format(self, proxy: str) -> bool:
-        """Validate proxy format"""
-        try:
-            parsed = urlparse(proxy)
-            return parsed.scheme in ['http', 'https', 'socks5'] and parsed.hostname
-        except Exception:
-            return False
+        """Validate proxy format IP:PORT:USER:PASS"""
+        return is_valid_proxy_format(proxy)
     
     def _get_cached_result(self, proxy: str) -> Optional[ProxyCheckResult]:
         """Get cached check result"""
@@ -66,7 +62,7 @@ class ProxyCheckService:
         Check if a single proxy is available
         
         Args:
-            proxy: Proxy address in format like http://host:port or socks5://host:port
+            proxy: Proxy address in format IP:PORT:USER:PASS
             use_cache: Whether to use cached results
             
         Returns:
@@ -83,7 +79,19 @@ class ProxyCheckService:
             result = ProxyCheckResult(
                 proxy=proxy,
                 is_available=False,
-                error_message="Invalid proxy format",
+                error_message="Invalid proxy format. Expected format: IP:PORT:USER:PASS",
+                checked_at=time.time()
+            )
+            self._cache_result(result)
+            return result
+        
+        # Parse proxy to httpx compatible format
+        httpx_proxy, original_proxy = parse_proxy_format(proxy)
+        if not httpx_proxy:
+            result = ProxyCheckResult(
+                proxy=proxy,
+                is_available=False,
+                error_message="Failed to parse proxy format",
                 checked_at=time.time()
             )
             self._cache_result(result)
@@ -95,7 +103,7 @@ class ProxyCheckService:
             logger.info(f"Starting proxy check: {proxy}")
             
             timeout = httpx.Timeout(self.TIMEOUT_SECONDS, read=self.TIMEOUT_SECONDS)
-            async with httpx.AsyncClient(timeout=timeout, proxy=proxy) as client:
+            async with httpx.AsyncClient(timeout=timeout, proxy=httpx_proxy) as client:
                 response = await client.head(self.CHECK_URL)
                 
             response_time = time.time() - start_time
